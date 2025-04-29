@@ -18,7 +18,9 @@ SRC = ft_isalpha.c \
       ft_isprint.c \
       ft_strlen.c \
       ft_memset.c \
-     ft_bzero.c 
+      ft_bzero.c \
+      ft_memcpy.c \
+      ft_memmove.c
 
 # Name of my main
 MAIN = example.c
@@ -49,7 +51,6 @@ $(NAME): $(OBJ)
 # Create .o files from .c 
 $(OBJ): $(SRC)
 	$(CC) $(CFLAGS) -c $^
-
 
 # Removes every object inside the directory
 clean:

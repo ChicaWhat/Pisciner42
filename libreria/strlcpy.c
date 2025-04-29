@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   strlcpy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 12:42:23 by carmegon          #+#    #+#             */
-/*   Updated: 2025/04/28 12:04:30 by carmegon         ###   ########.fr       */
+/*   Created: 2025/04/28 08:34:43 by carmegon          #+#    #+#             */
+/*   Updated: 2025/04/29 08:54:45 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum(int c)
+#include <"libft.h">
+
+size_t	strlcpy(char *dst, const char *src, size_t size)
 {
-	if ((c >= 48 && c < 58) || (c >= 65 && c < 91) || (c >= 97 && c < 123))
-		return (1);
-	return (0);
+	size_t	i;
+	size_t	j;
+
+		if (src)
+
+	i = 0;
+	j = 0;
+	while ()
 }

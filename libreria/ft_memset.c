@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 13:11:16 by carmegon          #+#    #+#             */
-/*   Updated: 2025/04/25 14:58:51 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:05:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	*ft_memset(void *s, int c, size_t n)
 {
-	size_t		i;
+	size_t			i;
 	unsigned char	*aux;
 
 	aux = (unsigned char *)s;
