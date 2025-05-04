@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 21:39:18 by marvin            #+#    #+#             */
-/*   Updated: 2025/04/30 21:39:18 by marvin           ###   ########.fr       */
+/*   Updated: 2025/05/04 11:39:25 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,24 @@
 char    *ft_strrchr(const char *s, int c)
 {
     char    cast_c;
-    char    aux;
-    int i;
-    int len_s = ft_strlen(s);
+    char    *aux;
+    int len_s;
 
     cast_c = c;
-    i = len_s;
-    while (s[len_s] != '\0')
+    len_s = ft_strlen(s);
+    if (cast_c == '\0')
+    {
+        aux = (char *)&s[len_s];
+        return (aux);
+    }
+    while (len_s >= 0)
     {
         if (s[len_s] == cast_c)
         {
             aux = (char *)&s[len_s];
             return (aux);
         }
-        i--;
+        len_s--;
     }
-    if (cast_c == '\0')
-    {
-        aux = (char *)&s[len_s];
-        return (aux);
-    }
-    else
-        return (NULL);
+    return (NULL);
 }

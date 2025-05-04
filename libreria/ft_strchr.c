@@ -1,37 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/27 14:52:14 by carmegon          #+#    #+#             */
-/*   Updated: 2025/04/30 14:18:01 by carmegon         ###   ########.fr       */
+/*   Created: 2025/04/30 17:58:51 by carmegon          #+#    #+#             */
+/*   Updated: 2025/04/30 18:49:03 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+char	*ft_strchr(const char *s, int c)
 {
-	size_t				i;
-	const unsigned char	*src_m;
-	unsigned char		*dst_m;
+	char	cast_c;
+	char	*aux;
+	int		i;
 
-	src_m = (const unsigned char *)src;
-	dst_m = (unsigned char *)dest;
-	i = n;
-	if (!src_m && !dst_m)
-		return (NULL);
-	if (dst_m > src_m)
+	cast_c = (char) c;
+	i = 0;
+	while (s[i] != '\0')
 	{
-		while (i > 0)
+		if (s[i] == cast_c)
 		{
-			i--;
-			dst_m[i] = src_m[i];
+			aux = (char *)&s[i];
+			return (aux);
 		}
+		i++;
+	}
+	if (cast_c == '\0')
+	{
+		aux = (char *)&s[i];
+		return (aux);
 	}
 	else
-		ft_memcpy(dst_m, src_m, i);
-	return ((void *)dest);
+		return (NULL);
 }
