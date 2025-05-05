@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 10:01:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/04/30 18:48:49 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:05:23 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,17 @@ int	main(void)
 }*/
 
 //-----ft_strchr-----//
-int	main(void)
+/* int	main(void)
 {
 	char	s[] = "AJFgaizaòo035_teo7kk";
 	printf("%s --- %s\n", strchr(s, 91), ft_strchr(s, 91));
 	return (0);
-}
+} */
+
+/* int	main(void)
+{
+	char	*big = "Hola mundo cruel";
+	char	*little = "";
+	printf("%s\n", ft_strnstr(big, little, 17));
+	return (0);
+} */

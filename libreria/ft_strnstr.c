@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcmp.c                                        :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 20:48:23 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/05 14:05:26 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/05 14:53:18 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/05 16:00:24 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_memcmp(const void *s1, const void *s2, size_t n)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	unsigned char	*cast_s1;
-	unsigned char	*cast_s2;
-	size_t		i;
-
-	cast_s1 = (unsigned char *)s1;
-	cast_s2 = (unsigned char *)s2;
-	i = 0;
-	while (i < n)
+	if (ft_strlen(little) == 0)
+		return ((char *)big);
+	while (*big && len >= ft_strlen(little))
 	{
-		if (cast_s1[i] != cast_s2[i])
-			return (cast_s1[i] - cast_s2[i]);
-		i++;
+		if (*big == *little && ft_strncmp(big, little, ft_strlen(little)) == 0)
+			return ((char *)big);
+		big++;
+		len--;
 	}
 	return (0);
 }
