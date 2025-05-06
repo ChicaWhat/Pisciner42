@@ -1,41 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 16:05:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/06 18:26:18 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/06 20:55:52 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/06 21:25:25 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-int	ft_atoi(const char *nptr)
+#include <stdio.h>
+char	*ft_strdup(const char *s)
 {
-	int	sign;
-	int	d;
-	int	result;
+	int	i;
+	char	*ret;
+	int	len;
 
-	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' || *nptr == '\r' 
-			|| *nptr == '\f' || *nptr == '\v')
-		nptr++;
-
-	sign = 1;
-	if (*nptr == '+' || *nptr == '-')
+	len = ft_strlen(s);
+	ret =(char *)malloc(sizeof(char) * len + 1);
+	if (!ret)
+		return(0);
+	i = 0;
+	while(s[i])
 	{
-		if (*nptr == '-')
-		       sign *= (-1);
-		nptr++;	
+		ret[i] = s[i];
+		i++;
 	}
-	d = 0;
-	result = 0;
-	while (ft_isdigit(*nptr))
-	{
-		d = *nptr - '0';
-		result = (result * 10) + d;
-		nptr++;
-	}
-	return (sign * result);
+	ret[i] = '\0';
+	return (ret);
 }

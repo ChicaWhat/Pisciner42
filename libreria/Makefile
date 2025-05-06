@@ -27,8 +27,13 @@ SRC = ft_isalpha.c \
 	ft_toupper.c \
 	ft_tolower.c \
 	ft_strrchr.c \
+	ft_strncmp.c \
 	ft_memchr.c \
-	ft_memcmp.c
+	ft_memcmp.c \
+	ft_strnstr.c \
+	ft_atoi.c \
+	ft_calloc.c \
+	ft_strdup.c
 
 # Name of my main
 MAIN = example.c
@@ -47,18 +52,18 @@ all: $(NAME)
 
 # Rule to compile my program
 run: $(PROGRAM)
-	$(PROGRAM)
+	@$(PROGRAM)
 
 $(PROGRAM): $(MAIN) $(NAME) 
-	$(CC) $(CFLAGS) $(MAIN) ${NAME} -o $@
+	@$(CC) $(CFLAGS) $(MAIN) ${NAME} -o $@
 
 # Rule to create the library
 $(NAME): $(OBJ)
-	$(AR) $(NAME) $(OBJ)
+	@$(AR) $(NAME) $(OBJ)
 
 # Create .o files from .c 
 $(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -c $^
+	@$(CC) $(CFLAGS) -c $^
 
 # Removes every object inside the directory
 clean:
