@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 10:01:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/05 16:05:23 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:09:31 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	main(void)
 	printf("%s --- %s\n", strchr(s, 91), ft_strchr(s, 91));
 	return (0);
 } */
-
+//-----(ft_strnstr)
 /* int	main(void)
 {
 	char	*big = "Hola mundo cruel";
@@ -65,3 +65,25 @@ int	main(void)
 	printf("%s\n", ft_strnstr(big, little, 17));
 	return (0);
 } */
+//-----(ft_substr)----//
+/* int	main(void)
+{
+	char	s[] = "Hola mundo cruel peperoni";
+	char	*sub_s = ft_substr(s, 36, 3);
+	printf("%s\n", sub_s);
+	free(sub_s);
+	return (0);
+} */
+
+/* 
+//----- (ft_strjoin) -------//
+int     main(void)
+{
+        char    s1[] = "Que pasara que misterios habra ";
+        char    s2[] = "puede ser mi gran noche, tan tantan taaan";
+        char    *new_s = ft_strjoin(s1, s2)
+        printf("%s",new_s);
+        free (new_s)
+        return (0);
+}*/
+
