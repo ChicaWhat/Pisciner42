@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   example.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 10:01:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/09 18:09:31 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:04:50 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,3 +87,18 @@ int     main(void)
         return (0);
 }*/
 
+//----- (ft_split) -------//
+
+/* int	main(void)
+{
+	char	s1[] = "Hola buenos dias";
+	char	**list = ft_split(s1, 32);
+	int	i = 0;
+	
+	while (*list[i])
+	{
+		printf("%s\n", &*list[i]);
+		i++;
+	}
+	return (0);
+} */
