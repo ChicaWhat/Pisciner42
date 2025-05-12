@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 10:01:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/11 18:04:50 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:35:22 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,3 +102,35 @@ int     main(void)
 	}
 	return (0);
 } */
+//------- (ft_itoa) ------//
+/* 
+	int main(void)
+{
+  int num = -4583;
+  int result = ft_count_numbers(num);
+  char *itoa = ft_itoa(-4583);
+  printf("%d\n %s", result, itoa);
+  return (0);
+}
+*/
+//--------- (ft_strmapi) --------//
+/* 
+char  my_upper(unsigned int i, char c)
+{
+	if (i % 2 == 0)
+	{
+		return (toupper(c));
+	}
+	else
+    	return (c);
+}	
+int main(void)
+{
+	char s[] = "Hola mi loca";
+	int i = 0;
+	char *new_s = ft_strmapi(s, my_upper);
+  printf("%s - Original\n", s);
+  printf("%s - Modificada", new_s);
+  return (0);
+}
+*/
