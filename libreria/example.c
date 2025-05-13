@@ -22,11 +22,12 @@
 
 /* int	main(void)
 {
-	//char d[12] = "NULL";
-	//const char f[] = "NULL";
-	printf("%s -", (char *)memmove(d, f+2, 4), (char *)ft_memmove(d, f, 4));
-	return (0);
-} *\
+        char d[] = "Hola buenos dias";
+        const char f[] = "Que tal estamos mi gente";
+        printf("%s\n", (char *)ft_memmove(d+3, f+2, 5));
+        return (0);
+} 
+*\
 
 //----ft_strlcpy----//
 int	main(void)
@@ -133,4 +134,28 @@ int main(void)
   printf("%s - Modificada", new_s);
   return (0);
 }
+*/
+
+//------ (ft_atoi) -------//
+/* 
+int     main(void)
+{
+        char    nptr[] = "   -653 -79++-40hb224";
+        int     result = ft_atoi(nptr);
+        printf("Este es mi numer: %d", result);
+        return (0);
+}
+/*
+
+/* 
+//------ (ft_strrchr) ------//
+int	main(void)
+{
+	char	s[] = "Hola buenos dias hoy me siento bien";
+	int	c = 117;
+	char	*result = ft_strrchr(s, c);
+	printf("%s", result);
+	return (0);
+}
+
 */
