@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 18:57:04 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/13 10:11:57 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/19 17:51:59 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/19 18:18:53 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Return the last node in the linked list
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+t_list	*ft_lstlast(t_list *lst)
 {
-	void	*str;
-
-	str = malloc(nmemb * size);
-	if (str == NULL)
-		return (str);
-	ft_bzero(str, nmemb * size);
-	return (str);
+	while (lst)
+	{
+		if (!lst->next)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
 }

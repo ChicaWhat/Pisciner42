@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 18:57:04 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/13 10:11:57 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/19 17:41:39 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/19 17:51:40 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Return the total number of the nodes in the linked list
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+int	ft_lstsize(t_list *lst)
 {
-	void	*str;
+	int	i;
 
-	str = malloc(nmemb * size);
-	if (str == NULL)
-		return (str);
-	ft_bzero(str, nmemb * size);
-	return (str);
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
 }

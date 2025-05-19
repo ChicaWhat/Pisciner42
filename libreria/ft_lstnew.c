@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 18:57:04 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/13 10:11:57 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/19 16:39:38 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/19 17:13:58 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Creating a new node. 
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+t_list	*ft_lstnew(void *content)
 {
-	void	*str;
+	t_list	*new;
 
-	str = malloc(nmemb * size);
-	if (str == NULL)
-		return (str);
-	ft_bzero(str, nmemb * size);
-	return (str);
+	new = malloc (sizeof(t_list));
+	if (!new)
+		return (NULL);
+	new->content = content;
+	new->next = NULL;
+	return (new);
 }

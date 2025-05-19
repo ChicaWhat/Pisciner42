@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 20:40:46 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/11 14:20:40 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:47:33 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,3 +89,16 @@ char	**ft_split(char const *s, char c)
 	list = ft_fill_array(list, s, w_count, c);
 	return (list);
 }
+
+/* int	main(void)
+{
+	char	s1[] = "Hola buenos dias";
+	char	**list = ft_split(s1, 32);
+	int	i = 0;
+	while (*list[i])
+	{
+		printf("%s\n", &*list[i]);
+		i++;
+	}
+	return (0);
+} */

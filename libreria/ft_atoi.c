@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/06 18:26:18 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:42:39 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,15 @@ int	ft_atoi(const char *nptr)
 	int	d;
 	int	result;
 
-	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' || *nptr == '\r' 
-			|| *nptr == '\f' || *nptr == '\v')
+	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' || *nptr == '\r'
+		|| *nptr == '\f' || *nptr == '\v')
 		nptr++;
-
 	sign = 1;
 	if (*nptr == '+' || *nptr == '-')
 	{
 		if (*nptr == '-')
-		       sign *= (-1);
-		nptr++;	
+			sign *= (-1);
+		nptr++;
 	}
 	d = 0;
 	result = 0;
