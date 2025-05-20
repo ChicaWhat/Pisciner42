@@ -1,33 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 20:55:52 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/08 16:36:26 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/19 17:15:13 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/19 17:20:05 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Add the new node at the beginning of the 'list'
 #include "libft.h"
 
-char	*ft_strdup(const char *s)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	int		i;
-	char	*ret;
-	int		len;
-
-	len = ft_strlen(s);
-	ret = (char *)malloc(sizeof(char) * len + 1);
-	if (!ret)
-		return (0);
-	i = 0;
-	while (s[i])
-	{
-		ret[i] = s[i];
-		i++;
-	}
-	ret[i] = '\0';
-	return (ret);
+	if (lst && new)
+		new->next = lst[0];
+	lst[0] = new;
 }

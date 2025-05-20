@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 19:36:04 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/04 20:43:18 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:13:13 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	*ft_memchr(const void *s, int c, size_t n)
 {
-	size_t	i;
+	size_t			i;
 	unsigned char	cast_c;
-	unsigned char *cast_s;
+	unsigned char	*cast_s;
 
 	cast_c = (unsigned char) c;
 	cast_s = (unsigned char *)s;
@@ -28,7 +28,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 		if (cast_c == cast_s[i])
 		{
 			return ((void *)(s + i));
-        	}
+		}
 		i++;
 	}
 	return (NULL);

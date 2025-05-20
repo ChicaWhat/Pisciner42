@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 20:55:52 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/08 16:36:26 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/19 17:51:59 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/19 18:18:53 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Return the last node in the linked list
 #include "libft.h"
 
-char	*ft_strdup(const char *s)
+t_list	*ft_lstlast(t_list *lst)
 {
-	int		i;
-	char	*ret;
-	int		len;
-
-	len = ft_strlen(s);
-	ret = (char *)malloc(sizeof(char) * len + 1);
-	if (!ret)
-		return (0);
-	i = 0;
-	while (s[i])
+	while (lst)
 	{
-		ret[i] = s[i];
-		i++;
+		if (!lst->next)
+			return (lst);
+		lst = lst->next;
 	}
-	ret[i] = '\0';
-	return (ret);
+	return (lst);
 }
