@@ -35,3 +35,11 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 		ft_memcpy(dst_m, src_m, i);
 	return ((void *)dest);
 }
+
+/* int	main(void)
+{
+        char d[] = "Hola buenos dias";
+        const char f[] = "Que tal estamos mi gente";
+        printf("%s\n", (char *)ft_memmove(d+3, f+2, 5));
+        return (0);
+}  */

@@ -29,7 +29,7 @@
 } 
 *\
 
-//----ft_strlcpy----//
+/----ft_strlcpy----/
 int	main(void)
 {
 	char d[] = "Hola buenos dias, hoy me siento bien";
