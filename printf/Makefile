@@ -10,6 +10,11 @@ CFLAGS = -Wall -Wextra -Werror
 # Sources files
 SRC = 
 
+# Main
+MAIN = main.c
+
+# Program
+PROGRAM = ./a.exe
 
 # Object files
 OBJ = $(SRC:%.c=%.o)
@@ -19,6 +24,14 @@ AR = ar rcs
 
 # Rule to compile all
 all: $(NAME)
+
+# Rule to run the program
+run: $(PROGRAM)
+	@echo "Ejecutando el programa..."
+	@$(PROGRAM)
+# Rule to compile the program
+$(PROGRAM): $(MAIN)
+	$(CC) $(CFLAGS) $(MAIN) -o $@
 
 # Rule to create the library
 $(NAME): $(OBJ)
@@ -34,8 +47,11 @@ clean:
 flcean: clean
 	rm -r $(NAME)
 
+pclean: fclean
+	rm -r $(PROGRAM)
+
 # Restart the Makefile. Erase everything and executes again
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re run pclean
 

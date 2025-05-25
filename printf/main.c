@@ -20,10 +20,10 @@ int	main()
 	char	c = 65;
 	char	d = '6';
 	int	size;
-	printf("%d\n", n);
+	printf("Devolviendo un entero: %d\n", n);
 	printf("Que dise mi ente %s\n", ptr);
-	printf("%u\n", num);
-	printf("%x\n%X\n", n, n);
+	printf("Devolviendo un unsigned int: %u\n", num);
+	printf("Jugando con hexad en minus: %x\ny en mayus: %X\n", n, n);
 	size = printf("Esto me devuelve el valor de 65 en la tabla ascii: %c\n", c);
 	printf("%d\n", size);
 	printf("Esta es la variable de tipo char que me devuelve un entero: %d\nEsta es la varibale de tipo char que me devuelve el valor ascii del 6: %d", c, d);
