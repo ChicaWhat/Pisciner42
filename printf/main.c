@@ -22,7 +22,7 @@ int	main()
 	int	size;
 	char	*str = NULL;
 	printf("%c\n", *str);
-	printf("Devolviendo un entero: %d\n", n);
+	printf("Devolviendo un entero: %i\n", n);
 	printf("Que dise mi ente %s\n", ptr);
 	printf("Devolviendo un unsigned int: %u\n", num);
 	printf("Jugando con hexad en minus: %x\ny en mayus: %X\n", n, n);

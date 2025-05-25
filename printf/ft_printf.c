@@ -49,6 +49,8 @@ int	print_specifier(char specifier, va_list imput)
 		printed_bytes += print_char(va_arg(imput, int));
 	else if (specifier == 's')
 		printed_bytes += print_str(va_arg(imput, char *));
+	else if (specifier == 'i')
+		printed_bytes += print_nbr(va_arg(imput, int));
 	return(printed_bytes);
 }
 
@@ -72,3 +74,29 @@ char	print_str(char *str)
 	return (i);
 }
 
+int	print_nbr(int num)
+{
+	int	d;
+
+	if (num == INT_MIN)
+	{
+		write(1, "-2147483648", 11);
+		return (11);
+	}
+	if (num < 0)
+	{
+		write(1, "-", 1);
+		num *= -1;
+	}
+/* 	if (num >= 0 && num <= 9)
+	{
+		num = num + '0';
+		write(1, &num, 1);
+	} */
+	if (num >= 10)
+	{
+		print_nbr(num / 10);
+	}
+	d = num % 10 + '0';
+	write(1, &d, 1);
+}
