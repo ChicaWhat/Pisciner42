@@ -16,9 +16,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stddef.h>
-<<<<<<< HEAD
-//# include <bsd/string.h>
-=======
 # include <limits.h>
 # include <string.h>
 
@@ -27,7 +24,6 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }					t_list;
->>>>>>> 02d7329445b695b3614cd82c6c01fa18a6d81775
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
