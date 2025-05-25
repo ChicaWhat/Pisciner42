@@ -12,40 +12,63 @@
 
 #include "ft_printf.h"
 
-int	ft_printf(char const *format, ...)
+int	ft_printf(char const *chain, ...)
 {
 	va_list	imput;
 	int	printed_bytes;
 	int	i;
 
-//	va_start(ap, format);
+	va_start(imput, chain);
 
 	printed_bytes = 0;
 	i = 0;
-	while (format[i] != '\0')
+	while (chain[i] != '\0')
 	{
-		if (format[i] == '%')
-		
-		if != '%'
-			putchat;
+		if (chain[i] == '%')
+		{
+			i++;
+			printed_bytes += print_specifier(chain[i], imput);
+		}
+		else
+		{
+			print_char(chain[i]);
 			printed_bytes++;
-		else 
-			escoger qué y como
-			if 'c'
-				putchar 
-				printed_bytes++;
-			if 's'
-				putstr
-				pb += los que haya impreso
-				-----
-				pb += putstr
-			if 'd'
-				putnbr
-				pb += los que haya imprimido
-			
+		}
 		i++;
 	}
+	va_end(imput);
 	return (printed_bytes);
 }
 
+int	print_specifier(char specifier, va_list imput)
+{
+	int	printed_bytes;
+
+	printed_bytes = 0;
+	if (specifier == 'c')
+		printed_bytes += print_char(va_arg(imput, int));
+	else if (specifier == 's')
+		printed_bytes += print_str(va_arg(imput, char *));
+	return(printed_bytes);
+}
+
+int	print_char(int c)
+{
+	return (write(1, &c, 1));
+}
+
+char	print_str(char *str)
+{
+	int	i;
+
+	if (!*str)
+		return (write(1, 'NULL', 4));
+	i = 0;
+	while (str[i] != '\0')
+	{
+		write(1, &str[i], 1);
+		i++;
+	}
+	return (i);
+}
 

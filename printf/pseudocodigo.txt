@@ -1,0 +1,29 @@
+Esto es lo que necesito para que me vaya recorriendo mi funcion printf para ir guardando los valores en printed_bytes y luego los concatene con los que haya impreso gracias al tipo de especificador que se encuentre.	
+		if != '%'
+			putchat;
+			printed_bytes++;
+		else 
+			escoger qué y como
+			if 'c'
+				putchar 
+				printed_bytes++;
+			if 's'
+				putstr
+				pb += los que haya impreso
+				-----
+				pb += putstr
+			if 'd'
+				putnbr
+				pb += los que haya imprimido
+			if 'u'
+                putnbr?
+                pb += los que haya impreso
+            if 'x' o 'X'
+                put_hex_lower o put_hex_upper
+                pb += los que haya impreso
+            if 'p'
+                void *(?)
+                pb += lo que haya impreso
+            if 'i'
+                putnbr
+                pb += lo que haya impreso
