@@ -61,8 +61,8 @@ char	print_str(char *str)
 {
 	int	i;
 
-	if (!*str)
-		return (write(1, 'NULL', 4));
+/* 	if (str == NULL)
+		return (write(1, "NULL", 4)); */
 	i = 0;
 	while (str[i] != '\0')
 	{

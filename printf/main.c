@@ -20,8 +20,8 @@ int	main()
 	char	c = 65;
 	char	d = '6';
 	int	size;
-	char	*str = "\0";
-	printf("%s\n", str);
+	char	*str = NULL;
+	printf("%c\n", *str);
 	printf("Devolviendo un entero: %d\n", n);
 	printf("Que dise mi ente %s\n", ptr);
 	printf("Devolviendo un unsigned int: %u\n", num);
