@@ -1,29 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_print_nbr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/24 19:14:34 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:06:04 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/26 11:39:50 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/26 17:07:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
-# include <stdio.h>
-# include <unistd.h>
-# include <stdarg.h>
-# include <limits.h>
+#include "ft_printf.h"
 
-int		ft_printf(char const *chain, ...);
-int		ft_print_str(char *str);
-int		ft_print_char(int c);
-int		ft_print_nbr(int num);
-int		ft_print_hex_top(unsigned int num);
-int		ft_print_hex_bottom(unsigned int num);
-int		ft_print_ptr(void *ptr);
-int		ft_print_uns(unsigned int num);
+int	ft_print_nbr(int num)
+{
+	char	d;
+	int		printed_bytes;
 
-#endif
+	printed_bytes = 0;
+	d = num;
+	if (num == INT_MIN)
+	{
+		write(1, "-2147483648", 11);
+		return (11);
+	}
+	if (num < 0)
+	{
+		printed_bytes += write(1, "-", 1);
+		num *= -1;
+	}
+	if (num >= 10)
+	{
+		printed_bytes += ft_print_nbr(num / 10);
+	}
+	d = num % 10 + '0';
+	printed_bytes += write(1, &d, 1);
+	return (printed_bytes);
+}

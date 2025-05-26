@@ -8,13 +8,20 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 # Sources files
-SRC = 
+SRC = ft_printf.c \
+	ft_print_char.c \
+	ft_print_str.c \
+	ft_print_nbr.c \
+	ft_print_hex_top.c \
+	ft_print_hex_bottom.c \
+	ft_print_ptr.c \
+	ft_print_uns.c
 
 # Main
-MAIN = main.c
+#MAIN = main.c
 
 # Program
-PROGRAM = ./a.exe
+#PROGRAM = ./a.out
 
 # Object files
 OBJ = $(SRC:%.c=%.o)
@@ -26,12 +33,12 @@ AR = ar rcs
 all: $(NAME)
 
 # Rule to run the program
-run: $(PROGRAM)
-	@echo "Ejecutando el programa..."
-	@$(PROGRAM)
+#run: $(PROGRAM)
+#	@echo "Ejecutando el programa..."
+#	@$(PROGRAM)
 # Rule to compile the program
-$(PROGRAM): $(MAIN)
-	$(CC) $(CFLAGS) $(MAIN) -o $@
+#$(PROGRAM): $(MAIN)
+#	$(CC) $(CFLAGS) $(MAIN) $(NAME) -o $@
 
 # Rule to create the library
 $(NAME): $(OBJ)
@@ -39,16 +46,16 @@ $(NAME): $(OBJ)
 
 # Rule to compile all the .c to o.
 $(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $^
 
 clean:
-	rm -r $(OBJ)
+	rm -rf $(OBJ)
 
-flcean: clean
-	rm -r $(NAME)
+fclean: clean
+	rm -rf $(NAME)
 
-pclean: fclean
-	rm -r $(PROGRAM)
+#pclean: fclean
+#	rm -r $(PROGRAM)
 
 # Restart the Makefile. Erase everything and executes again
 re: fclean all

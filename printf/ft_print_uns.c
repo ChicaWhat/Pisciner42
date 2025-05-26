@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_print_uns.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/24 19:14:34 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:06:04 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/26 17:08:01 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/26 17:18:31 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
-# include <stdio.h>
-# include <unistd.h>
-# include <stdarg.h>
-# include <limits.h>
+#include "ft_printf.h"
 
-int		ft_printf(char const *chain, ...);
-int		ft_print_str(char *str);
-int		ft_print_char(int c);
-int		ft_print_nbr(int num);
-int		ft_print_hex_top(unsigned int num);
-int		ft_print_hex_bottom(unsigned int num);
-int		ft_print_ptr(void *ptr);
-int		ft_print_uns(unsigned int num);
+int	ft_print_uns(unsigned int num)
+{
+	int					printed_bytes;
+	char				d;
+	unsigned long int	n;
 
-#endif
+	n = num;
+	printed_bytes = 0;
+	if (num >= 10)
+	{
+		printed_bytes += ft_print_nbr(num / 10);
+	}
+	d = num % 10 + '0';
+	printed_bytes += write(1, &d, 1);
+	return (printed_bytes);
+}

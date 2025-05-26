@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_print_str.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/24 19:14:34 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:06:04 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/26 11:08:49 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/26 16:41:54 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
-# include <stdio.h>
-# include <unistd.h>
-# include <stdarg.h>
-# include <limits.h>
+#include "ft_printf.h"
 
-int		ft_printf(char const *chain, ...);
-int		ft_print_str(char *str);
-int		ft_print_char(int c);
-int		ft_print_nbr(int num);
-int		ft_print_hex_top(unsigned int num);
-int		ft_print_hex_bottom(unsigned int num);
-int		ft_print_ptr(void *ptr);
-int		ft_print_uns(unsigned int num);
+int	ft_print_str(char *str)
+{
+	int	i;
 
-#endif
+	if (str == NULL)
+	{
+		(write(1, "(null)", 6));
+		return (6);
+	}
+	i = 0;
+	while (str[i] != '\0')
+	{
+		write(1, &str[i], 1);
+		i++;
+	}
+	return (i);
+}

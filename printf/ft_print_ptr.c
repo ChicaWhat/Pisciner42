@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_print_ptr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/24 19:14:34 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:06:04 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/26 14:05:07 by carmegon          #+#    #+#             */
+/*   Updated: 2025/05/26 16:29:15 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
-# include <stdio.h>
-# include <unistd.h>
-# include <stdarg.h>
-# include <limits.h>
+#include "ft_printf.h"
 
-int		ft_printf(char const *chain, ...);
-int		ft_print_str(char *str);
-int		ft_print_char(int c);
-int		ft_print_nbr(int num);
-int		ft_print_hex_top(unsigned int num);
-int		ft_print_hex_bottom(unsigned int num);
-int		ft_print_ptr(void *ptr);
-int		ft_print_uns(unsigned int num);
+int	ft_print_ptr(void *ptr)
+{
+	unsigned long int	*cst;
+	int					printed_bytes;
 
-#endif
+	printed_bytes = 0;
+	cst = (unsigned long int *)ptr;
+	if (!cst)
+		printed_bytes += write(1, "(nil)", 5);
+	else
+	{
+		printed_bytes += write(1, "0x", 2);
+		printed_bytes += ft_print_hex_bottom(*cst);
+	}
+	return (printed_bytes);
+}
