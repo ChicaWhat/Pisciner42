@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 11:46:55 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:05:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:09:41 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	ft_print_hex_top(unsigned int num)
 {
-	unsigned int	printed_bytes;
-	unsigned int	d;
+	unsigned int		printed_bytes;
+	unsigned long long	d;
 
 	printed_bytes = 0;
-	d = num;
+	d = (unsigned long long)num;
 	if (num >= 16)
 	{
 		printed_bytes += ft_print_hex_top(num / 16);

@@ -6,16 +6,16 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:33:30 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:05:18 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:27:55 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_hex_bottom(unsigned int num)
+int	ft_print_hex_bottom(unsigned long long num)
 {
-	unsigned int	printed_bytes;
-	unsigned int	d;
+	unsigned int		printed_bytes;
+	unsigned long long	d;
 
 	printed_bytes = 0;
 	d = num;

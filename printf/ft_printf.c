@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 20:46:30 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/26 18:05:34 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:20:59 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_print_specifier(char specifier, va_list input)
 	else if (specifier == 'u')
 		printed_bytes += ft_print_uns(va_arg(input, unsigned int));
 	else if (specifier == '%')
-		printed_bytes += ft_print_char(va_arg(input, int));
+		printed_bytes += ft_print_char('%');
 	else if (specifier == 'X')
 		printed_bytes += ft_print_hex_top(va_arg(input, unsigned int));
 	else if (specifier == 'x')

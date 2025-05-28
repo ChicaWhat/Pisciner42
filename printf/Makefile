@@ -60,5 +60,5 @@ fclean: clean
 # Restart the Makefile. Erase everything and executes again
 re: fclean all
 
-.PHONY: all clean fclean re run pclean
+.PHONY: all clean fclean re
 
