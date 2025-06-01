@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:54:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/30 11:24:18 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/01 19:44:21 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # include <fcntl.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 20
+# define BUFFER_SIZE 10
 #endif
 
-int	read(char *s, int fd);
+char	*get_next_line(int fd);
 
 #endif

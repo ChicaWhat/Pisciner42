@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/05/31 19:37:31 by marvin           ###   ########.fr       */
+/*   Updated: 2025/06/01 20:23:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,8 @@ char    *get_next_line(int fd)
         - En esta variable ssize_t hago el llamado a mi funcion read- Read recibe 3 parametros: 1. fd 2. mi puntero *ptr 3. Cantidad de bytes que leeré (buufer_size)
         - Reserva el espacio de memoria (malloc)
     */
+    char	*ptr;
+    ssize_t	readingTheFile;
+
+
 }
