@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/01 20:23:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:15:32 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ char    *get_next_line(int fd)
     */
     char	*ptr;
     ssize_t	readingTheFile;
+
+    readingTheFile = read(fd, ptr, BUFFER_SIZE);
 
 
 }
