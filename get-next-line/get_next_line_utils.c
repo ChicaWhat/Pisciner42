@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/06 16:42:41 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:41:27 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,53 +76,44 @@ char	*ft_strdup(char *stash)
 	stash[i] = '\0';
 	return (stash);
 } */
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char *stash, unsigned int start, size_t len)
 {
-	char			*sub_s;
+	char			*line;
 	unsigned int	i;
 
-	if (start > ft_strlen(s))
-	{
-		sub_s = ft_calloc(1, 1);
-		return (sub_s);
-	}
-	if (len > (ft_strlen(s) - start))
-		len = ft_strlen(s) - start;
-	sub_s = (char *)malloc((len + 1) * sizeof(char));
-	if (!sub_s)
+	line = (char *)malloc((len + 1) * sizeof(char));
+	if (!line)
 		return (NULL);
 	i = 0;
-	while (s[start] && i < len)
+	while (stash[start] && i < len)
 	{
-		sub_s[i] = s[start];
+		line[i] = stash[start];
 		i++;
 		start++;
 	}
-	sub_s[i] = '\0';
-	return (sub_s);
+	line[i] = '\0';
+	return (line);
 }
-char	*ft_stashchr(const char *s, int c)
+char	*ft_strchr(char *stash, char c)
 {
-	char	cast_c;
-	char	*aux;
+	char	*line;
 	int		i;
 
-	cast_c = (char) c;
 	i = 0;
-	while (s[i] != '\0')
+	while (stash[i] != '\0')
 	{
-		if (s[i] == cast_c)
+		if (stash[i] == c)
 		{
-			aux = (char *)&s[i];
-			return (aux);
+			line = &stash[i + 1];
+			return (line);
 		}
 		i++;
 	}
-	if (cast_c == '\0')
+/* 	if (cast_c == '\0')
 	{
-		aux = (char *)&s[i];
+		aux = (char *)&stash[i];
 		return (aux);
 	}
-	else
-		return (NULL);
+	else */
+	return (NULL);
 }
