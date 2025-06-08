@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/06 17:41:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/08 18:05:18 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ char	*ft_strjoin(char *stash, char *str)
 		new_stash[len_stash + i] = str[i];
 		i++;
 	}
-	new_stash[len_new] = '\0';
+	new_stash[len_new - 1] = '\0';
 	/* 
-		Aqui vamos a dejar comentado un free, porque ni idea
-		de si lo voy a necesitar o no
-		free(stash);
+		?Aqui vamos a dejar comentado un free, porque ni idea
+		?de si lo voy a necesitar o no
+		?free(stash);
 	*/
 	return (new_stash);
 }
@@ -49,7 +49,7 @@ size_t	ft_strlen(char *s)
 	size_t	i;
 
 	if (!s)
-		return (NULL);
+		return (0);
 	i = 0;
 	while (s[i] != '\0')
 	{
@@ -58,7 +58,7 @@ size_t	ft_strlen(char *s)
 	return (i);
 }
 /* 
-	No se si la tengo que usar o no, pero aqui la dejo
+	*No se si la tengo que usar o no, pero aqui la dejo
 char	*ft_strdup(char *stash)
 {
 	int		i;
@@ -109,6 +109,8 @@ char	*ft_strchr(char *stash, char c)
 		}
 		i++;
 	}
+//! Posiblemente tenga que volver a poner esta condicion, a no ser que me consiga manejar con
+//! mi substr para poder dividir mi linea depurada y lo que queda despues del \n en adelante
 /* 	if (cast_c == '\0')
 	{
 		aux = (char *)&stash[i];

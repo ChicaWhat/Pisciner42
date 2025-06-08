@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:54:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/01 19:44:21 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/08 17:15:02 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,17 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdlib.h>
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 10
 #endif
 
 char	*get_next_line(int fd);
+char    *read_line(int fd, char *str);
+char    *ft_strjoin(char *stash, char *str);
+size_t  ft_strlen(char *s);
+char    *ft_substr(char *stash, unsigned int start, size_t len);
+char    *ft_strchr(char *stash, char c);
 
 #endif
