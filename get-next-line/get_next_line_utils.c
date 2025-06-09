@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/08 18:05:18 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:00:02 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,7 @@ char	*ft_strjoin(char *stash, char *str)
 		i++;
 	}
 	new_stash[len_new - 1] = '\0';
-	/* 
-		?Aqui vamos a dejar comentado un free, porque ni idea
-		?de si lo voy a necesitar o no
-		?free(stash);
-	*/
+	free(stash);
 	return (new_stash);
 }
 size_t	ft_strlen(char *s)
@@ -99,12 +95,16 @@ char	*ft_strchr(char *stash, char c)
 	char	*line;
 	int		i;
 
+/* 	if (!stash)
+		return (NULL); */
 	i = 0;
 	while (stash[i] != '\0')
 	{
 		if (stash[i] == c)
 		{
-			line = &stash[i + 1];
+			line = ft_substr(stash, 0, stash[i]);
+			if (!line)
+				return (NULL);
 			return (line);
 		}
 		i++;
