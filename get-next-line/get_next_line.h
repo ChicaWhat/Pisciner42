@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 10:54:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/11 10:52:38 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:08:33 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,18 @@
 # include <fcntl.h>
 # include <stdlib.h>
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
-#endif
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 100
+# endif
 
 char	*get_next_line(int fd);
-char    *read_line(int fd, char *str);
+char	*read_line(int fd, char *str);
 char	*extract_line(char *stash);
 char	*update_line(char *stash);
-char    *ft_strjoin(char *stash, char *str);
-size_t  ft_strlen(char *s);
-char    *ft_substr(char *stash, unsigned int start, size_t len);
-char    *ft_strchr(char *stash, char c);
+char	*ft_strjoin(char *stash, char *str);
+size_t	ft_strlen(char *s);
+char	*ft_substr(char *stash, unsigned int start, size_t len);
+char	*ft_strchr(char *stash, char c);
+char	*ft_free(char **str);
 
 #endif

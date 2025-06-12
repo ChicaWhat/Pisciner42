@@ -6,11 +6,19 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/11 10:46:10 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:07:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_free(char **str)
+{
+	if (*str)
+		free(*str);
+	*str = NULL;
+	return (NULL);
+}
 
 char	*ft_strjoin(char *stash, char *str)
 {
@@ -37,9 +45,10 @@ char	*ft_strjoin(char *stash, char *str)
 		i++;
 	}
 	new_stash[len_new - 1] = '\0';
-	free(stash);
+	ft_free(&stash);
 	return (new_stash);
 }
+
 size_t	ft_strlen(char *s)
 {
 	size_t	i;
@@ -48,30 +57,10 @@ size_t	ft_strlen(char *s)
 		return (0);
 	i = 0;
 	while (s[i] != '\0')
-	{
 		i++;
-	}
 	return (i);
 }
-/* 
-	*No se si la tengo que usar o no, pero aqui la dejo
-char	*ft_strdup(char *stash)
-{
-	int		i;
-	int		len_stash;
 
-	stash = (char *)malloc(1 * sizeof(char));
-	if (!stash)
-		return (0);
-	i = 0;
-	while (stash[i])
-	{
-		stash[i] = s[i];
-		i++;
-	}
-	stash[i] = '\0';
-	return (stash);
-} */
 char	*ft_substr(char *stash, unsigned int start, size_t len)
 {
 	char			*line;
@@ -79,7 +68,10 @@ char	*ft_substr(char *stash, unsigned int start, size_t len)
 
 	line = (char *)malloc((len + 1) * sizeof(char));
 	if (!line)
+	{
+		line = NULL;
 		return (NULL);
+	}
 	i = 0;
 	while (stash[start] && i < len)
 	{
@@ -90,13 +82,12 @@ char	*ft_substr(char *stash, unsigned int start, size_t len)
 	line[i] = '\0';
 	return (line);
 }
+
 char	*ft_strchr(char *stash, char c)
 {
 	char	*line;
 	int		i;
 
-/* 	if (!stash)
-		return (NULL); */
 	i = 0;
 	while (stash[i] != '\0')
 	{
@@ -108,13 +99,5 @@ char	*ft_strchr(char *stash, char c)
 		}
 		i++;
 	}
-//! Posiblemente tenga que volver a poner esta condicion, a no ser que me consiga manejar con
-//! mi substr para poder dividir mi linea depurada y lo que queda despues del \n en adelante
-/* 	if (cast_c == '\0')
-	{
-		aux = (char *)&stash[i];
-		return (aux);
-	}
-	else */
 	return (NULL);
 }
