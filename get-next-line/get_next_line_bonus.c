@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:17:33 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/16 17:52:20 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:31:01 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_read_line(int fd, char *stash)
 {
@@ -20,8 +20,7 @@ char	*ft_read_line(int fd, char *stash)
 	if (!stash)
 	{
 		stash = malloc(1 * sizeof(char));
-		
-		stash = "";
+		stash[0] = '\0';
 		if (!stash)
 			return (ft_free(&stash));
 	}
@@ -92,19 +91,19 @@ char	*ft_update_line(char *stash)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = ft_read_line(fd, stash);
-	if (!stash || stash[0] == '\0')
-		return (ft_free(&stash));
-	line = ft_extract_line(stash);
+	stash[fd] = ft_read_line(fd, stash[fd]);
+	if (!stash[fd] || stash[fd][0] == '\0')
+		return (ft_free(&stash[fd]));
+	line = ft_extract_line(stash[fd]);
 	if (!line)
 		return (NULL);
-	stash = ft_update_line(stash);
-	if (!stash)
+	stash[fd] = ft_update_line(stash[fd]);
+	if (!stash[fd])
 		return (NULL);
 	return (line);
 }
@@ -114,27 +113,14 @@ char	*get_next_line(int fd)
 	int		fd;
 	char	*line;
 
-	//fd = open("archivo.txt", O_RDONLY);
+	fd = open("archivo.txt", O_RDONLY);
 	//fd = open("oneline.txt", O_RDONLY);
 	//fd = open("vacio.txt", O_RDONLY);
-	fd = open("peque.txt", O_RDONLY);
-	while ((line = get_next_line(fd)) != NULL)
+	while ((line = ft_get_next_line(fd)) != NULL)
 	{
 		printf("LÍNEA OBTENIDA DEL MAIN: %s]", line);
 		free(line);
 	}
 	close(fd);
 	return (0);
-} */
-/* int main(void)
-{
-    char *line;
-
-    write(1, "Escribe algo (Ctrl + D para terminar):\n", 39);
-    while ((line = get_next_line(0)) != NULL)
-    {
-        printf(">> %s", line);
-        free(line);
-    }
-    return (0);
 } */
