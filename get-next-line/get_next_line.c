@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:17:33 by carmegon          #+#    #+#             */
-/*   Updated: 2025/06/16 17:52:20 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:31:59 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ char	*ft_read_line(int fd, char *stash)
 	if (!stash)
 	{
 		stash = malloc(1 * sizeof(char));
-		
-		stash = "";
+		stash[0] = '\0';
 		if (!stash)
 			return (ft_free(&stash));
 	}
@@ -109,12 +108,12 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-/* int	main(void)
+int	main(void)
 {
 	int		fd;
 	char	*line;
 
-	//fd = open("archivo.txt", O_RDONLY);
+	fd = open("archivo.txt", O_RDONLY);
 	//fd = open("oneline.txt", O_RDONLY);
 	//fd = open("vacio.txt", O_RDONLY);
 	fd = open("peque.txt", O_RDONLY);
@@ -125,7 +124,7 @@ char	*get_next_line(int fd)
 	}
 	close(fd);
 	return (0);
-} */
+}
 /* int main(void)
 {
     char *line;
