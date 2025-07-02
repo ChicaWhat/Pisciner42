@@ -5,23 +5,19 @@ int ft_strlen(char *str)
 {
 		int i = 0;
 		while (str[i])
-		{
-				i++;
-		}
+			i++;
 		return (i);
 }
 
-char *rev_print(char *str)
+void rev_print(char *str)
 {
-		int i = 0;
-		int j = 0;
-		while (str[i])
+		//int i = 0;
+		int len = ft_strlen(str) - 1;
+		while (str[len])
 		{
-			j = ft_strlen(str);
-			write(1, &str[i], j--);
-			i++;
+			write(1, &str[len], 1);
+			len--;
 		}
-		return (str);
 }
 
 int main(int argc, char **argv)
@@ -32,7 +28,7 @@ int main(int argc, char **argv)
 		{
 				rev_print(argv[1]);
 		}
-		else
-				write(1, "\n", 1);
+
+		write(1, "\n", 1);
 		return (0);
 }
