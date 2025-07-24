@@ -12,9 +12,7 @@ char **split(char *str)
 	while (*str)
 	{
 		while (*str == 32 || *str == '\t' || *str == '\n')
-		{
 			str++;
-		}
 		if (!str)
 			break;
 		start = str;
@@ -24,7 +22,7 @@ char **split(char *str)
 		if (!word)
 			return (NULL);
 		j = 0;
-		while (start > str)
+		while (start < str)
 			word[i][j++] = *start++;
 		word[i][j] = '\0';
 		i++;
