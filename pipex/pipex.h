@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 16:03:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/08/10 16:22:28 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/08/12 23:29:04 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 # include <errno.h>
 # include <string.h>
 # include <unistd.h>
-# include  <fcntl.h>
+# include <fcntl.h>
+# include <stdlib.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 100
