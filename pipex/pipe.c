@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 13:35:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/08/14 14:15:22 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/08/14 16:23:15 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,57 @@ int main(void)
 		if (pid1 == 0)
 		{
 				dup2(pipefd[1], STDOUT_FILENO);
+
+			// Cerramos descriptores no necesarios
+			close(pipefd[0]); // No necesitamos leer
+			close(pipefd[1]); // Ya redirigido con dup2
+
+			// Ejecutar el primer comando (ls -l)
+			char *cmd[1] = {"ls", "l", NULL};
+			/*
+					Array creado:          execve() lo interpreta como:
+					+-----------+         +---------------------------+
+					| cmd1[0] → "ls"      | argv[0] → "ls" (nombre)   |
+					| cmd1[1] → "-l"      | argv[1] → "-l" (flag)     |
+					| cmd1[2] → NULL      | argv[2] → NULL (fin)      |
+					+-----------+         +---------------------------+
+			*/
+			if (access(cmd1[0], X_OK == 0))
+					execve[cmd[0], cmd1, NULL];
+
+			// Si execve falla, pasa por aqui
+			perror("Error execve");
+			exit(EXIT_FAILURE);
 		}
 
-		// Cerramos descriptores no necesarios
-		close(pipefd[0]); // No necesitamos leer
-		close(pipefd[1]); // Ya redirigido con dup2
-
-		// Ejecutar el primer comando (ls -l)
-		char *cmd[1] = {"ls", "l", NULL};
-		/*
-			Array creado:          execve() lo interpreta como:
-			+-----------+         +---------------------------+
-			| cmd1[0] → "ls"      | argv[0] → "ls" (nombre)   |
-			| cmd1[1] → "-l"      | argv[1] → "-l" (flag)     |
-			| cmd1[2] → NULL      | argv[2] → NULL (fin)      |
-			+-----------+         +---------------------------+
-		*/
-		if (access(cmd1[0], X_OK == 0))
+		// Segundo for() - Para el segundo comando
+		pid2 = fork();
+		if (pid2 == -1)
 		{
-				execve[cmd[0], cmd1, NULL];
+				// Redireccionamos la entrada estándar (STDIN) del pipe
+				dup2(pipefd[0], STDIN_FILENO);
+
+				// Cerrar descriptores no necesarios
+				close(pipefd[1]); // No necesitamos escribir
+				close(pipefd[0]); // Ya redirigido con dup2
+
+				// Ejecutamos el segundo comando
+				char *cmd2[] = {"wc", "l", NULL};
+				if (access(cmd2[0], X_OK) == 0)
+						execve(cmd[0], cmd2, NULL);
+				perro("Error en execve");
+				exit(EXIT_FAILURE);
 		}
+		
+		// Proceso padre
+		// Cerramos ambos extremos del pipe(el padre no los usa directamente)
+		close(pipefd[0]);
+		close(pipefd[1]);
+
+		// Esperar a que ambos hijos terminen
+		waitpid(pid1, NULL, 0);
+		waitpid(pid2, NULL, 0);
+
+		printf("Proceso completado!\n");
+		return (0);
 }
-
-
-
-
