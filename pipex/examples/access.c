@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   access.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/10 16:03:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/08/13 20:45:50 by carmegon         ###   ########.fr       */
+/*   Created: 2025/08/10 16:31:09 by carmegon          #+#    #+#             */
+/*   Updated: 2025/08/10 16:36:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-	- The "fcntl.h" library is for using the constants required by the
-	open() function.
-	- The "sys/wait.h" library is for using the pid_t type. 
+	access() function checks that the access or the command exists.
 */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include <stdio.h>
-# include <errno.h>
-# include <string.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <stdlib.h>
-# include <sys/wait.h>
+#include "pipex.h"
 
+int main(void)
+{
+		char *file = "prueba.txt";
 
-//int open(char *nameFile, )
-
-#endif
+		if (access(file, R_OK) == 0)
+				printf("El archivo %s se puede leer\n", file);
+		else
+				perror("Error de acceso");
+		return (0);
+}
