@@ -1,25 +1,30 @@
-#include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-int	is_power_of_2(unsigned int n)
+/*
+	Hay que averiguar si el numero que nos pasan por parametros es potencia de
+	2. Una potencia es el resultado de multiplicar el numero X POR SI MISMO una
+	cantidad especifica de veces.
+	Para ello, me creo una variable con valor 1 y voy multiplicando esta variable
+	x2. Si el numero que consigo es exactamente igual al numero que me han pasado
+	por parámetros, entonces es potencia de 2, sino no lo es.
+*/
+int is_power_of_2(unsigned int n)
 {
-		return((n & (n-1)) == 0);
+		unsigned int prueba = 1;
 
+		while (prueba < n)
+		{
+				prueba *= 2;
+				if (prueba == n)
+						return (1);
+		}
+		return (0);
 }
-/*{
-		unsigned int i = 1;
-		
-		while (2*i <= n)
-				i *= 2;
-		if (i == n)
-				return (1);
-		return (0);
-}*/
 
-int main(void)
+int main(int ac, char **av)
 {
-		unsigned int n = 0;
-		printf("%i\n", is_power_of_2(n));
+		if (ac == 2)
+				printf("%d\n", is_power_of_2(atoi(av[1])));
 		return (0);
-
 }

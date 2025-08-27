@@ -35,13 +35,13 @@ int main(int argc, char **argv)
 		{
 			if (operator == '+')
 				result = a + b;
-			else if (argv[2][0] == '-')
+			else if (operator == '-')
 				result = a - b;
-			else if (argv[2][0] == '*')
+			else if (operator == '*')
 				result = a * b;
-			else if (argv[2][0] == '/')
+			else if (operator == '/')
 				result = a / b;
-			else if (argv[2][0] == '%')
+			else if (operator == '%')
 				result = a % b;
 			printf("%d", result);
 		}
