@@ -15,10 +15,10 @@ int ft_atoi(char *str)
             i++;
         }                                        
         while (str[i] >= '0' && str[i] <= '9')
-		{
-                num = (num * 10) + str[i] - '0';
-				i++;
-		}                                                      
+	{
+        	num = (num * 10) + str[i] - '0';
+		i++;
+	}                                                      
         return (num * sign);                                                           
 }
 

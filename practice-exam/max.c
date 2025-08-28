@@ -4,7 +4,7 @@
 int max(int *tab, unsigned int len)
 {
 		int aux;
-		unsigned int i = 0;
+		unsigned int i = 1;
 
 		if (!tab || len == 0)
 				return (0);
@@ -23,10 +23,10 @@ int main(int ac, char **av)
 {
 		(void)ac;
 		(void)av;
-		int tab[] = {3, 9, 2, 15, 7, 10};
-		int len = 6;
+		int *tab = NULL;
+		int len = 0;
 
-		if (ac == 3)
-				printf("%d\n", max(&tab[5], len));
+		if (ac == 1)
+				printf("%d\n", max(&tab[0], len));
 		return (0);
 }
