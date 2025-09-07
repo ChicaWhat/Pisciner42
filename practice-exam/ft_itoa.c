@@ -7,8 +7,7 @@ int ft_count(int nb)
 		int count = 0;
 		if (nb <= 0)
 				count++;
-		nb = -nb;
-		while (nb > 0)
+		while (nb != 0)
 		{
 				nb = nb / 10;
 				count++;
@@ -19,19 +18,20 @@ int ft_count(int nb)
 char *ft_itoa(int nbr)
 {
 		int len = ft_count(nbr);
-		//int count = 0;
 		long nb = nbr;
-		//int i = 0;
+		int sign = 1;
 		char *str = malloc(len + 1 * sizeof(char));
+		if (!str)
+				return (0);
 		str[len] = '\0';
 		if (nb < 0)
+		{
 				str[0] = '-';
-		if (nb < 0)
-				nb *= -1;
-		//nb *= -1;
+				sign = -1;
+		}
 		while (nb != 0)
 		{
-			str[len - 1] = nb % 10 + '0';
+			str[len - 1] = (nb % 10) * sign + '0';
 			nb /= 10;
 			len--;
 		}

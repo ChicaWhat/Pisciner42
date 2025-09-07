@@ -78,9 +78,15 @@ int main(int ac, char **av)
 	{
 		write(1, split[i], ft_strlen(split[i]));
 		write(1, " ", 1);
+		free(split[i]);
 		i++;
 	}
-	write(1, split[0], ft_strlen(split[0]));
+	if (split[0])
+	{
+		write(1, split[0], ft_strlen(split[0]));
+		free(split[0]);
+	}
 	write(1, "\n", 1);
+	free(split);
 	return (0);
 }
