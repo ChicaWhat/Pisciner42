@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 16:14:42 by carmegon          #+#    #+#             */
-/*   Updated: 2025/08/10 16:30:30 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/09/26 20:18:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@
 	errno = EEXIST (el archivo ya existe);
 */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 int main(void)
 {
-		int fd;
-		fd = open("prueva.txt", O_RDONLY);
-		//errno = EEXIST;
+	int fd;
+	fd = open("prueva.txt", O_RDONLY);
+	// errno = EEXIST;
 
-		if (fd == -1)
-		{
-				perror("Error con perror");
-				printf("Error con strerror: %s\n", strerror(errno));
-		}
-		else
-		{
-				printf("Archivo arbierto correctamente (fd = %d)\n", fd);
-				close(fd);
-		}
-		return (0);
+	if (fd == -1)
+	{
+		perror("Error con perror");
+		printf("Error con strerror: %s\n", strerror(errno));
+	}
+	else
+	{
+		printf("Archivo arbierto correctamente (fd = %d)\n", fd);
+		close(fd);
+	}
+	return (0);
 }

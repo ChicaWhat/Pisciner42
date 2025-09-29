@@ -1,0 +1,17 @@
+manzana roja
+banana amarilla
+manzana verde
+uva morada
+banana madura
+
+"grep manzana" "wc -l"
+cuenta las veces que hay manzana escrita y lo pasa al outfile
+
+"wc -w" "cat"
+cuenta palabras y guarda el resultado
+
+"tr 'a-z' 'A-Z'" "head -3"
+convierte a mayusculas y toma las primeras 3 lineas
+
+"cut -d' ' -f1" "sort" "uniq"
+toma la primera palabra de cada linea, ordena y elimina duplicados

@@ -8,9 +8,9 @@ int main(int argc, char **argv)
 
     if (argc == 2)
     {
-        char c = argv[1][i];
         while (argv[1][i])
         {
+            char c = argv[1][i];
             int j = -1;
             if (c >= 'b' && c <= 'z')
             {
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
                     j++;
                 }
             }
-            else if (c >= 'B' && c <= 'Z')
+            if (c >= 'B' && c <= 'Z')
             {
                 while (c != alpha1[j])
                 {

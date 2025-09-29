@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.c      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 16:03:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/08/25 20:52:57 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/09/29 20:24:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,21 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include "libft/libft.h"
 
-char	**ft_split(char const *s, char c);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlen(const char *s);
-char	*ft_strnstr(const char *big, const char *little, size_t len);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
+# ifndef RED
+#  define RED "\033[31m"
+# endif
+# ifndef RESET
+#  define RESET "\033[0m"
+# endif
+
+void	pipex_error(int error_code);
+char	**get_path(char **env);
+void	ft_free_all(char **list, char *str);
+char	*find_command_path(char **path_list, char *command);
+int count_sigle_quotes(char *str, char c);
+char **filter_array(char **command);
+char **check_commands(char **av);
 
 #endif
