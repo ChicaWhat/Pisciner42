@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 15:20:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/26 21:21:22 by marvin           ###   ########.fr       */
+/*   Updated: 2025/09/30 20:48:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char **get_path(char **env)
 		}
 		i++;
 	}
-	ft_free_all(path_list, NULL);
+	ft_free_all(path_list, NULL); //Comprobar si en vez de NULL poner path_env
 	return (NULL);
 }
 

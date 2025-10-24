@@ -86,10 +86,8 @@ int main(int ac, char **av, char **envp)
         write(2, "./pipex file1 comand1 comand2 file2\n", 36);
     if (pipe(fd) == -1)
         pipex_error(24);
-    ft_first_child(av, envp, fd);
+    //ft_first_child(av, envp, fd);
     else
-    {
         ft_daddy(av, envp, fd);
-    }
     return (0);
 }
