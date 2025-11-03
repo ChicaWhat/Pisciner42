@@ -12,16 +12,16 @@
 
 #include "../push-swap.h"
 
-int	ft_digit_space(char c)
+int ft_digit_space(char c)
 {
     if (c == '+' || c == '-')
         return (0);
-	else if (c >= 48 && c < 58)
-		return (0);
+    else if (c >= 48 && c < 58)
+        return (0);
     else if (c == 32)
         return (0);
     else
-	    return (1);
+        return (1);
 }
 
 int ft_sign(char *str)
@@ -29,8 +29,8 @@ int ft_sign(char *str)
     int i;
 
     i = 0;
-    if (!str[i])
-        return (0);
+    if (!str[i] || str[i] == '\0')
+        return (1);
     while (str[i])
     {
         if ((str[i] == '+' || str[i] == '-') && !ft_isdigit(str[i + 1]))
@@ -46,8 +46,8 @@ int ft_sign(char *str)
 
 int ft_no_repeat(char **list)
 {
-    int     i;
-    int     j;
+    int i;
+    int j;
 
     i = 0;
     while (list[i])
@@ -67,8 +67,8 @@ int ft_no_repeat(char **list)
 
 int is_order(char **list)
 {
-    int     i;
-    int     j;
+    int i;
+    int j;
 
     i = 0;
     while ((list[i]))
@@ -115,10 +115,10 @@ long ft_atol(char *str)
     return (n * sign);
 }
 // Esta funcion es la primera de todas para unificar todos los argv en uno
-char    *ft_one_argv(char **av)
+char *ft_one_argv(char **av)
 {
-    char    *res;
-    int     i;
+    char *res;
+    int i;
 
     res = ft_calloc(1, sizeof(char));
     if (!res)
@@ -138,32 +138,60 @@ char    *ft_one_argv(char **av)
     return (res);
 }
 
-char    **ft_split_argv(int ac, char **av)
+char **ft_split_argv(char *one_av)
 {
-    char    *one_av;
     char    **list;
 
-    if (ac < 2)
-        return (NULL);
-    one_av = ft_one_argv(av);
     list = ft_split(one_av, ' ');
-    free(one_av);
     if (!list)
+    {
+        free(one_av);
         ft_error();
+    }
+    free(one_av);
     return (list);
 }
 
-int ft_is_valid(int ac, char **av)
+int list_size(char **list_num)
+{
+    int i;
+
+    i = 0;
+    while (list_num[i])
+        i++;
+    return (i);
+}
+
+long *ft_convert_to_int_array(char **list, int size)
 {
     int     i;
-    int     j;
+    long    *int_array;
+    
+    i = 0;
+    int_array = malloc(size * sizeof(long));
+    if (!int_array)
+    {
+        ft_free_all(list, NULL, NULL);
+        return (NULL);
+    }
+    while (i < size)
+    {
+        int_array[i] = ft_atol(list[i]);
+        i++;
+    }
+    return (int_array);
+}
+int ft_is_valid(int ac, char **av)
+{
+    int i;
+    int j;
 
     i = 1;
     while (i < ac)
     {
         j = 0;
         if (av[i][j] == '\0')
-            return (0);
+            return (1);
         while (av[i][j])
         {
             if (ft_sign(av[i]))
@@ -189,21 +217,37 @@ void ft_parsing(int ac, char **av)
         exit(0);
 }
 
+void    print_nodes(t_node *node)
+{
+    t_node  *aux;
+
+    aux = node;
+    while (1)
+    {
+        printf("nodo %ld\n", aux->num);
+        printf("next %ld\n", aux->next->num);
+        printf("prev %ld\n", aux->prev->num);
+        printf("-------------------------\n");
+        aux = aux->next;
+        if (aux == node)
+            break;
+    }
+}
+
 int main(int ac, char **av)
 {
-    int     i;
-    char    **res;
-    //int     j;
+    t_node  *stack_a;
 
     if (ac == 1)
         return (0);
-    i = 1;
-    while (av[i])
+    ft_parsing(ac, av);
+    stack_a = init_stack(av+1);
+    if (!stack_a)
     {
-        res = ft_split_argv(ac, av);
-        ft_printf("%d\n", ft_atol(res[i]));
-        i++;
+        free(stack_a);
+        return (1);
     }
-    free(res);
+    print_nodes(stack_a);
+    free(stack_a);
     return (0);
 }

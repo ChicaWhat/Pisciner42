@@ -17,3 +17,22 @@ void    ft_error(void)
     ft_putstr_fd("Error\n", 2);
     exit(1);
 }
+void    *ft_free_all(char **list, char *str, t_node **node)
+{
+    int     i;
+    if (list)
+    {
+        i = 0;
+        while (list[i])
+        {
+            free(list[i]);
+            i++;
+        }
+        free(list);
+    }
+    if (str)
+        free(str);
+    if (node)
+        free ((*node));
+    return (NULL);
+}
