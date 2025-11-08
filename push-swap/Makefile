@@ -19,6 +19,7 @@ OBJ_DIR = obj
 SRC_FILES = main.c \
 			error.c \
 			nodes.c \
+			moves.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))

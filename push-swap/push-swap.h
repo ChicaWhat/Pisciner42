@@ -57,7 +57,13 @@ void    *ft_free_all(char **list, char *str, t_node **node);
 long    *ft_convert_to_int_array(char **list, int size);
 t_node  *create_stack(long *list_num, int size);
 t_node  *init_stack(char **av);
-int list_size(char **list_num);
+int     list_size(char **list_num);
+void    ft_swap(t_node **stack);
+void    ft_push(t_node **stack_src, t_node **stack_dest);
+void    ft_rotate(t_node **stack);
+void    ft_reverse_rotate(t_node **stack);
 
+
+t_node    *print_nodes(t_node *node);
 
 #endif

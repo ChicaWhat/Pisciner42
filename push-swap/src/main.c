@@ -217,7 +217,7 @@ void ft_parsing(int ac, char **av)
         exit(0);
 }
 
-void    print_nodes(t_node *node)
+t_node    *print_nodes(t_node *node)
 {
     t_node  *aux;
 
@@ -232,11 +232,14 @@ void    print_nodes(t_node *node)
         if (aux == node)
             break;
     }
+    return (node);
 }
 
-int main(int ac, char **av)
+//! MAIN ORIGINAL
+/* int main(int ac, char **av)
 {
     t_node  *stack_a;
+    t_node  *stack_b = NULL;
 
     if (ac == 1)
         return (0);
@@ -247,7 +250,66 @@ int main(int ac, char **av)
         free(stack_a);
         return (1);
     }
+    free(stack_a);
+    return (0);
+} */
+
+//? MAIN DE PRUEBA
+int main(int ac, char **av)
+{
+    t_node  *stack_a;
+    t_node  *stack_b = NULL;
+
+    if (ac == 1)
+        return (0);
+    ft_parsing(ac, av);
+    stack_a = init_stack(av+1);
+    if (!stack_a)
+    {
+        free(stack_a);
+        return (1);
+    }
+    printf("-----ANTES DEL PUSH-----\n");
+    printf("Stack src:\n");
     print_nodes(stack_a);
+    ft_push(&stack_a, &stack_b);
+    printf("-----DESPUES DEL PUSH-----\n");
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----OTRO PUSH-----\n");
+    ft_push(&stack_a, &stack_b);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN SWAP-----\n");
+    ft_swap(&stack_b);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----ÚLTIMO PUSH-----\n");
+    ft_push(&stack_a, &stack_b);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN ROTATE-----\n");
+    ft_rotate(&stack_b);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN PUSH MAS-----\n");
+    ft_push(&stack_b, &stack_a);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN REVERSE ROTATE-----\n");
+    ft_reverse_rotate(&stack_a);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
     free(stack_a);
     return (0);
 }
