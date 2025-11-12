@@ -12,6 +12,26 @@
 
 #include "../push-swap.h"
 
+t_node  *push_swap(char **av)
+{
+    t_node  *stack_a;
+    int     size;
+    long    *list_num;
+
+    size = list_size(av);
+    list_num = ft_convert_to_int_array(av, size);
+    stack_a = init_stack(av);
+    if (!stack_a)
+    {
+        free(stack_a);
+        return (NULL);
+    }
+    list_num = ft_order_long(list_num, size);
+    ft_index_nodes(list_num, size, &stack_a);
+    free(list_num);
+    return (stack_a);
+}
+
 long     *ft_order_long(long *list_num, int size)
 {
     int     i;
@@ -63,6 +83,7 @@ void    ft_index_nodes(long *list_num, int size, t_node **stack)
     }
 }
 
+//! COMPROBANDO SI ORDENA EL ARRAY DE LONG
 /* int main(int ac, char **av)
 {
     (void)ac;

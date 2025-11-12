@@ -19,8 +19,12 @@ OBJ_DIR = obj
 SRC_FILES = main.c \
 			error.c \
 			nodes.c \
-			moves.c \
+			move_rotate.c \
+			move_reverse_rotate.c \
+			move_swap.c \
+			move_push.c \
 			order_array.c \
+			algorith.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))

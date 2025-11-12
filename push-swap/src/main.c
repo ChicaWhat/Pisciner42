@@ -196,11 +196,11 @@ int ft_is_valid(int ac, char **av)
         {
             if (ft_sign(av[i]))
                 return (1);
-            else if (ft_digit_space(av[i][j]))
+            if (ft_digit_space(av[i][j]))
                 return (1);
-            else if (ft_no_repeat(av))
+            if (ft_no_repeat(av+1))
                 return (1);
-            else if (ft_atol(av[i]) > INT_MAX || ft_atol(av[i]) < INT_MIN)
+            if (ft_atol(av[i]) > INT_MAX || ft_atol(av[i]) < INT_MIN)
                 return (1);
             j++;
         }
@@ -236,27 +236,33 @@ t_node    *print_nodes(t_node *node)
     return (node);
 }
 
+
 //! MAIN ORIGINAL
-/* int main(int ac, char **av)
+int main(int ac, char **av)
 {
     t_node  *stack_a;
-    t_node  *stack_b = NULL;
+    //t_node  *stack_b = NULL;
 
     if (ac == 1)
         return (0);
     ft_parsing(ac, av);
-    stack_a = init_stack(av+1);
+    stack_a = push_swap(av+1);
     if (!stack_a)
     {
         free(stack_a);
         return (1);
     }
+    printf("---STACK SIN ORDENAR---\n");
+    print_nodes(stack_a);
+    printf("---STACK ORDENADO---\n");
+    order_two_nodes(&stack_a);
+    print_nodes(stack_a);
     free(stack_a);
     return (0);
-} */
+}
 
 //? MAIN DE PRUEBA
-int main(int ac, char **av)
+/* int main(int ac, char **av)
 {
     t_node  *stack_a;
     t_node  *stack_b = NULL;
@@ -317,4 +323,54 @@ int main(int ac, char **av)
     print_nodes(stack_b);
     free(stack_a);
     return (0);
-}
+} */
+
+//? OTRO MAIN DE PRUEBA
+/* int main(int ac, char **av)
+{
+    t_node  *stack_a;
+    t_node  *stack_b = NULL;
+
+    if (ac == 1)
+        return (0);
+    ft_parsing(ac, av);
+    stack_a = init_stack(av+1);
+    if (!stack_a)
+    {
+        free(stack_a);
+        return (1);
+    }
+    printf("-----ANTES DEL PUSH-----\n");
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("-----DESPUES DEL PUSH-----\n");
+    ft_pb(&stack_a, &stack_b);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----SWAP A-----\n");
+    ft_sa(&stack_a);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("-----OTRO PUSH-----\n");
+    ft_pb(&stack_a, &stack_b);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----SWAP B-----\n");
+    ft_sb(&stack_b);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----SS-----\n");
+    ft_ss(&stack_a, &stack_b);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    free(stack_a);
+    return (0);
+} */

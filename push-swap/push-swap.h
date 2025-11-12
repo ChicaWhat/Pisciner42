@@ -59,10 +59,22 @@ t_node  *create_stack(long *list_num, int size);
 t_node  *init_stack(char **av);
 int     list_size(char **list_num);
 void    ft_swap(t_node **stack);
-void    ft_push(t_node **stack_src, t_node **stack_dest);
-void    ft_rotate(t_node **stack);
-void    ft_reverse_rotate(t_node **stack);
+void    ft_sa(t_node **a);
+void    ft_sb(t_node **b);
+void    ft_ss(t_node **a, t_node **b);
+void    ft_push(t_node **stack_dest, t_node **stack_src);
+void    ft_pa(t_node **b, t_node **a);
+void    ft_pb(t_node **a, t_node **b);
+void    ft_ra(t_node **a);
+void    ft_rb(t_node **b);
+void    ft_rr(t_node **a, t_node **b);
+void    ft_rra(t_node **a);
+void    ft_rrb(t_node **b);
+void    ft_rrr(t_node **a, t_node **b);
 long    *ft_order_long(long *list_num, int size);
+void    ft_index_nodes(long *list_num, int size, t_node **stack);
+t_node  *push_swap(char **av);
+void    order_two_nodes(t_node **stack);
 
 
 t_node    *print_nodes(t_node *node);

@@ -12,8 +12,18 @@
 
 #include "../push-swap.h"
 
-void    ft_two_nodes(t_node **stack)
+// -- Order 2 nodes -- //
+void    order_two_nodes(t_node **stack)
 {
     if ((*stack)->num > (*stack)->next->num)
-        ft_swap(stack);
+        ft_sa(stack);
+}
+
+// -- Order 3 nodes -- //
+void    order_three_nodes(t_node **stack_a)
+{
+    int *a;
+    int *b;
+    int *c;
+    
 }

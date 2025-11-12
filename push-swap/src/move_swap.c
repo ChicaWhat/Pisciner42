@@ -12,6 +12,7 @@
 
 #include "../push-swap.h"
 
+// --- move swap --- //
 void    ft_swap(t_node **stack)
 {
     t_node  *aux;
@@ -29,6 +30,27 @@ void    ft_swap(t_node **stack)
     (*stack)->prev = aux;
 }
 
+// --- move sa --- //
+void    ft_sa(t_node **a)
+{
+    ft_swap(a);
+    ft_printf("sa\n");
+}
+
+// --- move sb --- //
+void    ft_sb(t_node **b)
+{
+    ft_swap(b);
+    ft_printf("sb\n");
+}
+
+// --- move ss --- //
+void    ft_ss(t_node **a, t_node **b)
+{
+    ft_swap(a);
+    ft_swap(b);
+    ft_printf("ss\n");
+}
 
 
 
