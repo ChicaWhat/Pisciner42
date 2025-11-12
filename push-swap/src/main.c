@@ -256,7 +256,7 @@ t_node    *print_nodes(t_node *node)
 } */
 
 //? MAIN DE PRUEBA
-/* int main(int ac, char **av)
+int main(int ac, char **av)
 {
     t_node  *stack_a;
     t_node  *stack_b = NULL;
@@ -273,14 +273,14 @@ t_node    *print_nodes(t_node *node)
     printf("-----ANTES DEL PUSH-----\n");
     printf("Stack src:\n");
     print_nodes(stack_a);
-    ft_push(&stack_a, &stack_b);
     printf("-----DESPUES DEL PUSH-----\n");
+    ft_pb(&stack_a, &stack_b);
     printf("Stack src:\n");
     print_nodes(stack_a);
     printf("Stack dst:\n");
     print_nodes(stack_b);
     printf("-----OTRO PUSH-----\n");
-    ft_push(&stack_a, &stack_b);
+    ft_pb(&stack_a, &stack_b);
     printf("Stack src:\n");
     print_nodes(stack_a);
     printf("Stack dst:\n");
@@ -290,27 +290,31 @@ t_node    *print_nodes(t_node *node)
     printf("Stack dst:\n");
     print_nodes(stack_b);
     printf("-----ÚLTIMO PUSH-----\n");
-    ft_push(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN ROTATE-----\n");
-    ft_rotate(&stack_b);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN PUSH MAS-----\n");
-    ft_push(&stack_b, &stack_a);
+    ft_pb(&stack_a, &stack_b);
     printf("Stack src:\n");
     print_nodes(stack_a);
     printf("Stack dst:\n");
     print_nodes(stack_b);
     printf("-----UN REVERSE ROTATE-----\n");
-    ft_reverse_rotate(&stack_a);
+    ft_rrb(&stack_b);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN ROTATE-----\n");
+    ft_rb(&stack_b);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN PUSH MAS-----\n");
+    ft_pa(&stack_b, &stack_a);
+    printf("Stack src:\n");
+    print_nodes(stack_a);
+    printf("Stack dst:\n");
+    print_nodes(stack_b);
+    printf("-----UN ROTATE-----\n");
+    ft_ra(&stack_a);
     printf("Stack src:\n");
     print_nodes(stack_a);
     printf("Stack dst:\n");
     print_nodes(stack_b);
     free(stack_a);
     return (0);
-} */
+}

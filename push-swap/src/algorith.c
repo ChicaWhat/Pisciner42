@@ -12,7 +12,7 @@
 
 #include "../push-swap.h"
 
-void    ft_two_nodes(t_node **stack, int size)
+void    ft_two_nodes(t_node **stack)
 {
     if ((*stack)->num > (*stack)->next->num)
         ft_swap(stack);

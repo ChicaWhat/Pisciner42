@@ -63,7 +63,7 @@ void    ft_index_nodes(long *list_num, int size, t_node **stack)
     }
 }
 
-int main(int ac, char **av)
+/* int main(int ac, char **av)
 {
     (void)ac;
     char    *one_av;
@@ -105,4 +105,4 @@ int main(int ac, char **av)
     print_nodes(stack_a);
     free(stack_a);
     return (0);
-}
+} */
