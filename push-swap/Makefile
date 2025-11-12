@@ -20,6 +20,7 @@ SRC_FILES = main.c \
 			error.c \
 			nodes.c \
 			moves.c \
+			order_array.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))

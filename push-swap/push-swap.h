@@ -62,6 +62,7 @@ void    ft_swap(t_node **stack);
 void    ft_push(t_node **stack_src, t_node **stack_dest);
 void    ft_rotate(t_node **stack);
 void    ft_reverse_rotate(t_node **stack);
+long    *ft_order_long(long *list_num, int size);
 
 
 t_node    *print_nodes(t_node *node);

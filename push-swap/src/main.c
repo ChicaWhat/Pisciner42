@@ -225,8 +225,9 @@ t_node    *print_nodes(t_node *node)
     while (1)
     {
         printf("nodo %ld\n", aux->num);
-        printf("next %ld\n", aux->next->num);
-        printf("prev %ld\n", aux->prev->num);
+        printf("index %d\n", aux->index);
+/*         printf("next %ld\n", aux->next->num);
+        printf("prev %ld\n", aux->prev->num); */
         printf("-------------------------\n");
         aux = aux->next;
         if (aux == node)
@@ -255,7 +256,7 @@ t_node    *print_nodes(t_node *node)
 } */
 
 //? MAIN DE PRUEBA
-int main(int ac, char **av)
+/* int main(int ac, char **av)
 {
     t_node  *stack_a;
     t_node  *stack_b = NULL;
@@ -312,4 +313,4 @@ int main(int ac, char **av)
     print_nodes(stack_b);
     free(stack_a);
     return (0);
-}
+} */
