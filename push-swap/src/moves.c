@@ -57,12 +57,3 @@ void    ft_push(t_node **stack_src, t_node **stack_dest)
     (*stack_dest) = aux;
 }
 
-void    ft_rotate(t_node **stack)
-{
-    (*stack) = (*stack)->next;
-}
-
-void    ft_reverse_rotate(t_node **stack)
-{
-    (*stack) = (*stack)->prev;
-}
