@@ -75,6 +75,8 @@ long    *ft_order_long(long *list_num, int size);
 void    ft_index_nodes(long *list_num, int size, t_node **stack);
 t_node  *push_swap(char **av);
 void    order_two_nodes(t_node **stack);
+void    order_three_nodes(t_node **stack_a);
+void    order_3_or_less(t_node **stack_a, int size);
 
 
 t_node    *print_nodes(t_node *node);

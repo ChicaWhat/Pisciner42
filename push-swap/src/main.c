@@ -242,10 +242,12 @@ int main(int ac, char **av)
 {
     t_node  *stack_a;
     //t_node  *stack_b = NULL;
+    int     size;
 
     if (ac == 1)
         return (0);
     ft_parsing(ac, av);
+    size = list_size(av+1);
     stack_a = push_swap(av+1);
     if (!stack_a)
     {
@@ -255,7 +257,7 @@ int main(int ac, char **av)
     printf("---STACK SIN ORDENAR---\n");
     print_nodes(stack_a);
     printf("---STACK ORDENADO---\n");
-    order_two_nodes(&stack_a);
+    order_3_or_less(&stack_a, size);
     print_nodes(stack_a);
     free(stack_a);
     return (0);
