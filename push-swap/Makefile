@@ -25,6 +25,7 @@ SRC_FILES = main.c \
 			move_push.c \
 			order_array.c \
 			algorith.c \
+			utils.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
