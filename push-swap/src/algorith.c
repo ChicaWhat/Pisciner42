@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/12 18:19:36 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/13 11:59:54 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void    order_three_nodes(t_node **stack_a)
 }
 
 // -- Function that order 3 nodes or less -- //
-void    order_3_or_less(t_node **stack_a, int size)
+void    order_nodes(t_node **stack_a, int size)
 {
     if (size == 1)
         return;
@@ -58,3 +58,5 @@ void    order_3_or_less(t_node **stack_a, int size)
     else if (size == 3)
         order_three_nodes(stack_a);
 }
+
+

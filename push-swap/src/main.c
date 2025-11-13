@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/10/17 13:44:38 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:43:59 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,11 +196,11 @@ int ft_is_valid(int ac, char **av)
         {
             if (ft_sign(av[i]))
                 return (1);
-            if (ft_digit_space(av[i][j]))
+            else if (ft_digit_space(av[i][j]))
                 return (1);
-            if (ft_no_repeat(av+1))
+            else if (ft_no_repeat(av+1))
                 return (1);
-            if (ft_atol(av[i]) > INT_MAX || ft_atol(av[i]) < INT_MIN)
+            else if (ft_atol(av[i]) > INT_MAX || ft_atol(av[i]) < INT_MIN)
                 return (1);
             j++;
         }
@@ -211,9 +211,9 @@ int ft_is_valid(int ac, char **av)
 
 void ft_parsing(int ac, char **av)
 {
-    if (ft_is_valid(ac, av))
-        ft_error();
-    else if (!is_order(av))
+	if (ft_is_valid(ac, av))
+		ft_error();
+    if (!is_order(av))
         exit(0);
 }
 
@@ -241,8 +241,9 @@ t_node    *print_nodes(t_node *node)
 int main(int ac, char **av)
 {
     t_node  *stack_a;
-    //t_node  *stack_b = NULL;
+    t_node  *stack_b = NULL;
     int     size;
+	int		count;
 
     if (ac == 1)
         return (0);
@@ -254,11 +255,19 @@ int main(int ac, char **av)
         free(stack_a);
         return (1);
     }
-    printf("---STACK SIN ORDENAR---\n");
+	count = count_nodes(&stack_a);
+	printf("Numero de nodos: %d\n", count);
     print_nodes(stack_a);
-    printf("---STACK ORDENADO---\n");
+	ft_push(&stack_a, &stack_b);
+	count = count_nodes(&stack_a);
+	printf("Numero de nodos: %d\n", count);
+    print_nodes(stack_a);
+	ft_push(&stack_b, &stack_a);
+	count = count_nodes(&stack_a);
+	printf("Numero de nodos: %d\n", count);	
+ /*    printf("---STACK ORDENADO---\n");
     order_3_or_less(&stack_a, size);
-    print_nodes(stack_a);
+    print_nodes(stack_a); */
     free(stack_a);
     return (0);
 }
