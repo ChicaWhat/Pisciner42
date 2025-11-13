@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:28:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/13 16:22:41 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:38:12 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ void    ft_index_nodes(long *list_num, int size, t_node **stack)
     int     i;
     t_node *aux;
 
-    if (!(*stack))
-        return;
     i = 0;
     while (i < size)
     {
@@ -73,6 +71,10 @@ void    ft_index_nodes(long *list_num, int size, t_node **stack)
             if (list_num[i] == aux->num)
             {
                 aux->index = i;
+				if (i != size - 1)
+					aux->target = i + 1;
+				else
+					aux->target = 0;
                 break;
             }
             aux = aux->next;
@@ -88,8 +90,8 @@ int	count_nodes(t_node **stack_a)
 	t_node	*aux;
 	int		count;
 	
-/* 	if (!(*stack_a))
-		return (0); */
+ 	if (!stack_a || !(*stack_a))
+		return (0);
 
 	count = 1;
 	aux = (*stack_a);

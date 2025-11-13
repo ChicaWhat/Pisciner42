@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/13 16:20:10 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:40:08 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_node
     int             size;
     int             cost_a;
     int             cost_b;
-    struct s_node   *target;
+    int   			target;
     struct s_node   *prev;
     struct s_node   *next;
 }   t_node;

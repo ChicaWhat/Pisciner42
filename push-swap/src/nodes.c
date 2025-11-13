@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/10/24 10:49:39 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:40:24 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_node  *create_node(long num, int size)
     new_node->size = size;
     new_node->cost_a = 0;
     new_node->cost_b = 0;
-    new_node->target = NULL;
+    new_node->target = 0;
     new_node->prev = new_node;
     new_node->next = new_node;
     return (new_node);

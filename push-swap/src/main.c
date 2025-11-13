@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/13 16:43:59 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:44:11 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,7 @@ t_node    *print_nodes(t_node *node)
     {
         printf("nodo %ld\n", aux->num);
         printf("index %d\n", aux->index);
+        printf("target %d\n", aux->target);
 /*         printf("next %ld\n", aux->next->num);
         printf("prev %ld\n", aux->prev->num); */
         printf("-------------------------\n");
@@ -241,7 +242,7 @@ t_node    *print_nodes(t_node *node)
 int main(int ac, char **av)
 {
     t_node  *stack_a;
-    t_node  *stack_b = NULL;
+    //t_node  *stack_b = NULL;
     int     size;
 	int		count;
 
@@ -258,13 +259,6 @@ int main(int ac, char **av)
 	count = count_nodes(&stack_a);
 	printf("Numero de nodos: %d\n", count);
     print_nodes(stack_a);
-	ft_push(&stack_a, &stack_b);
-	count = count_nodes(&stack_a);
-	printf("Numero de nodos: %d\n", count);
-    print_nodes(stack_a);
-	ft_push(&stack_b, &stack_a);
-	count = count_nodes(&stack_a);
-	printf("Numero de nodos: %d\n", count);	
  /*    printf("---STACK ORDENADO---\n");
     order_3_or_less(&stack_a, size);
     print_nodes(stack_a); */
