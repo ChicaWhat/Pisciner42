@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/13 19:55:52 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/14 18:14:58 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,14 @@ void    ft_rrb(t_node **b);
 void    ft_rrr(t_node **a, t_node **b);
 long    *ft_order_long(long *list_num, int size);
 void    ft_index_nodes(long *list_num, int size, t_node **stack);
-int		count_nodes(t_node **stack_a);
+int		stack_size(t_node **stack_a);
 void	set_positions(t_node **stack_a);
 t_node  *push_swap(char **av);
 void    order_two_nodes(t_node **stack);
 void    order_three_nodes(t_node **stack_a);
 void    order_nodes(t_node **stack_a, int size);
+void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
+void	costs(t_node **stack_a);
 t_node    *print_nodes(t_node *node);
 
 #endif

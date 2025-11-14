@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/13 20:31:22 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/14 18:16:11 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,7 @@ t_node    *print_nodes(t_node *node)
         printf("index %d\n", aux->index);
         printf("target %d\n", aux->target);
         printf("posicion %d\n", aux->pos);
+		printf("cost_a %d\n", aux->cost_a);
 /*         printf("next %ld\n", aux->next->num);
         printf("prev %ld\n", aux->prev->num); */
         printf("-------------------------\n");
@@ -243,9 +244,10 @@ t_node    *print_nodes(t_node *node)
 int main(int ac, char **av)
 {
     t_node  *stack_a;
-    //t_node  *stack_b = NULL;
+    t_node  *stack_b = NULL;
     int     size;
 	//int		count;
+	//int		count_b;
 
     if (ac == 1)
         return (0);
@@ -257,9 +259,17 @@ int main(int ac, char **av)
         free(stack_a);
         return (1);
     }
-	//count = count_nodes(&stack_a);
 	//set_positions(&stack_a);
+	costs(&stack_a);
+    printf("Stack A:\n");
     print_nodes(stack_a);
+	move_stacks(&stack_a, &stack_b, size);
+	costs(&stack_a);
+	costs(&stack_b);
+    printf("Stack A:\n");
+    print_nodes(stack_a);
+    printf("Stack B:\n");
+    print_nodes(stack_b);	
  /*    printf("---STACK ORDENADO---\n");
     order_3_or_less(&stack_a, size);
     print_nodes(stack_a); */

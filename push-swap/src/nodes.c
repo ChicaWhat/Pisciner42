@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/13 20:32:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/14 13:13:49 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 t_node  *create_node(long num, int size)
 {
     t_node	*new_node;
-	int		pos;
 
-	pos = 0;
     new_node = malloc(1 * sizeof(t_node));
     if (!new_node)
         return (NULL);
     new_node->num = num;
     new_node->index = 0;
-    new_node->pos = pos;
+    new_node->pos = 1;
     new_node->size = size;
     new_node->cost_a = 0;
     new_node->cost_b = 0;
