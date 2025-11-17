@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/14 20:51:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/16 20:40:22 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,13 @@ void	target_and_cost_b(t_node **a, t_node **b)
 	aux_b = (*b);
 	while (1)
 	{
+		best_index = NULL;
 		while (1)
 		{
 			if (aux_a->index > aux_b->index)
-				best_index = (*b)->index;
+				best_index = aux_b->index;
+			if (aux_b->index > best_index)
+				best_index = aux_b;
 			aux_b = aux_b->next;
 			if (aux_b == (*b))
 				break ;

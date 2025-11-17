@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/14 18:16:11 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/16 20:12:36 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ t_node    *print_nodes(t_node *node)
         printf("target %d\n", aux->target);
         printf("posicion %d\n", aux->pos);
 		printf("cost_a %d\n", aux->cost_a);
+		printf("cost_b %d\n", aux->cost_b);
 /*         printf("next %ld\n", aux->next->num);
         printf("prev %ld\n", aux->prev->num); */
         printf("-------------------------\n");
