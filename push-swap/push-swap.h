@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/14 18:14:58 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/17 17:40:31 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_node
     int             size;
     int             cost_a;
     int             cost_b;
+	int				total_cost;
     int   			target;
     struct s_node   *prev;
     struct s_node   *next;
@@ -80,7 +81,9 @@ void    order_two_nodes(t_node **stack);
 void    order_three_nodes(t_node **stack_a);
 void    order_nodes(t_node **stack_a, int size);
 void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
-void	costs(t_node **stack_a);
+void	cost_a(t_node **stack_a);
+void	cost_b(t_node **stack_b);
+void	target_and_cost_b(t_node **a, t_node **b);
 t_node    *print_nodes(t_node *node);
 
 #endif

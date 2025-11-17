@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/16 20:40:22 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/17 17:40:11 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 	order_three_nodes(stack_a);
 }
 
-void	costs(t_node **stack_a)
+void	cost_a(t_node **stack_a)
 {
 	t_node *aux;
 	int		size;
@@ -97,23 +97,42 @@ void	costs(t_node **stack_a)
 	}
 }
 
+void	cost_b(t_node **stack_b)
+{
+	t_node *aux;
+	int		size;
+	
+	size = stack_size(stack_b);
+	aux = (*stack_b);
+	while (1)
+	{
+		if (aux->pos <= size / 2)
+			aux->cost_b = aux->pos - 1;
+		else
+			aux->cost_b = (size - aux->pos) + 1;
+		aux = aux->next;
+		if (aux == (*stack_b))
+			return ;
+	}
+}
+
 void	target_and_cost_b(t_node **a, t_node **b)
 {
 	t_node	*aux_b;
 	t_node	*aux_a;
-	t_node	*best_index;
+	int		best_index;
 
 	aux_a = (*a);
 	aux_b = (*b);
 	while (1)
 	{
-		best_index = NULL;
+		best_index = 0;
 		while (1)
 		{
 			if (aux_a->index > aux_b->index)
 				best_index = aux_b->index;
 			if (aux_b->index > best_index)
-				best_index = aux_b;
+				best_index = aux_b->index;
 			aux_b = aux_b->next;
 			if (aux_b == (*b))
 				break ;

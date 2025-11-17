@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/16 20:41:01 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/17 09:38:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_node  *create_node(long num, int size)
     new_node->size = size;
     new_node->cost_a = 0;
     new_node->cost_b = 0;
+    new_node->total_cost = 0;
     new_node->target = 0;
     new_node->prev = new_node;
     new_node->next = new_node;
@@ -80,29 +81,8 @@ t_node    *create_stack(long *list_num, int size)
     //free(list_num);
     return (node1);
 }
-void	target_and_cost_b(t_node **a, t_node **b)
-{
-	t_node	*aux_b;
-	t_node	*aux_a;
-	t_node	*best_index;
 
-	aux_a = (*a);
-	aux_b = (*b);
-	while (1)
-	{
-		while (1)
-		{
-			if (aux_a->index > aux_b->index)
-				best_index = (*b)->index;
-			aux_b = aux_b->next;
-			if (aux_b == (*b))
-				break ;
-		}
-		aux_a = aux_a->next;
-		if (aux_a == (*a))
-			break ;
-	}
-}t_node  *init_stack(char **av)
+t_node  *init_stack(char **av)
 {
     char    *one_av;
     char    **list;
