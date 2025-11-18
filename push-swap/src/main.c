@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/16 20:12:36 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:50:30 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,12 +261,12 @@ int main(int ac, char **av)
         return (1);
     }
 	//set_positions(&stack_a);
-	costs(&stack_a);
+	cost_a(&stack_a);
     printf("Stack A:\n");
     print_nodes(stack_a);
 	move_stacks(&stack_a, &stack_b, size);
-	costs(&stack_a);
-	costs(&stack_b);
+	cost_a(&stack_a);
+	cost_b(&stack_b);
     printf("Stack A:\n");
     print_nodes(stack_a);
     printf("Stack B:\n");

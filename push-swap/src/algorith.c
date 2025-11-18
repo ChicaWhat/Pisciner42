@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/17 17:40:11 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/18 06:10:02 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,24 @@ void    order_three_nodes(t_node **stack_a)
     int b;
     int c;
 
-    a = (*stack_a)->index;
-    b = (*stack_a)->next->index;
-    c = (*stack_a)->next->next->index;
-    if (a == 1 && b == 0 && c == 2)
+    a = (*stack_a)->num;
+    b = (*stack_a)->next->num;
+    c = (*stack_a)->next->next->num;
+	if (a > b && b < c && c > a)
         ft_sa(stack_a);
-    else if (a == 2 && b == 1 && c == 0)
+    else if (a > b && b > c && c < a)
     {
         ft_ra(stack_a);
         ft_sa(stack_a);
     }
-    else if (a == 0 && b == 2 && c == 1)
+    else if (a < b && b > c && c > a)
     {
         ft_rra(stack_a);
         ft_sa(stack_a);
     }
-    else if (a == 2 && b == 0 && c == 1)
+    else if (a > b && b < c && c < a)
         ft_ra(stack_a);
-    else if (a == 1 && b == 2 && c == 0)
+    else if (a < b && b > c && c < a)
         ft_rra(stack_a);
 set_positions(stack_a);
 }
@@ -66,14 +66,16 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 	size = stack_size(stack_a);
 	while (size > 3)
 	{
-		if ((*stack_a)->index >= 3)
+		if ((*stack_a)->index < (*stack_a)->size - 3)
 			ft_pb(stack_a, stack_b);
 		else
 			ft_ra(stack_a);
 		size = stack_size(stack_a);
 		size_b = stack_size(stack_b);
 		set_positions(stack_a);
+		printf("coño\n");
 		set_positions(stack_b);
+		printf("puto\n");
 	}
 	order_three_nodes(stack_a);
 }
@@ -116,29 +118,27 @@ void	cost_b(t_node **stack_b)
 	}
 }
 
-void	target_and_cost_b(t_node **a, t_node **b)
+void	put_total_cost(t_node **a, t_node **b)
 {
 	t_node	*aux_b;
 	t_node	*aux_a;
 	int		best_index;
 
-	aux_a = (*a);
 	aux_b = (*b);
 	while (1)
 	{
-		best_index = 0;
+		best_index = 9999;
+		aux_a = (*a);
 		while (1)
 		{
-			if (aux_a->index > aux_b->index)
-				best_index = aux_b->index;
-			if (aux_b->index > best_index)
-				best_index = aux_b->index;
-			aux_b = aux_b->next;
-			if (aux_b == (*b))
+			if ((aux_a->index > aux_b->index) && (best_index > aux_a->index))
+				aux_b->total_cost = aux_a->cost_a + aux_b->cost_b;
+			aux_a = aux_a->next;
+			if (aux_a == (*a))
 				break ;
 		}
-		aux_a = aux_a->next;
-		if (aux_a == (*a))
+		aux_b = aux_b->next;
+		if (aux_b == (*b))
 			break ;
 	}
 }

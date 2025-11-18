@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/17 17:40:31 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/18 05:43:49 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void    order_nodes(t_node **stack_a, int size);
 void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
 void	cost_a(t_node **stack_a);
 void	cost_b(t_node **stack_b);
-void	target_and_cost_b(t_node **a, t_node **b);
+void	put_total_cost(t_node **a, t_node **b);
 t_node    *print_nodes(t_node *node);
 
 #endif
