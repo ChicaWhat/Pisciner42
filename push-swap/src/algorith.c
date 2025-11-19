@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 21:34:30 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 22:05:50 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ void	cost_a(t_node **stack_a)
 		if (aux->pos <= (size + 1) / 2)
 			aux->cost_a = aux->pos - 1;
 		else
-			aux->cost_a = (size - aux->pos) + 1;
+		{
+			aux->cost_a = (aux->pos - size) - 1;
+			//aux->cost_a = (size - aux->pos) + 1;
+		}
 		aux = aux->next;
 		if (aux == (*stack_a))
 			return ;
@@ -114,8 +117,8 @@ void	cost_b(t_node **stack_b)
 			aux->cost_b = aux->pos - 1;
 		else
 		{
-			//aux->cost_b = (aux->pos - size) - 1;
-			aux->cost_b = (size - aux->pos) + 1;
+			aux->cost_b = (aux->pos - size) - 1;
+			//aux->cost_b = (size - aux->pos) + 1;
 		}
 		aux = aux->next;
 		if (aux == (*stack_b))
@@ -123,12 +126,12 @@ void	cost_b(t_node **stack_b)
 	}
 }
 
-/* int	abs_cost(int cost)
+int	abs_cost(int cost)
 {
 	if (cost < 0)
 		cost = -cost;
 	return (cost);
-} */
+}
 
 void	put_total_cost(t_node **a, t_node **b)
 {
@@ -146,7 +149,7 @@ void	put_total_cost(t_node **a, t_node **b)
 			if ((aux_a->index > aux_b->index) && (best_index > aux_a->index))
 			{
 				best_index = aux_a->index;
-				aux_b->total_cost = aux_a->cost_a + aux_b->cost_b;
+				aux_b->total_cost = abs_cost(aux_a->cost_a) + abs_cost(aux_b->cost_b);
 				aux_b->target = aux_a->num;
 			}
 			aux_a = aux_a->next;
