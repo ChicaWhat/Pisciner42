@@ -6,17 +6,18 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/10/17 13:44:56 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 22:56:09 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push-swap.h"
-
+//--- Función para escribir "Error" por pantalla ---//
 void    ft_error(void)
 {
     ft_putstr_fd("Error\n", 2);
     exit(1);
 }
+//--- Función para liberar dobles arrays, arrays y nodos cuando sea necesario ---//
 void    *ft_free_all(char **list, char *str, t_node **node)
 {
     int     i;

@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 20:45:35 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 23:05:08 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push-swap.h"
 
+//--- Función que crea el primer nodo reservando memoria e inicializa todos los varoles ---//
 t_node  *create_node(long num, int size)
 {
     t_node	*new_node;
@@ -32,7 +33,7 @@ t_node  *create_node(long num, int size)
     new_node->next = new_node;
     return (new_node);
 }
-
+//--- Función que crea un segundo nodo y lo enlaza a la lista doblemente enlazada---//
 void    add_new_node(t_node **node1, long num, int size)
 {
     t_node  *node2;
@@ -45,7 +46,7 @@ void    add_new_node(t_node **node1, long num, int size)
     (*node1)->prev = node2; 
     node2->prev = (*node1);
 }
-
+//--- Función necesaria para enlazar cuando tenemos más de 2 nodos en la lista ---// 
 void    add_more_nodes(t_node **stack, t_node **node)
 {
     (*stack)->prev->next = (*node);
@@ -53,7 +54,7 @@ void    add_more_nodes(t_node **stack, t_node **node)
     (*node)->prev = (*stack)->prev;
     (*stack)->prev = (*node);
 }
-
+//--- Función que crea el stack sin los valores actualizados todavía ---//
 t_node    *create_stack(long *list_num, int size)
 {
     int     i;
@@ -82,7 +83,7 @@ t_node    *create_stack(long *list_num, int size)
     //free(list_num);
     return (node1);
 }
-
+//--- Función que ''rellena'' cada nodo de la pila con el num y el size de dicha lista ---//
 t_node  *init_stack(char **av)
 {
     char    *one_av;
@@ -98,7 +99,7 @@ t_node  *init_stack(char **av)
     if (!list)
         return (NULL);
     size = list_size(list);
-    list_num = ft_convert_to_int_array(list, size);
+    list_num = ft_convert_to_long_array(list, size);
     if (!list_num)
         return (NULL);
     stack_a = create_stack(list_num, size);

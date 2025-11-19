@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:28:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 19:39:13 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 22:41:28 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_node  *push_swap(char **av)
 	int		count;
 
     size = list_size(av);
-    list_num = ft_convert_to_int_array(av, size);
+    list_num = ft_convert_to_long_array(av, size);
     stack_a = init_stack(av);
     if (!stack_a)
     {
@@ -128,7 +128,7 @@ int	stack_size(t_node **stack)
     if (!list)
         return (0);
     size = list_size(list);
-    list_num = ft_convert_to_int_array(list, size);
+    list_num = ft_convert_to_long_array(list, size);
     printf("Lista de números sin ordenar:");
     for (int i = 0; i < size; i++)
     {

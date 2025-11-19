@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 21:35:48 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 22:47:51 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push-swap.h"
 
+//--- Funcion para detectar cualquier caracter que no sea numerico---//
 int ft_digit_space(char c)
 {
     if (c == '+' || c == '-')
@@ -23,7 +24,7 @@ int ft_digit_space(char c)
     else
         return (1);
 }
-
+//--- Funcion para comprobar si hay cualquier caracter no numerico al principio y entre medias del av---//
 int ft_sign(char *str)
 {
     int i;
@@ -43,7 +44,7 @@ int ft_sign(char *str)
     }
     return (0);
 }
-
+//--- Función que comprueba si pasan av que no estén repetidos ---//
 int ft_no_repeat(char **list)
 {
     int i;
@@ -64,7 +65,7 @@ int ft_no_repeat(char **list)
     }
     return (0);
 }
-
+//--- Función que comprueba si los av ya están ordenados ---//
 int is_order(char **list)
 {
     int i;
@@ -85,7 +86,7 @@ int is_order(char **list)
     }
     return (0);
 }
-
+//--- Función para transformar los char* a long int y comprobar que no me pasan un av que sobrepase los valores de INT_MIN o INT_MAX ---//
 long ft_atol(char *str)
 {
     int i;
@@ -114,7 +115,7 @@ long ft_atol(char *str)
     }
     return (n * sign);
 }
-// Esta funcion es la primera de todas para unificar todos los argv en uno
+// Función que unifica todos los **av en un único array ---//
 char *ft_one_argv(char **av)
 {
     char *res;
@@ -137,7 +138,7 @@ char *ft_one_argv(char **av)
     }
     return (res);
 }
-
+//--- Función para splitear el único av creado anteriormente ---//
 char **ft_split_argv(char *one_av)
 {
     char    **list;
@@ -151,7 +152,7 @@ char **ft_split_argv(char *one_av)
     free(one_av);
     return (list);
 }
-
+//--- Función para calcular el tamaño de la lista ---//
 int list_size(char **list_num)
 {
     int i;
@@ -161,26 +162,27 @@ int list_size(char **list_num)
         i++;
     return (i);
 }
-
-long *ft_convert_to_int_array(char **list, int size)
+//--- Función que transforma el char** en long* --//
+long *ft_convert_to_long_array(char **list, int size)
 {
     int     i;
-    long    *int_array;
+    long    *long_array;
     
     i = 0;
-    int_array = malloc(size * sizeof(long));
-    if (!int_array)
+    long_array = malloc(size * sizeof(long));
+    if (!long_array)
     {
         ft_free_all(list, NULL, NULL);
         return (NULL);
     }
     while (i < size)
     {
-        int_array[i] = ft_atol(list[i]);
+        long_array[i] = ft_atol(list[i]);
         i++;
     }
-    return (int_array);
+    return (long_array);
 }
+//--- Función que comprueba de una llamada si el av pasado es válido ---//
 int ft_is_valid(int ac, char **av)
 {
     int i;
@@ -208,7 +210,7 @@ int ft_is_valid(int ac, char **av)
     }
     return (0);
 }
-
+//--- Función que complementa a ft_is_valid y completa el parseo ---//
 void ft_parsing(int ac, char **av)
 {
 	if (ft_is_valid(ac, av))
@@ -216,7 +218,7 @@ void ft_parsing(int ac, char **av)
     if (!is_order(av))
         exit(0);
 }
-
+//--- Función que me printea toda la info que necesite de los nodos ---//
 t_node    *print_nodes(t_node *node)
 {
     t_node  *aux;
@@ -241,7 +243,6 @@ t_node    *print_nodes(t_node *node)
     }
     return (node);
 }
-
 
 //! MAIN ORIGINAL
 int main(int ac, char **av)
@@ -275,70 +276,6 @@ int main(int ac, char **av)
     free(stack_a);
     return (0);
 }
-
-//? MAIN DE PRUEBA
-/* int main(int ac, char **av)
-{
-    t_node  *stack_a;
-    t_node  *stack_b = NULL;
-
-    if (ac == 1)
-        return (0);
-    ft_parsing(ac, av);
-    stack_a = init_stack(av+1);
-    if (!stack_a)
-    {
-        free(stack_a);
-        return (1);
-    }
-    printf("-----ANTES DEL PUSH-----\n");
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("-----DESPUES DEL PUSH-----\n");
-    ft_pb(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----OTRO PUSH-----\n");
-    ft_pb(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN SWAP-----\n");
-    ft_swap(&stack_b);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----ÚLTIMO PUSH-----\n");
-    ft_pb(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN REVERSE ROTATE-----\n");
-    ft_rrb(&stack_b);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN ROTATE-----\n");
-    ft_rb(&stack_b);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN PUSH MAS-----\n");
-    ft_pa(&stack_b, &stack_a);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----UN ROTATE-----\n");
-    ft_ra(&stack_a);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    free(stack_a);
-    return (0);
-} */
 
 //? OTRO MAIN DE PRUEBA
 /* int main(int ac, char **av)

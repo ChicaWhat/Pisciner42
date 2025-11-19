@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 21:33:38 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 22:41:28 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int     ft_is_valid(int ac, char **av);
 void    ft_parsing(int ac, char **av);
 void    ft_error(void);
 void    *ft_free_all(char **list, char *str, t_node **node);
-long    *ft_convert_to_int_array(char **list, int size);
+long    *ft_convert_to_long_array(char **list, int size);
 t_node  *create_stack(long *list_num, int size);
 t_node  *init_stack(char **av);
 int     list_size(char **list_num);
