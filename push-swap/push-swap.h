@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/18 05:43:49 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 21:33:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ typedef struct s_node
     int             cost_a;
     int             cost_b;
 	int				total_cost;
-    int   			target;
+	int				cheapest;
+    long   			target;
     struct s_node   *prev;
     struct s_node   *next;
 }   t_node;
@@ -73,7 +74,7 @@ void    ft_rra(t_node **a);
 void    ft_rrb(t_node **b);
 void    ft_rrr(t_node **a, t_node **b);
 long    *ft_order_long(long *list_num, int size);
-void    ft_index_nodes(long *list_num, int size, t_node **stack);
+void    ft_index_and_target_nodes(long *list_num, int size, t_node **stack);
 int		stack_size(t_node **stack_a);
 void	set_positions(t_node **stack_a);
 t_node  *push_swap(char **av);
@@ -84,6 +85,7 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
 void	cost_a(t_node **stack_a);
 void	cost_b(t_node **stack_b);
 void	put_total_cost(t_node **a, t_node **b);
+void	cheapest(t_node **stack_b);
 t_node    *print_nodes(t_node *node);
 
 #endif

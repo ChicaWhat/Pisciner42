@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/18 06:10:02 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/19 21:34:30 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,13 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 		size = stack_size(stack_a);
 		size_b = stack_size(stack_b);
 		set_positions(stack_a);
-		printf("coño\n");
 		set_positions(stack_b);
-		printf("puto\n");
 	}
 	order_three_nodes(stack_a);
+	cost_a(stack_a);
+	cost_b(stack_b);
+	put_total_cost(stack_a, stack_b);
+	cheapest(stack_b);
 }
 
 void	cost_a(t_node **stack_a)
@@ -89,7 +91,7 @@ void	cost_a(t_node **stack_a)
 	aux = (*stack_a);
 	while (1)
 	{
-		if (aux->pos <= size / 2)
+		if (aux->pos <= (size + 1) / 2)
 			aux->cost_a = aux->pos - 1;
 		else
 			aux->cost_a = (size - aux->pos) + 1;
@@ -108,15 +110,25 @@ void	cost_b(t_node **stack_b)
 	aux = (*stack_b);
 	while (1)
 	{
-		if (aux->pos <= size / 2)
+		if (aux->pos <= (size + 1) / 2)
 			aux->cost_b = aux->pos - 1;
 		else
+		{
+			//aux->cost_b = (aux->pos - size) - 1;
 			aux->cost_b = (size - aux->pos) + 1;
+		}
 		aux = aux->next;
 		if (aux == (*stack_b))
 			return ;
 	}
 }
+
+/* int	abs_cost(int cost)
+{
+	if (cost < 0)
+		cost = -cost;
+	return (cost);
+} */
 
 void	put_total_cost(t_node **a, t_node **b)
 {
@@ -132,7 +144,11 @@ void	put_total_cost(t_node **a, t_node **b)
 		while (1)
 		{
 			if ((aux_a->index > aux_b->index) && (best_index > aux_a->index))
+			{
+				best_index = aux_a->index;
 				aux_b->total_cost = aux_a->cost_a + aux_b->cost_b;
+				aux_b->target = aux_a->num;
+			}
 			aux_a = aux_a->next;
 			if (aux_a == (*a))
 				break ;
@@ -142,3 +158,25 @@ void	put_total_cost(t_node **a, t_node **b)
 			break ;
 	}
 }
+
+void	cheapest(t_node **stack_b)
+{
+	t_node	*aux;
+	t_node	*best_cheapest;
+	
+	aux = (*stack_b);
+	best_cheapest = aux;
+	while (1)
+	{
+		if (aux->total_cost < best_cheapest->total_cost)
+		{
+			best_cheapest = aux;
+		}
+		aux = aux->next;
+		if (aux == (*stack_b))
+			break ;
+	}
+	best_cheapest->cheapest = 1;
+}
+
+
