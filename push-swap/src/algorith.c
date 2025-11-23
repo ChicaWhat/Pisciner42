@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 22:05:50 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/20 17:28:21 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,9 +172,7 @@ void	cheapest(t_node **stack_b)
 	while (1)
 	{
 		if (aux->total_cost < best_cheapest->total_cost)
-		{
 			best_cheapest = aux;
-		}
 		aux = aux->next;
 		if (aux == (*stack_b))
 			break ;
