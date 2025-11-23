@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:28:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 22:41:28 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/23 22:34:27 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_node  *push_swap(char **av)
     ft_index_and_target_nodes(list_num, size, &stack_a);
 	count = stack_size(&stack_a);
 	set_positions(&stack_a);
+	order_nodes(&stack_a, size);
     free(list_num);
     return (stack_a);
 }

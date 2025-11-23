@@ -12,122 +12,142 @@
 
 #include "../push-swap.h"
 // Stack A and stack B make rotate //
-void    path1(t_node **stack_a, t_node **stack_b)
+void    path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
-    t_node  *a;
-    t_node  *b;
-
-    a = (*stack_a);
-    b = (*stack_b);
-    while (1)
-    {
-        if (a->cost_a > 0 && b->cost_b > 0)
-        {
-            ft_rr(a, b);
-            a->cost_a--;
-            b->cost_b--;
-        }
-        else if (a->cost_a > 0 && b->cost_b == 0)
-        {
-            ft_ra(a);
-            a->cost_a--;
-        }
-        else if (a->cost_a == 0 && b->cost_b > 0)
-        {
-            ft_rb(b);
-            b->cost_b--;
-        }
-        else
-            ft_pa(b, a);
-    }
+	while (cheapest->cost_a >= 0 && cheapest->cost_b >= 0)
+	{
+		ft_rr(stack_a, stack_b);
+		cheapest->cost_a--;
+		cheapest->cost_b--;
+	}
+	while (cheapest->cost_a >= 0)
+	{
+		ft_ra(stack_a);
+		cheapest->cost_a--;
+	}
+	while (cheapest->cost_b >= 0)
+	{
+		ft_rb(stack_b);
+		cheapest->cost_b--;
+	}
+	ft_pa(stack_b, stack_a);
 }
 // Stack A and stack b make reverse rotate //
-void    path2(t_node **stack_a, t_node **stack_b)
+void    path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
-    t_node  *a;
-    t_node  *b;
-
-    a = (*stack_a);
-    b = (*stack_b);
-    while (1)
+    while (cheapest->cost_a <= 0 && cheapest->cost_b <= 0)
     {
-        if (a->cost_a < 0 && b->cost_b < 0)
-        {
-            ft_rrr(a, b);
-            a->cost_a++;
-            b->cost_b++;
-        }
-        else if (a->cost_a == 0 && b->cost_b < 0)
-        {
-            ft_rrb(b);
-            b->cost_b++;
-        }
-        else if (a->cost_a < 0 && b->cost_b == 0)
-        {
-            ft_rra(a);
-            a->cost_a++;
-        }
-        else
-            ft_pa(b, a);
-    }
+		ft_rrr(stack_a, stack_b);
+		cheapest->cost_a++;
+		cheapest->cost_b++;
+	}
+	while (cheapest->cost_a <= 0)
+	{
+		ft_rra(stack_a);
+		cheapest->cost_a++;
+	}
+	while (cheapest->cost_b <= 0)
+	{
+		ft_rrb(stack_b);
+		cheapest->cost_b++;
+	}
+	ft_pa(stack_b, stack_a);
 }
-void    path3(t_node **stack_a, t_node **stack_b)
+// Stack A makes rotate and stack B makes reverse rotate //
+void    path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
-    t_node  *a;
-    t_node  *b;
-
-    a = (*stack_a);
-    b = (*stack_b);
-    while (1)
-    {
-        if (a->cost_a > 0 && b->cost_b < 0)
-        {
-            ft_ra(a);
-            ft_rrb(b);
-            a->cost_a--;
-            b->cost_b++;
-        }
-        else if (a->cost_a == 0 && b->cost_b < 0)
-        {
-            ft_rrb(b);
-            b->cost_b++;
-        }
-        else if (a->cost_a > 0 && b->cost_b == 0)
-        {
-            ft_ra(a);
-            a->cost_a--;
-        }
-        else
-            ft_pa(b, a);
-    }
+	while (cheapest->cost_a >= 0)
+	{
+		ft_ra(stack_a);
+		cheapest->cost_a--;
+	}
+	while (cheapest->cost_b <= 0)
+	{
+		ft_rrb(stack_b);
+		cheapest->cost_b++;
+	}
+    ft_pa(stack_b, stack_a);
 }
-void    path4(t_node **stack_a, t_node **stack_b)
+// Stack A makes reverse rotate and stack B makes rotate //
+void    path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
-    t_node  *a;
-    t_node  *b;
+	while (cheapest->cost_a <= 0)
+	{
+		ft_rra(stack_a);
+		cheapest->cost_a++;
+	}
+	while (cheapest->cost_b >= 0)
+	{
+		ft_rb(stack_b);
+		cheapest->cost_b--;
+	}
+    ft_pa(stack_b, stack_a);
+}
+// Function to generate all scenarios //
+void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest)
+{
+	printf("%ld\n", (*cheapest)->num);
+	if ((*cheapest)->cost_a >= 0 && (*cheapest)->cost_b >= 0)
+		path1(stack_a, stack_b, (*cheapest));
+	else if ((*cheapest)->cost_a < 0 && (*cheapest)->cost_b < 0)
+		path2(stack_a, stack_b, (*cheapest));
+	else if ((*cheapest)->cost_a >= 0 && (*cheapest)->cost_b < 0)
+		path3(stack_a, stack_b, (*cheapest));
+	else if ((*cheapest)->cost_a < 0 && (*cheapest)->cost_b >= 0)
+		path4(stack_a, stack_b, (*cheapest));
+}
+// 
+void	make_sort(t_node **stack_a, t_node **stack_b, int size)
+{
+	t_node	*aux;
+	t_node	*cheapest;
 
-    a = (*stack_a);
-    b = (*stack_b);
-    while (1)
-    {
-        if (a->cost_a < 0 && b->cost_b > 0)
-        {
-            ft_rra(a);
-            ft_rb(b);
-            a->cost_a++;
-            b->cost_b--;
-        }
-        else if (a->cost_a == 0 && b->cost_b > 0)
-        {
-            ft_rb(b);
-            b->cost_b--;
-        }
-        else if (a->cost_a < 0 && b->cost_b == 0)
-        {
-            ft_rra(a);
-            a->cost_a++;
-        }
-        else
-            ft_pa(b, a);
-    }
+	while ((*stack_b) != NULL)
+	{
+		set_positions(stack_a);
+		set_positions(stack_b);
+		cost_a(stack_a);
+		cost_b(stack_b);
+		aux = put_total_cost_and_find_target(stack_a, stack_b);
+		cheapest = cheapest_node(stack_b);
+		four_possibilities(stack_a, stack_b, &cheapest);
+		//print_nodes((*stack_b));
+	}
+	last_moves(stack_a, size);
+}
+void	last_moves(t_node **stack_a, int size)
+{
+	t_node	*aux;
+	int		flag;
+
+	aux = find_min_node(stack_a);
+	if (!aux)
+		return ;
+	if (aux->pos < (size + 1) / 2)
+		flag = 1;
+	else
+		flag = 0;
+	while ((*stack_a) != aux)
+	{
+		if (flag)
+			ft_ra(stack_a);
+		else
+			ft_rra(stack_a);
+	}
+}
+
+t_node	*find_min_node(t_node **stack_a)
+{
+	t_node	*aux;
+
+	aux = (*stack_a);
+	while (1)
+	{
+		if (aux->index == 0)
+			return (aux);
+		aux = aux->next;
+		if (aux == (*stack_a))
+			break;
+	}
+	return (NULL);
 }

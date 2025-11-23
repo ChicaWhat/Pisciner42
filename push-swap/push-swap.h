@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 22:41:28 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/23 22:29:37 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void    ft_rrb(t_node **b);
 void    ft_rrr(t_node **a, t_node **b);
 long    *ft_order_long(long *list_num, int size);
 void    ft_index_and_target_nodes(long *list_num, int size, t_node **stack);
-int		stack_size(t_node **stack_a);
+int		stack_size(t_node **stack);
 void	set_positions(t_node **stack_a);
 t_node  *push_swap(char **av);
 void    order_two_nodes(t_node **stack);
@@ -84,8 +84,17 @@ void    order_nodes(t_node **stack_a, int size);
 void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
 void	cost_a(t_node **stack_a);
 void	cost_b(t_node **stack_b);
-void	put_total_cost(t_node **a, t_node **b);
-void	cheapest(t_node **stack_b);
+t_node	*put_total_cost_and_find_target(t_node **a, t_node **b);
+t_node	*cheapest_node(t_node **stack_b);
+void    path1(t_node **stack_a, t_node **stack_b, t_node *cheapest);
+void    path2(t_node **stack_a, t_node **stack_b, t_node *cheapest);
+void    path3(t_node **stack_a, t_node **stack_b, t_node *cheapest);
+void    path4(t_node **stack_a, t_node **stack_b, t_node *cheapest);
+void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest);
+void	make_sort(t_node **stack_a, t_node **stack_b, int size);
+void	last_moves(t_node **stack_a, int size);
+t_node	*find_min_node(t_node **stack_a);
+
 t_node    *print_nodes(t_node *node);
 
 #endif

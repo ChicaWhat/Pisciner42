@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 22:47:51 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/23 22:36:41 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,31 +248,25 @@ t_node    *print_nodes(t_node *node)
 int main(int ac, char **av)
 {
     t_node  *stack_a;
-    t_node  *stack_b = NULL;
-    int     size;
-	//int		count;
-	//int		count_b;
+    //t_node  *stack_b = NULL;
 
     if (ac == 1)
         return (0);
     ft_parsing(ac, av);
-    size = list_size(av+1);
     stack_a = push_swap(av+1);
     if (!stack_a)
     {
         free(stack_a);
         return (1);
     }
-    printf("Stack A:\n");
+/*     printf("Stack A:\n");
     print_nodes(stack_a);
 	move_stacks(&stack_a, &stack_b, size);
     printf("Stack A:\n");
     print_nodes(stack_a);
     printf("Stack B:\n");
-    print_nodes(stack_b);	
- /*    printf("---STACK ORDENADO---\n");
-    order_3_or_less(&stack_a, size);
-    print_nodes(stack_a); */
+    print_nodes(stack_b);	 */
+    print_nodes(stack_a);
     free(stack_a);
     return (0);
 }

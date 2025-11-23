@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/20 17:28:21 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/23 22:33:39 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,17 @@ set_positions(stack_a);
 // -- Function that order 3 nodes or less -- //
 void    order_nodes(t_node **stack_a, int size)
 {
+	t_node  *stack_b;
+
+	stack_b = NULL;
     if (size == 1)
         return;
     else if (size == 2)
         order_two_nodes(stack_a);
     else if (size == 3)
         order_three_nodes(stack_a);
+	else
+		move_stacks(stack_a, &stack_b, size);
 }
 
 void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
@@ -76,10 +81,7 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 		set_positions(stack_b);
 	}
 	order_three_nodes(stack_a);
-	cost_a(stack_a);
-	cost_b(stack_b);
-	put_total_cost(stack_a, stack_b);
-	cheapest(stack_b);
+	make_sort(stack_a, stack_b, size);
 }
 
 void	cost_a(t_node **stack_a)
@@ -132,8 +134,8 @@ int	abs_cost(int cost)
 		cost = -cost;
 	return (cost);
 }
-
-void	put_total_cost(t_node **a, t_node **b)
+//void	put_total_cost_and_find_target(t_node **a, t_node **b)
+t_node	*put_total_cost_and_find_target(t_node **a, t_node **b)
 {
 	t_node	*aux_b;
 	t_node	*aux_a;
@@ -160,9 +162,10 @@ void	put_total_cost(t_node **a, t_node **b)
 		if (aux_b == (*b))
 			break ;
 	}
+	return (aux_b);
 }
 
-void	cheapest(t_node **stack_b)
+t_node	*cheapest_node(t_node **stack_b)
 {
 	t_node	*aux;
 	t_node	*best_cheapest;
@@ -178,6 +181,7 @@ void	cheapest(t_node **stack_b)
 			break ;
 	}
 	best_cheapest->cheapest = 1;
+	return (best_cheapest);
 }
 
 
