@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/19 23:05:08 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:21:32 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_node    *create_stack(long *list_num, int size)
     //free(list_num);
     return (node1);
 }
-//--- Función que ''rellena'' cada nodo de la pila con el num y el size de dicha lista ---//
+//--- Función que ''rellena'' cada nodo de la pila con el numnj y el size de dicha lista ---//
 t_node  *init_stack(char **av)
 {
     char    *one_av;
