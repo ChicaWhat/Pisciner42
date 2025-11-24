@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/23 22:36:41 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:19:06 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,7 @@ int main(int ac, char **av)
     print_nodes(stack_a);
     printf("Stack B:\n");
     print_nodes(stack_b);	 */
-    print_nodes(stack_a);
+    //print_nodes(stack_a);
     free(stack_a);
     return (0);
 }

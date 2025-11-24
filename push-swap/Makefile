@@ -3,7 +3,7 @@
 # ================== VARIABLES ==================
 
 # Name of the proyect
-NAME = push-swap
+NAME = push_swap
 
 # Compiler and flags
 CC = cc
