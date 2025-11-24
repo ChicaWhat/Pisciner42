@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/24 14:40:53 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/24 18:22:35 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,6 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 			ft_ra(stack_a);
 		total_size--;
 	}
-/* 	total_size = stack_size(stack_a);
-	while (total_size)
-	{
-		if ((*stack_a)->index < (total_size / 3))
-			ft_pb(stack_a, stack_b);
-		else
-			ft_ra(stack_a);
-		total_size--;
-	} */
 	while (size > 3)
 	{
 		if ((*stack_a)->index < (*stack_a)->size - 3)
@@ -133,7 +124,6 @@ void	cost_a(t_node **stack_a)
 		else
 		{
 			aux->cost_a = (aux->pos - size) - 1;
-			//aux->cost_a = (size - aux->pos) + 1;
 		}
 		aux = aux->next;
 		if (aux == (*stack_a))
@@ -169,12 +159,12 @@ int	abs_cost(int cost)
 		cost = -cost;
 	return (cost);
 }
-//void	put_total_cost_and_find_target(t_node **a, t_node **b)
-t_node	*put_total_cost_and_find_target(t_node **a, t_node **b)
+/* t_node	*find_target(t_node **a, t_node **b)
 {
 	t_node	*aux_b;
 	t_node	*aux_a;
 	int		best_index;
+	t_node	*target_node;
 
 	aux_b = (*b);
 	while (1)
@@ -185,11 +175,8 @@ t_node	*put_total_cost_and_find_target(t_node **a, t_node **b)
 		{
 			if ((aux_a->index > aux_b->index) && (best_index > aux_a->index))
 			{
-				if (aux_a->cost_a > aux_b->cost_b)
-					
 				best_index = aux_a->index;
-				aux_b->total_cost = abs_cost(aux_a->cost_a) + abs_cost(aux_b->cost_b);
-				aux_b->cost_a = aux_a->cost_a;
+				target_node = aux_a;
 			}
 			aux_a = aux_a->next;
 			if (aux_a == (*a))
@@ -199,7 +186,41 @@ t_node	*put_total_cost_and_find_target(t_node **a, t_node **b)
 		if (aux_b == (*b))
 			break ;
 	}
-	return (aux_b);
+	return (target_node);
+} */
+
+t_node	*find_target(t_node **a, t_node *node_b)
+{
+	//t_node	*aux_b;
+	t_node	*aux_a;
+	int		best_index;
+	t_node	*target_node;
+
+	aux_a = (*a);
+	best_index = 9999;
+	while (1)
+	{
+		if ((aux_a->index > node_b->index) && (best_index > aux_a->index))
+		{
+			best_index = aux_a->index;
+			target_node = aux_a;
+		}
+		aux_a = aux_a->next;
+		if (aux_a == (*a))
+			break ;
+	}
+	if (!target_node)
+	{
+		
+	}
+	return (target_node);
+}
+
+int	total_cost(t_node **stack_a, t_node **stack_b)
+{
+	//aux_b->total_cost = abs_cost(aux_a->cost_a) + abs_cost(aux_b->cost_b);
+	//aux_b->cost_a = aux_a->cost_a;
+	t_node	*b;
 }
 
 t_node	*cheapest_node(t_node **stack_b)

@@ -154,15 +154,21 @@ void	last_moves(t_node **stack_a, int size)
 t_node	*find_min_node(t_node **stack_a)
 {
 	t_node	*aux;
+	t_node	*min_node;
+	int		index_winner;
 
 	aux = (*stack_a);
+	index_winner = 9999;
 	while (1)
 	{
-		if (aux->index == 0)
-			return (aux);
+		if (aux->index < index_winner)
+		{
+			index_winner = aux->index;
+			min_node = aux;
+		}
 		aux = aux->next;
 		if (aux == (*stack_a))
-			break;
+		break;
 	}
-	return (NULL);
+	return (min_node);
 }
