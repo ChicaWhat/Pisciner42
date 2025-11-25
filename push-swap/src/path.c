@@ -12,7 +12,7 @@
 
 #include "../push-swap.h"
 // Stack A and stack B make rotate //
-void    path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
+void	path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
 	while (cheapest->cost_a > 0 && cheapest->cost_b > 0)
 	{
@@ -37,7 +37,7 @@ void    path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		ft_pa(stack_b, stack_a); */
 }
 // Stack A and stack b make reverse rotate //
-void    path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
+void	path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
     while (cheapest->cost_a < 0 && cheapest->cost_b < 0)
     {
@@ -62,7 +62,7 @@ void    path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		ft_pa(stack_b, stack_a); */
 }
 // Stack A makes rotate and stack B makes reverse rotate //
-void    path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
+void	path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
 	while (cheapest->cost_a > 0)
 	{
@@ -80,7 +80,7 @@ void    path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
     	ft_pa(stack_b, stack_a); */
 }
 // Stack A makes reverse rotate and stack B makes rotate //
-void    path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
+void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
 	while (cheapest->cost_a < 0)
 	{
@@ -118,13 +118,15 @@ void	make_sort(t_node **stack_a, t_node **stack_b, int size)
 	t_node	*aux;
 	t_node	*cheapest;
 
+	aux = (*stack_b);
 	while ((*stack_b) != NULL)
 	{
 		set_positions(stack_a);
 		set_positions(stack_b);
 		cost_a(stack_a);
 		cost_b(stack_b);
-		aux = put_total_cost_and_find_target(stack_a, stack_b);
+		set_target(stack_a, aux);
+		total_cost(stack_a, stack_b);
 		cheapest = cheapest_node(stack_b);
 		four_possibilities(stack_a, stack_b, &cheapest);
 	}
@@ -158,7 +160,7 @@ t_node	*find_min_node(t_node **stack_a)
 	int		index_winner;
 
 	aux = (*stack_a);
-	index_winner = 9999;
+	index_winner = INT_MAX;
 	while (1)
 	{
 		if (aux->index < index_winner)

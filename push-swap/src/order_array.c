@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:28:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/23 22:34:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/25 19:48:10 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_node  *push_swap(char **av)
         return (NULL);
     }
     list_num = ft_order_long(list_num, size);
-    ft_index_and_target_nodes(list_num, size, &stack_a);
+    ft_index_nodes(list_num, size, &stack_a);
 	count = stack_size(&stack_a);
 	set_positions(&stack_a);
 	order_nodes(&stack_a, size);
@@ -62,7 +62,7 @@ long     *ft_order_long(long *list_num, int size)
     return (list_num);
 }
 
-void    ft_index_and_target_nodes(long *list_num, int size, t_node **stack)
+void    ft_index_nodes(long *list_num, int size, t_node **stack)
 {
     int     i;
     t_node *aux;
@@ -76,10 +76,10 @@ void    ft_index_and_target_nodes(long *list_num, int size, t_node **stack)
             if (list_num[i] == aux->num)
             {
                 aux->index = i;
-				if (i != size - 1)
+/* 				if (i != size - 1)
 					aux->target = i + 1;
 				else
-					aux->target = 0;
+					aux->target = 0; */
                 break;
             }
             aux = aux->next;

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/24 18:22:35 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/25 20:09:33 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void    order_three_nodes(t_node **stack_a)
 set_positions(stack_a);
 }
 // -- Order 5 nodes -- //
-void	order_five_nodes(t_node **stack_a, t_node **stack_b, int size)
+/* void	order_five_nodes(t_node **stack_a, t_node **stack_b, int size)
 {
 	while (size > 3)
 	{
@@ -63,7 +63,7 @@ void	order_five_nodes(t_node **stack_a, t_node **stack_b, int size)
 	order_three_nodes(stack_a);
 	ft_pa(stack_b, stack_a);
 	ft_pa(stack_b, stack_a);
-}
+} */
 
 // -- Function that order 3 nodes or less -- //
 void    order_nodes(t_node **stack_a, int size)
@@ -77,8 +77,8 @@ void    order_nodes(t_node **stack_a, int size)
         order_two_nodes(stack_a);
     else if (size == 3)
         order_three_nodes(stack_a);
-	else if (size == 5)
-		order_five_nodes(stack_a, &stack_b, size);
+/* 	else if (size == 5)
+		order_five_nodes(stack_a, &stack_b, size); */
 	else
 		move_stacks(stack_a, &stack_b, size);
 }
@@ -103,10 +103,13 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 		else
 			ft_ra(stack_a);
 		size = stack_size(stack_a);
+		printf("%d\n", size);
+		printf("%ld\n", (*stack_a)->num);
 		set_positions(stack_a);
 		set_positions(stack_b);
 	}
 	order_three_nodes(stack_a);
+	printf("1\n");
 	make_sort(stack_a, stack_b, size);
 }
 
@@ -152,7 +155,7 @@ void	cost_b(t_node **stack_b)
 			return ;
 	}
 }
-
+// -- Function that turns the negative values to positive values --//
 int	abs_cost(int cost)
 {
 	if (cost < 0)
@@ -189,15 +192,15 @@ int	abs_cost(int cost)
 	return (target_node);
 } */
 
-t_node	*find_target(t_node **a, t_node *node_b)
+void	set_target(t_node **a, t_node *node_b)
 {
-	//t_node	*aux_b;
 	t_node	*aux_a;
 	int		best_index;
 	t_node	*target_node;
 
 	aux_a = (*a);
-	best_index = 9999;
+	best_index = INT_MAX;
+	target_node = NULL;
 	while (1)
 	{
 		if ((aux_a->index > node_b->index) && (best_index > aux_a->index))
@@ -210,17 +213,33 @@ t_node	*find_target(t_node **a, t_node *node_b)
 			break ;
 	}
 	if (!target_node)
-	{
-		
-	}
-	return (target_node);
+		target_node = find_min_node(a);
+	node_b->target = target_node->index;
+	//return (target_node);
 }
 
-int	total_cost(t_node **stack_a, t_node **stack_b)
+void	total_cost(t_node **stack_a, t_node **stack_b)
 {
-	//aux_b->total_cost = abs_cost(aux_a->cost_a) + abs_cost(aux_b->cost_b);
-	//aux_b->cost_a = aux_a->cost_a;
+	t_node	*a;
 	t_node	*b;
+	
+	a = (*stack_a);
+	b = (*stack_b);
+	while (1)
+	{
+		if ((a->cost_a > 0 && b->cost_b > 0) || (a->cost_a < 0 && b->cost_b < 0))
+		{
+			if (abs_cost(a->cost_a) > abs_cost(b->cost_b))
+				b->total_cost = abs_cost(a->cost_a);
+			else
+				b->total_cost = abs_cost(b->cost_b);
+		}
+		else
+			b->total_cost = abs_cost(a->cost_a) + abs_cost(b->cost_b);
+		a = a->next;
+		if (a == (*stack_a))
+			break;
+	}
 }
 
 t_node	*cheapest_node(t_node **stack_b)

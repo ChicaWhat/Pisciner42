@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/24 12:19:06 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/25 19:07:53 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,6 @@ t_node    *print_nodes(t_node *node)
 int main(int ac, char **av)
 {
     t_node  *stack_a;
-    //t_node  *stack_b = NULL;
 
     if (ac == 1)
         return (0);
@@ -270,53 +269,3 @@ int main(int ac, char **av)
     free(stack_a);
     return (0);
 }
-
-//? OTRO MAIN DE PRUEBA
-/* int main(int ac, char **av)
-{
-    t_node  *stack_a;
-    t_node  *stack_b = NULL;
-
-    if (ac == 1)
-        return (0);
-    ft_parsing(ac, av);
-    stack_a = init_stack(av+1);
-    if (!stack_a)
-    {
-        free(stack_a);
-        return (1);
-    }
-    printf("-----ANTES DEL PUSH-----\n");
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("-----DESPUES DEL PUSH-----\n");
-    ft_pb(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----SWAP A-----\n");
-    ft_sa(&stack_a);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("-----OTRO PUSH-----\n");
-    ft_pb(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----SWAP B-----\n");
-    ft_sb(&stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    printf("-----SS-----\n");
-    ft_ss(&stack_a, &stack_b);
-    printf("Stack src:\n");
-    print_nodes(stack_a);
-    printf("Stack dst:\n");
-    print_nodes(stack_b);
-    free(stack_a);
-    return (0);
-} */
