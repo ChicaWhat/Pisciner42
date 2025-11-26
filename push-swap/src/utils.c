@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:47:17 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/24 12:02:26 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/26 20:26:30 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	set_positions(t_node **stack_a)
 	t_node	*aux;
 	int		i;
 
-	if (!(*stack_a))
+	if (!stack_a || !(*stack_a))
 		return ;
 	aux = (*stack_a);
 	i = 1;
@@ -25,7 +25,7 @@ void	set_positions(t_node **stack_a)
 	{
 		aux->pos = i;
 		aux->cheapest = 0;
-		//aux->total_cost = 0;
+		aux->total_cost = 0;
 		aux = aux->next;
 		i++;
 		if (aux == (*stack_a))

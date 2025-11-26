@@ -100,8 +100,15 @@ void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 // Function to generate all scenarios //
 void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest)
 {
+	 	printf("Stack A\n");
+		print_nodes(*stack_a);
+		printf("Stack B\n");
+		print_nodes(*stack_b);
 	if ((*cheapest)->cost_a >= 0 && (*cheapest)->cost_b >= 0)
+	{
 		path1(stack_a, stack_b, (*cheapest));
+		printf("1\n");
+	}
 	else if ((*cheapest)->cost_a <= 0 && (*cheapest)->cost_b < 0)
 	{
 		path2(stack_a, stack_b, (*cheapest));
@@ -118,20 +125,7 @@ void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest)
 		printf("4\n");
 	}
 	if ((*cheapest)->total_cost == 0)
-	{
 		ft_pa(stack_b, stack_a);
-		printf("Stack A\n");
-		print_nodes(*stack_a);
-		printf("Stack B\n");
-		print_nodes(*stack_b);
-		printf("5\n");
-	}
-	set_positions(stack_a);
-	set_positions(stack_b);
-	cost_a(stack_a);
-	cost_b(stack_b);
-	set_all_targets(stack_a, stack_b);
-	set_total_cost(stack_a, stack_b);
 }
 // 
 void	make_sort(t_node **stack_a, t_node **stack_b, int size)
@@ -144,10 +138,10 @@ void	make_sort(t_node **stack_a, t_node **stack_b, int size)
 	{
 		set_positions(stack_a);
 		set_positions(stack_b);
-		//cost_a(stack_a);
-		//cost_b(stack_b);
-		//set_target(stack_a, *stack_b);
-		//total_cost(stack_a, stack_b);
+		cost_a(stack_a);
+		cost_b(stack_b);
+		set_all_targets(stack_a, stack_b);
+		set_total_cost(stack_a, stack_b);
 		cheapest = cheapest_node(stack_b);
 		four_possibilities(stack_a, stack_b, &cheapest);
 	}

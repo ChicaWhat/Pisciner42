@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/26 14:03:24 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/26 19:54:23 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	order_nodes(t_node **stack_a, int size);
 void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
 void	cost_a(t_node **stack_a);
 void	cost_b(t_node **stack_b);
-void	set_target(t_node **a, t_node *node_b);
+void	set_target(t_node **a, t_node **stack_b);
 void	set_all_targets(t_node **stack_a, t_node **stack_b);
 void	total_cost(t_node **stack_a, t_node **stack_b);
 void	set_total_cost(t_node **stack_a ,t_node **stack_b);
@@ -91,6 +91,6 @@ void	make_sort(t_node **stack_a, t_node **stack_b, int size);
 void	last_moves(t_node **stack_a, int size);
 t_node	*find_min_node(t_node **stack_a);
 
-t_node	*print_nodes(t_node *node);
+void	print_nodes(t_node *node);
 
 #endif

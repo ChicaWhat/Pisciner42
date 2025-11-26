@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/26 14:06:36 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/26 20:49:46 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ void	cost_b(t_node **stack_b)
 {
 	t_node *aux;
 	int		size;
+
+	if (!stack_b || !(*stack_b))
+		return ;
 	
 	size = stack_size(stack_b);
 	aux = (*stack_b);
@@ -191,7 +194,7 @@ int	abs_cost(int cost)
 	return (target_node);
 } */
 
-void	set_target(t_node **a, t_node *node_b)
+void	set_target(t_node **a, t_node **stack_b)
 {
 	t_node	*aux_a;
 	int		best_index;
@@ -202,11 +205,11 @@ void	set_target(t_node **a, t_node *node_b)
 	target_node = NULL;
 	while (1)
 	{
-		if ((aux_a->index > node_b->index) && (best_index > aux_a->index))
+		if ((aux_a->index > (*stack_b)->index) && (best_index > aux_a->index))
 		{
 			best_index = aux_a->index;
 			target_node = aux_a;
-			node_b->target = target_node->index;	
+			(*stack_b)->target = target_node->index;
 		}
 		aux_a = aux_a->next;
 		if (aux_a == (*a))
@@ -215,7 +218,7 @@ void	set_target(t_node **a, t_node *node_b)
 	if (!target_node)
 	{
 		target_node = find_min_node(a);
-		node_b->target = target_node->index;
+		(*stack_b)->target = target_node->index;
 	}
 	//return (target_node);
 }
@@ -223,11 +226,14 @@ void	set_target(t_node **a, t_node *node_b)
 void	set_all_targets(t_node **stack_a, t_node **stack_b)
 {
 	t_node	*b;
+	
+	if (!stack_b || !(*stack_b))
+		return ;
 
 	b = (*stack_b);
 	while (1)
 	{
-		set_target(stack_a, b);
+		set_target(stack_a, &b);
 		b = b->next;
 		if (b == (*stack_b))
 			break;
@@ -252,8 +258,9 @@ void	total_cost(t_node **stack_a, t_node **stack_b)
 				else
 					b->total_cost = abs_cost(b->cost_b);
 			}
-				else
-					b->total_cost = abs_cost(a->cost_a) + abs_cost(b->cost_b);
+			else
+				b->total_cost = abs_cost(a->cost_a) + abs_cost(b->cost_b);
+			b->cost_a = a->cost_a;
 			break ;
 		}
 		a = a->next;
@@ -264,6 +271,9 @@ void	total_cost(t_node **stack_a, t_node **stack_b)
 void	set_total_cost(t_node **stack_a ,t_node **stack_b)
 {
 	t_node	*b;
+	
+	if (!stack_b || !(*stack_b))
+		return ;
 	
 	b = (*stack_b);
 	while (1)
@@ -281,7 +291,7 @@ t_node	*cheapest_node(t_node **stack_b)
 	t_node	*best_cheapest;
 	
 	aux = (*stack_b);
-	best_cheapest = aux;
+	best_cheapest = (*stack_b);
 	while (1)
 	{
 		if (aux->total_cost < best_cheapest->total_cost)
@@ -291,6 +301,8 @@ t_node	*cheapest_node(t_node **stack_b)
 			break ;
 	}
 	best_cheapest->cheapest = 1;
+/* 	printf("%ld nodo cheapest\n", best_cheapest->num);
+	printf("%d nodo cheapest\n", best_cheapest->cheapest); */
 	return (best_cheapest);
 }
 

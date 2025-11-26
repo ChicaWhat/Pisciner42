@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/25 19:07:53 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/26 19:45:49 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,10 +219,13 @@ void ft_parsing(int ac, char **av)
         exit(0);
 }
 //--- Función que me printea toda la info que necesite de los nodos ---//
-t_node    *print_nodes(t_node *node)
+void	print_nodes(t_node *node)
 {
     t_node  *aux;
 
+	if (!node)
+		return ;
+	
     aux = node;
     while (1)
     {
@@ -241,7 +244,6 @@ t_node    *print_nodes(t_node *node)
         if (aux == node)
             break;
     }
-    return (node);
 }
 
 //! MAIN ORIGINAL
