@@ -100,30 +100,14 @@ void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 // Function to generate all scenarios //
 void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest)
 {
-	 	printf("Stack A\n");
-		print_nodes(*stack_a);
-		printf("Stack B\n");
-		print_nodes(*stack_b);
 	if ((*cheapest)->cost_a >= 0 && (*cheapest)->cost_b >= 0)
-	{
 		path1(stack_a, stack_b, (*cheapest));
-		printf("1\n");
-	}
 	else if ((*cheapest)->cost_a <= 0 && (*cheapest)->cost_b < 0)
-	{
 		path2(stack_a, stack_b, (*cheapest));
-		printf("2\n");
-	}
 	else if ((*cheapest)->cost_a >= 0 && (*cheapest)->cost_b < 0)
-	{
 		path3(stack_a, stack_b, (*cheapest));
-		printf("3\n");
-	}
 	else if ((*cheapest)->cost_a < 0 && (*cheapest)->cost_b >= 0)
-	{
 		path4(stack_a, stack_b, (*cheapest));
-		printf("4\n");
-	}
 	if ((*cheapest)->total_cost == 0)
 		ft_pa(stack_b, stack_a);
 }

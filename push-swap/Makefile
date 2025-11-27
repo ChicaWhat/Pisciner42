@@ -40,9 +40,6 @@ LIBFT_MAKE = $(MAKE) -C $(LIBFT_DIR)
 # Objects
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-# Includes paths
-# INCLUDES = -I$(INC_DIR) -I$(LIBFT_INC)
-
 # Colors
 GREEN = \033[0;32m
 RED = \033[0;31m

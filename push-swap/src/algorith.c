@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/26 20:49:46 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/27 11:13:32 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,6 @@ void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
 		set_positions(stack_b);
 	}
 	order_three_nodes(stack_a);
-/* 	printf("Stack A:\n");
-	print_nodes(*stack_a); */
 	make_sort(stack_a, stack_b, size);
 }
 
