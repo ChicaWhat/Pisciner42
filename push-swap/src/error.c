@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/27 13:44:21 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/28 16:17:17 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,6 @@ void	*ft_free_all(char **list, char *str, t_node **node)
 		free ((*node));
 	return (NULL);
 }
-//--- Función para liberar la lista circular ---//
-/* void	free_circular_list(t_node **stack)
-{
-	t_node	*current;
-	t_node	*next;
-
-	if (!stack || !(*stack))
-		return ;
-
-	current = (*stack);
-	while (1)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-		if (current == (*stack))
-			break; ;
-	}
-} */
 
 void	free_circular_list(t_node **stack)
 {

@@ -33,8 +33,6 @@ void	path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->cost_b--;
 		cheapest->total_cost--;
 	}
-/* 	if (cheapest->total_cost == 0)
-		ft_pa(stack_b, stack_a); */
 }
 // Stack A and stack b make reverse rotate //
 void	path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
@@ -58,8 +56,6 @@ void	path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->cost_b++;
 		cheapest->total_cost--;
 	}
-/* 	if (cheapest->total_cost == 0)
-		ft_pa(stack_b, stack_a); */
 }
 // Stack A makes rotate and stack B makes reverse rotate //
 void	path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
@@ -76,8 +72,6 @@ void	path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->cost_b++;
 		cheapest->total_cost--;
 	}
-/* 	if (cheapest->total_cost == 0)
-    	ft_pa(stack_b, stack_a); */
 }
 // Stack A makes reverse rotate and stack B makes rotate //
 void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
@@ -94,8 +88,6 @@ void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->cost_b--;
 		cheapest->total_cost--;
 	}
-/* 	if (cheapest->total_cost == 0)
-    	ft_pa(stack_b, stack_a); */
 }
 // Function to generate all scenarios //
 void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest)

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/27 13:37:32 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:23:19 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest);
 void	make_sort(t_node **stack_a, t_node **stack_b, int size);
 void	last_moves(t_node **stack_a, int size);
 t_node	*find_min_node(t_node **stack_a);
+int		count_stack(t_node **stack);
 
 void	print_nodes(t_node *node);
 

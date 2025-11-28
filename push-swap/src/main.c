@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main1.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/27 13:15:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:38:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,17 @@ int	is_order(char **list)
 	i = 0;
 	while ((list[i]))
 	{
-		j = i + 1;
+		j = 0;
 		while ((list[j]))
 		{
-			if (ft_atol(list[i]) < ft_atol(list[j]))
+			if (ft_atol(&list[i][j]) < ft_atol(&list[i][j + 1]))
 				j++;
 			else
 				return (1);
 		}
 		i++;
 	}
+	printf("Esta ordenado\n");
 	return (0);
 }
 //--- Función para transformar los char* a long int y comprobar que no me pasan un av que sobrepase los valores de INT_MIN o INT_MAX ---//
@@ -196,19 +197,24 @@ long	*ft_convert_to_long_array(char **list, int size)
 {
 	int		i;
 	long	*long_array;
+	char	*one_av;
 
 	i = 0;
+	one_av = ft_one_argv(list);
+	if (!one_av)
+		return (ft_free_all(list, NULL, NULL));
 	long_array = malloc(size * sizeof(long));
 	if (!long_array)
 	{
-		ft_free_all(list, NULL, NULL);
+		ft_free_all(list, one_av, NULL);
 		return (NULL);
 	}
 	while (i < size)
 	{
-		long_array[i] = ft_atol(list[i]);
+		long_array[i] = ft_atol(&one_av[i]);
 		i++;
 	}
+	free(one_av);
 	return (long_array);
 }
 //--- Función que comprueba de una llamada si el av pasado es válido ---//
@@ -247,6 +253,22 @@ void	ft_parsing(int ac, char **av)
 	if (!is_order(av))
 		exit(0);
 }
+
+//! MAIN ORIGINAL
+int	main(int ac, char **av)
+{
+	t_node	*stack_a;
+	
+	if (ac == 1)
+	return (0);
+	ft_parsing(ac, av);
+	stack_a = push_swap(av+1);
+	if (!stack_a)
+	return (1);
+	free_circular_list(&stack_a);
+	return (0);
+}
+
 //--- Función que me printea toda la info que necesite de los nodos ---//
 void	print_nodes(t_node *node)
 {
@@ -266,30 +288,11 @@ void	print_nodes(t_node *node)
 		printf("cost_b %d\n", aux->cost_b);
 		printf("total_cost %d\n", aux->total_cost);
 		printf("cheapest %d\n", aux->cheapest);
-/*		printf("next %ld\n", aux->next->num);
-		printf("prev %ld\n", aux->prev->num); */
+		printf("next %ld\n", aux->next->num);
+		printf("prev %ld\n", aux->prev->num);
 		printf("-------------------------\n");
 		aux = aux->next;
 		if (aux == node)
 			break;
 	}
-}
-
-//! MAIN ORIGINAL
-int	main(int ac, char **av)
-{
-	t_node	*stack_a;
-
-	if (ac == 1)
-		return (0);
-	ft_parsing(ac, av);
-	stack_a = push_swap(av+1);
-	if (!stack_a)
-	{
-		free(stack_a);
-		return (1);
-	}
-	free(stack_a);
-	//ft_free_all(NULL, NULL, &stack_a);
-	return (0);
 }

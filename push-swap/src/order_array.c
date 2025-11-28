@@ -6,30 +6,46 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:28:12 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/25 19:48:10 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:36:19 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push-swap.h"
+
+int		count_stack(t_node **stack)
+{
+	int	count;
+	t_node *aux;
+	aux = (*stack);
+	count = 0;
+	while (1)
+	{
+		count++;
+		aux = aux->next;
+		if (aux == (*stack))
+			break ;
+	}
+	return (count);
+}
 
 t_node  *push_swap(char **av)
 {
     t_node  *stack_a;
     int     size;
     long    *list_num;
-	int		count;
+	//int		count;
 
-    size = list_size(av);
-    list_num = ft_convert_to_long_array(av, size);
     stack_a = init_stack(av);
     if (!stack_a)
     {
         free(stack_a);
         return (NULL);
     }
+	size = count_stack(&stack_a);
+    list_num = ft_convert_to_long_array(av, size);
     list_num = ft_order_long(list_num, size);
     ft_index_nodes(list_num, size, &stack_a);
-	count = stack_size(&stack_a);
+	//count = stack_size(&stack_a);
 	set_positions(&stack_a);
 	order_nodes(&stack_a, size);
     free(list_num);
