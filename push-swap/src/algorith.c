@@ -6,45 +6,44 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/28 17:35:01 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:31:03 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push-swap.h"
 
 // -- Order 2 nodes -- //
-void    order_two_nodes(t_node **stack)
+void	order_two_nodes(t_node **stack)
 {
-    if ((*stack)->num > (*stack)->next->num)
-        ft_sa(stack);
+	if ((*stack)->num > (*stack)->next->num)
+		ft_sa(stack);
 }
-
 // -- Order 3 nodes -- //
-void    order_three_nodes(t_node **stack_a)
+void	order_three_nodes(t_node **stack_a)
 {
-    int a;
-    int b;
-    int c;
+	int	a;
+	int	b;
+	int	c;
 
-    a = (*stack_a)->num;
-    b = (*stack_a)->next->num;
-    c = (*stack_a)->next->next->num;
+	a = (*stack_a)->num;
+	b = (*stack_a)->next->num;
+	c = (*stack_a)->next->next->num;
 	if (a > b && b < c && c > a)
-        ft_sa(stack_a);
-    else if (a > b && b > c && c < a)
-    {
-        ft_ra(stack_a);
-        ft_sa(stack_a);
-    }
-    else if (a < b && b > c && c > a)
-    {
-        ft_rra(stack_a);
-        ft_sa(stack_a);
-    }
-    else if (a > b && b < c && c < a)
-        ft_ra(stack_a);
-    else if (a < b && b > c && c < a)
-        ft_rra(stack_a);
+		ft_sa(stack_a);
+	else if (a > b && b > c && c < a)
+	{
+		ft_ra(stack_a);
+		ft_sa(stack_a);
+	}
+	else if (a < b && b > c && c > a)
+	{
+		ft_rra(stack_a);
+		ft_sa(stack_a);
+	}
+	else if (a > b && b < c && c < a)
+		ft_ra(stack_a);
+	else if (a < b && b > c && c < a)
+		ft_rra(stack_a);
 set_positions(stack_a);
 }
 // -- Order 5 nodes -- //
@@ -59,24 +58,23 @@ void	order_five_nodes(t_node **stack_a, t_node **stack_b, int size)
 		size = stack_size(stack_a);
 	}
 	if ((*stack_b)->num < (*stack_b)->next->num)
-    	ft_sb(stack_b);
+		ft_sb(stack_b);
 	order_three_nodes(stack_a);
 	ft_pa(stack_b, stack_a);
 	ft_pa(stack_b, stack_a);
 }
-
-// -- Function that order 3 nodes or less -- //
-void    order_nodes(t_node **stack_a, int size)
+// -- Function that order 2, 3, 5 or more nodes -- //
+void	order_nodes(t_node **stack_a, int size)
 {
 	t_node  *stack_b;
 
 	stack_b = NULL;
-    if (size == 1)
-        return;
-    else if (size == 2)
-        order_two_nodes(stack_a);
-    else if (size == 3)
-        order_three_nodes(stack_a);
+	if (size == 1)
+		return;
+	else if (size == 2)
+		order_two_nodes(stack_a);
+	else if (size == 3)
+		order_three_nodes(stack_a);
 	else if (size == 5)
 		order_five_nodes(stack_a, &stack_b, size);
 	else

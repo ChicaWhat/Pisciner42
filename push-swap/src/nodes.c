@@ -6,13 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/28 17:36:57 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:48:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push-swap.h"
 
-//--- Función que crea el primer nodo reservando memoria e inicializa todos los varoles ---//
+//--- Function to create the first node by allocating memory and initializing all variables ---//
 t_node	*create_node(long num, int size)
 {
 	t_node	*new_node;
@@ -33,7 +33,7 @@ t_node	*create_node(long num, int size)
 	new_node->next = new_node;
 	return (new_node);
 }
-//--- Función que crea un segundo nodo y lo enlaza a la lista doblemente enlazada---//
+//--- Function to create a second node and link it to the doubly linked list ---//
 void	add_new_node(t_node **node1, long num, int size)
 {
 	t_node	*node2;
@@ -46,7 +46,7 @@ void	add_new_node(t_node **node1, long num, int size)
 	(*node1)->prev = node2; 
 	node2->prev = (*node1);
 }
-//--- Función necesaria para enlazar cuando tenemos más de 2 nodos en la lista ---// 
+//--- Function needed to link when we have more than 2 nodes in the list ---//
 void	add_more_nodes(t_node **stack, t_node **node)
 {
 	(*stack)->prev->next = (*node);
@@ -54,7 +54,7 @@ void	add_more_nodes(t_node **stack, t_node **node)
 	(*node)->prev = (*stack)->prev;
 	(*stack)->prev = (*node);
 }
-//--- Función que crea el stack sin los valores actualizados todavía ---//
+//--- Function to create the stack without updated values yet ---//
 t_node	*create_stack(long *list_num, int size)
 {
 	int		i;
@@ -83,7 +83,7 @@ t_node	*create_stack(long *list_num, int size)
 	//free(list_num);
 	return (node1);
 }
-//--- Función que ''rellena'' cada nodo de la pila con el numnj y el size de dicha lista ---//
+//--- Function to 'fill' each node in the stack with the number and the size of the list ---//
 t_node	*init_stack(char **av)
 {
 	char	*one_av;

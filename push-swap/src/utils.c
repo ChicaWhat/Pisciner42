@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:47:17 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/26 20:26:30 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/11/29 16:52:35 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,32 @@ void	set_positions(t_node **stack_a)
 			return ;
 	}
 }
+//--- Function to transform char* to long int and check that no argument exceeds INT_MIN or INT_MAX ---//
+long	ft_atol(char *str)
+{
+	int		i;
+	int		sign;
+	long	n;
 
+	i = 0;
+	while (str[i] < 33)
+		i++;
+	sign = 1;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	n = 0;
+	while (str[i])
+	{
+		if (n > INT_MAX || n < INT_MIN)
+			return (LONG_MAX);
+		else if (str[i] < '0' || str[i] > '9')
+			return (n * sign);
+		n = (n * 10) + (str[i] - '0');
+		i++;
+	}
+	return (n * sign);
+}
