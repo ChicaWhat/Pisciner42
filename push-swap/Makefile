@@ -27,7 +27,10 @@ SRC_FILES = main.c \
 			algorith.c \
 			utils.c \
 			path.c \
-			
+			av_valids.c \
+			make_sort.c \
+			one_av.c \
+			parsing.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
