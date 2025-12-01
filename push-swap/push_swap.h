@@ -1,15 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push-swap.h                                        :+:      :+:    :+:   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/28 17:23:19 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 21:25:23 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
@@ -17,10 +16,6 @@
 # include <unistd.h>
 # include "libft/libft.h"
 # include <limits.h>
-
-/************************************************/
-/*              Estructura de los nodos         */
-/************************************************/
 
 typedef struct s_node
 {
@@ -37,7 +32,6 @@ typedef struct s_node
 	struct s_node	*next;
 }	t_node;
 
-
 int		ft_digit_space(char c);
 int		ft_sign(char *str);
 int		ft_no_repeat(char **list);
@@ -45,8 +39,8 @@ int		is_order(char **list);
 long	ft_atol(char *str);
 char	*ft_one_argv(char **av);
 char	**ft_split_argv(char *one_av);
-int		ft_is_valid(int ac, char **av);
-void	ft_parsing(int ac, char **av);
+int		ft_is_valid(char **av);
+void	ft_parsing(char **av);
 void	ft_error(void);
 void	*ft_free_all(char **list, char *str, t_node **node);
 void	free_circular_list(t_node **stack);
@@ -71,7 +65,7 @@ long	*ft_order_long(long *list_num, int size);
 void	ft_index_nodes(long *list_num, int size, t_node **stack);
 int		stack_size(t_node **stack);
 void	set_positions(t_node **stack_a);
-t_node  *push_swap(char **av);
+t_node	*push_swap(char **av);
 void	order_two_nodes(t_node **stack);
 void	order_three_nodes(t_node **stack_a);
 void	order_nodes(t_node **stack_a, int size);
@@ -81,18 +75,16 @@ void	cost_b(t_node **stack_b);
 void	set_target(t_node **a, t_node **stack_b);
 void	set_all_targets(t_node **stack_a, t_node **stack_b);
 void	total_cost(t_node **stack_a, t_node **stack_b);
-void	set_total_cost(t_node **stack_a ,t_node **stack_b);
+void	set_total_cost(t_node **stack_a, t_node **stack_b);
 t_node	*cheapest_node(t_node **stack_b);
 void	path1(t_node **stack_a, t_node **stack_b, t_node *cheapest);
 void	path2(t_node **stack_a, t_node **stack_b, t_node *cheapest);
 void	path3(t_node **stack_a, t_node **stack_b, t_node *cheapest);
 void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest);
-void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest);
+void	four_paths(t_node **stack_a, t_node **stack_b, t_node **cheapest);
 void	make_sort(t_node **stack_a, t_node **stack_b, int size);
 void	last_moves(t_node **stack_a, int size);
 t_node	*find_min_node(t_node **stack_a);
-int		count_stack(t_node **stack);
-
 void	print_nodes(t_node *node);
 
 #endif

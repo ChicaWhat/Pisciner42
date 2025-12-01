@@ -6,21 +6,23 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/29 16:27:30 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 21:18:25 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include	"../push-swap.h"
+#include "../push_swap.h"
 //--- Function to write "Error" to the screen ---//
 void	ft_error(void)
 {
 	ft_putstr_fd("Error\n", 2);
 	exit(1);
 }
+
 //--- Function to free double arrays, arrays, and nodes ---//
 void	*ft_free_all(char **list, char *str, t_node **node)
 {
 	int	i;
+
 	if (list)
 	{
 		i = 0;
@@ -37,6 +39,7 @@ void	*ft_free_all(char **list, char *str, t_node **node)
 		free ((*node));
 	return (NULL);
 }
+
 //--- Function to free the entire stack, node by node ---//
 void	free_circular_list(t_node **stack)
 {

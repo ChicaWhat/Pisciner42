@@ -6,190 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 18:19:36 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/29 16:31:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 22:07:37 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 
-// -- Order 2 nodes -- //
-void	order_two_nodes(t_node **stack)
-{
-	if ((*stack)->num > (*stack)->next->num)
-		ft_sa(stack);
-}
-// -- Order 3 nodes -- //
-void	order_three_nodes(t_node **stack_a)
-{
-	int	a;
-	int	b;
-	int	c;
-
-	a = (*stack_a)->num;
-	b = (*stack_a)->next->num;
-	c = (*stack_a)->next->next->num;
-	if (a > b && b < c && c > a)
-		ft_sa(stack_a);
-	else if (a > b && b > c && c < a)
-	{
-		ft_ra(stack_a);
-		ft_sa(stack_a);
-	}
-	else if (a < b && b > c && c > a)
-	{
-		ft_rra(stack_a);
-		ft_sa(stack_a);
-	}
-	else if (a > b && b < c && c < a)
-		ft_ra(stack_a);
-	else if (a < b && b > c && c < a)
-		ft_rra(stack_a);
-set_positions(stack_a);
-}
-// -- Order 5 nodes -- //
-void	order_five_nodes(t_node **stack_a, t_node **stack_b, int size)
-{
-	while (size > 3)
-	{
-		if ((*stack_a)->index < 2)
-			ft_pb(stack_a, stack_b);
-		else
-			ft_ra(stack_a);
-		size = stack_size(stack_a);
-	}
-	if ((*stack_b)->num < (*stack_b)->next->num)
-		ft_sb(stack_b);
-	order_three_nodes(stack_a);
-	ft_pa(stack_b, stack_a);
-	ft_pa(stack_b, stack_a);
-}
-// -- Function that order 2, 3, 5 or more nodes -- //
-void	order_nodes(t_node **stack_a, int size)
-{
-	t_node  *stack_b;
-
-	stack_b = NULL;
-	if (size == 1)
-		return;
-	else if (size == 2)
-		order_two_nodes(stack_a);
-	else if (size == 3)
-		order_three_nodes(stack_a);
-	else if (size == 5)
-		order_five_nodes(stack_a, &stack_b, size);
-	else
-		move_stacks(stack_a, &stack_b, size);
-}
-
-void	move_stacks(t_node **stack_a, t_node **stack_b, int size)
-{
-	int		total_size;
-	
-	total_size = size;
-	while (total_size)
-	{
-		if ((*stack_a)->index < (total_size / 2) + 1)
-			ft_pb(stack_a, stack_b);
-		else
-			ft_ra(stack_a);
-		total_size--;
-	}
-	while (size > 3)
-	{
-		if ((*stack_a)->index < (*stack_a)->size - 3)
-			ft_pb(stack_a, stack_b);
-		else
-			ft_ra(stack_a);
-		size = stack_size(stack_a);
-		set_positions(stack_a);
-		set_positions(stack_b);
-	}
-	order_three_nodes(stack_a);
-	make_sort(stack_a, stack_b, size);
-}
-
-void	cost_a(t_node **stack_a)
-{
-	t_node *aux;
-	int		size;
-	
-	size = stack_size(stack_a);
-	aux = (*stack_a);
-	while (1)
-	{
-		if (aux->pos <= (size + 1) / 2)
-			aux->cost_a = aux->pos - 1;
-		else
-		{
-			aux->cost_a = (aux->pos - size) - 1;
-		}
-		aux = aux->next;
-		if (aux == (*stack_a))
-			return ;
-	}
-}
-
-void	cost_b(t_node **stack_b)
-{
-	t_node *aux;
-	int		size;
-
-	if (!stack_b || !(*stack_b))
-		return ;
-	
-	size = stack_size(stack_b);
-	aux = (*stack_b);
-	while (1)
-	{
-		if (aux->pos <= (size + 1) / 2)
-			aux->cost_b = aux->pos - 1;
-		else
-		{
-			aux->cost_b = (aux->pos - size) - 1;
-			//aux->cost_b = (size - aux->pos) + 1;
-		}
-		aux = aux->next;
-		if (aux == (*stack_b))
-			return ;
-	}
-}
-// -- Function that turns the negative values to positive values --//
-int	abs_cost(int cost)
-{
-	if (cost < 0)
-		cost = -cost;
-	return (cost);
-}
-/* t_node	*find_target(t_node **a, t_node **b)
-{
-	t_node	*aux_b;
-	t_node	*aux_a;
-	int		best_index;
-	t_node	*target_node;
-
-	aux_b = (*b);
-	while (1)
-	{
-		best_index = 9999;
-		aux_a = (*a);
-		while (1)
-		{
-			if ((aux_a->index > aux_b->index) && (best_index > aux_a->index))
-			{
-				best_index = aux_a->index;
-				target_node = aux_a;
-			}
-			aux_a = aux_a->next;
-			if (aux_a == (*a))
-				break ;
-		}
-		aux_b = aux_b->next;
-		if (aux_b == (*b))
-			break ;
-	}
-	return (target_node);
-} */
-
+// --- Finds and sets the target index in stack A for a node in stack B --- //
 void	set_target(t_node **a, t_node **stack_b)
 {
 	t_node	*aux_a;
@@ -216,90 +39,21 @@ void	set_target(t_node **a, t_node **stack_b)
 		target_node = find_min_node(a);
 		(*stack_b)->target = target_node->index;
 	}
-	//return (target_node);
 }
 
+// Sets target indices in stack A for all nodes in stack B
 void	set_all_targets(t_node **stack_a, t_node **stack_b)
 {
 	t_node	*b;
-	
+
 	if (!stack_b || !(*stack_b))
 		return ;
-
 	b = (*stack_b);
 	while (1)
 	{
 		set_target(stack_a, &b);
 		b = b->next;
 		if (b == (*stack_b))
-			break;
-	}
-}
-
-void	total_cost(t_node **stack_a, t_node **stack_b)
-{
-	t_node	*a;
-	t_node	*b;
-	
-	a = (*stack_a);
-	b = (*stack_b);
-	while (1)
-	{
-		if (a->index == b->target)
-		{
-			if ((a->cost_a > 0 && b->cost_b > 0) || (a->cost_a < 0 && b->cost_b < 0))
-			{
-				if (abs_cost(a->cost_a) > abs_cost(b->cost_b))
-					b->total_cost = abs_cost(a->cost_a);
-				else
-					b->total_cost = abs_cost(b->cost_b);
-			}
-			else
-				b->total_cost = abs_cost(a->cost_a) + abs_cost(b->cost_b);
-			b->cost_a = a->cost_a;
-			break ;
-		}
-		a = a->next;
-		if (a == (*stack_a))
-			break;
-	}
-}
-void	set_total_cost(t_node **stack_a ,t_node **stack_b)
-{
-	t_node	*b;
-	
-	if (!stack_b || !(*stack_b))
-		return ;
-	
-	b = (*stack_b);
-	while (1)
-	{
-		total_cost(stack_a, &b);
-		b = b->next;
-		if (b == (*stack_b))
-			break;
-	}
-}
-
-t_node	*cheapest_node(t_node **stack_b)
-{
-	t_node	*aux;
-	t_node	*best_cheapest;
-	
-	aux = (*stack_b);
-	best_cheapest = (*stack_b);
-	while (1)
-	{
-		if (aux->total_cost < best_cheapest->total_cost)
-			best_cheapest = aux;
-		aux = aux->next;
-		if (aux == (*stack_b))
 			break ;
 	}
-	best_cheapest->cheapest = 1;
-/* 	printf("%ld nodo cheapest\n", best_cheapest->num);
-	printf("%d nodo cheapest\n", best_cheapest->cheapest); */
-	return (best_cheapest);
 }
-
-

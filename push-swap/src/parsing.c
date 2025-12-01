@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 
 //--- Function to check in one call if the passed av is valid ---//
-int	ft_is_valid(int ac, char **av)
+int	ft_is_valid(char **av)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
-	i = 1;
-	while (i < ac)
+	i = 0;
+	while (av[i])
 	{
 		j = 0;
 		if (av[i][j] == '\0')
@@ -30,7 +30,7 @@ int	ft_is_valid(int ac, char **av)
 				return (1);
 			else if (ft_digit_space(av[i][j]))
 				return (1);
-			else if (ft_no_repeat(av+1))
+			else if (ft_no_repeat(av))
 				return (1);
 			else if (ft_atol(av[i]) > INT_MAX || ft_atol(av[i]) < INT_MIN)
 				return (1);
@@ -40,10 +40,11 @@ int	ft_is_valid(int ac, char **av)
 	}
 	return (0);
 }
+
 //--- Function that complements ft_is_valid and completes parsing ---//
-void	ft_parsing(int ac, char **av)
+void	ft_parsing(char **av)
 {
-	if (ft_is_valid(ac, av))
+	if (ft_is_valid(av))
 		ft_error();
 	if (!is_order(av))
 		exit(0);

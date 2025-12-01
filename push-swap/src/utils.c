@@ -6,12 +6,14 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 16:47:17 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/29 17:18:28 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 21:26:59 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
-//--- Function to update positions and reset total_cost and cheapest values to 0 ---//
+#include "../push_swap.h"
+
+// Function to update positions and 
+//reset total_cost and cheapest values to 0
 void	set_positions(t_node **stack_a)
 {
 	t_node	*aux;
@@ -32,6 +34,7 @@ void	set_positions(t_node **stack_a)
 			return ;
 	}
 }
+
 //--- Function to find the smallest node ---//
 t_node	*find_min_node(t_node **stack_a)
 {
@@ -50,11 +53,13 @@ t_node	*find_min_node(t_node **stack_a)
 		}
 		aux = aux->next;
 		if (aux == (*stack_a))
-		break;
+			break ;
 	}
 	return (min_node);
 }
-//--- Function to transform char* to long int and check that no argument exceeds INT_MIN or INT_MAX ---//
+
+// Function to transform char* to long int and 
+// check that no argument exceeds INT_MIN or INT_MAX
 long	ft_atol(char *str)
 {
 	int		i;

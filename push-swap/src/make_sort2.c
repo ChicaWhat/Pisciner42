@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_sort.c                                        :+:      :+:    :+:   */
+/*   make_sort2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/29 17:18:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/29 17:18:48 by carmegon         ###   ########.fr       */
+/*   Created: 2025/12/01 21:47:33 by carmegon          #+#    #+#             */
+/*   Updated: 2025/12/01 21:47:33 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 
 //--- Function to sort ---//
 void	make_sort(t_node **stack_a, t_node **stack_b, int size)
@@ -26,10 +26,11 @@ void	make_sort(t_node **stack_a, t_node **stack_b, int size)
 		set_all_targets(stack_a, stack_b);
 		set_total_cost(stack_a, stack_b);
 		cheapest = cheapest_node(stack_b);
-		four_possibilities(stack_a, stack_b, &cheapest);
+		four_paths(stack_a, stack_b, &cheapest);
 	}
 	last_moves(stack_a, size);
 }
+
 //--- Function to make the final moves ---//
 void	last_moves(t_node **stack_a, int size)
 {

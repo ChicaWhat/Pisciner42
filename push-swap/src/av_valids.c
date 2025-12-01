@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 
 //--- Function to detect any non-numeric character ---//
 int	ft_digit_space(char c)
@@ -24,7 +24,9 @@ int	ft_digit_space(char c)
 	else
 		return (1);
 }
-//--- Function to check for non-numeric characters at the beginning and in the middle of av ---//
+
+/* --- Function to check for non-numeric characters at the 
+beginning and in the middle of av --- */
 int	ft_sign(char *str)
 {
 	int	i;
@@ -44,6 +46,7 @@ int	ft_sign(char *str)
 	}
 	return (0);
 }
+
 //--- Function to check if there are no repeated arguments ---//
 int	ft_no_repeat(char **list)
 {
@@ -65,6 +68,7 @@ int	ft_no_repeat(char **list)
 	}
 	return (0);
 }
+
 //--- Function to check if the arguments are already sorted ---//
 int	is_order(char **list)
 {
@@ -74,10 +78,10 @@ int	is_order(char **list)
 	i = 0;
 	while ((list[i]))
 	{
-		j = 0;
+		j = i + 1;
 		while ((list[j]))
 		{
-			if (ft_atol(&list[i][j]) < ft_atol(&list[i][j + 1]))
+			if (ft_atol(list[i]) < ft_atol(list[j]))
 				j++;
 			else
 				return (1);
@@ -86,4 +90,3 @@ int	is_order(char **list)
 	}
 	return (0);
 }
-

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 20:57:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/23 16:14:48 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:32:01 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-static int ft_count_numbers(long int num)
+static int	ft_count_numbers(long int num)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	if (num <= 0)
@@ -27,11 +27,11 @@ static int ft_count_numbers(long int num)
 	return (result);
 }
 
-char *ft_itoa(int n)
+char	*ft_itoa(int n)
 {
-	char *result;
-	long int num;
-	int len_num;
+	char		*result;
+	long int	num;
+	int			len_num;
 
 	num = n;
 	len_num = ft_count_numbers(num);

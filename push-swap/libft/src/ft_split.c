@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 20:40:46 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/23 16:14:48 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:36:36 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-static void ft_free_all(char **list, int end_list)
+static void	ft_free_all(char **list, int end_list)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < end_list)
@@ -25,11 +25,11 @@ static void ft_free_all(char **list, int end_list)
 	free(list);
 }
 
-static int ft_word_counter(char const *str, char c)
+static int	ft_word_counter(char const *str, char c)
 {
-	int i;
-	int words;
-	int flag;
+	int	i;
+	int	words;
+	int	flag;
 
 	i = 0;
 	flag = 1;
@@ -48,10 +48,10 @@ static int ft_word_counter(char const *str, char c)
 	return (words);
 }
 
-static char **ft_fill_array(char **list, char const *str, int w_count, char c)
+static char	**ft_fill_array(char **list, char const *str, int w_count, char c)
 {
-	int i;
-	int word_len;
+	int	i;
+	int	word_len;
 
 	i = 0;
 	word_len = 0;
@@ -75,10 +75,10 @@ static char **ft_fill_array(char **list, char const *str, int w_count, char c)
 	return (list);
 }
 
-char **ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
-	int w_count;
-	char **list;
+	int		w_count;
+	char	**list;
 
 	w_count = ft_word_counter(s, c);
 	list = malloc((w_count + 1) * sizeof(char *));

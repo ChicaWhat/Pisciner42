@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:17:33 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/23 16:14:32 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:43:46 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-char *ft_read_line(int fd, char *stash)
+char	*ft_read_line(int fd, char *stash)
 {
-	char *str;
-	ssize_t bytes_read;
+	char	*str;
+	ssize_t	bytes_read;
 
 	if (!stash)
 	{
@@ -40,10 +40,10 @@ char *ft_read_line(int fd, char *stash)
 	return (stash);
 }
 
-char *ft_extract_line(char *stash)
+char	*ft_extract_line(char *stash)
 {
-	char *line;
-	int i;
+	char	*line;
+	int		i;
 
 	i = 0;
 	if (!stash[i])
@@ -64,10 +64,10 @@ char *ft_extract_line(char *stash)
 	return (line);
 }
 
-char *ft_update_line(char *stash)
+char	*ft_update_line(char *stash)
 {
-	char *aux;
-	int i;
+	char	*aux;
+	int		i;
 
 	i = 0;
 	if (!stash[i])
@@ -89,10 +89,10 @@ char *ft_update_line(char *stash)
 	return (aux);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *stash;
-	char *line;
+	static char	*stash;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);

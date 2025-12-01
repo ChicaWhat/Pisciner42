@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 // Stack A and stack B make rotate //
 void	path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
@@ -34,11 +34,12 @@ void	path1(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->total_cost--;
 	}
 }
+
 // Stack A and stack b make reverse rotate //
 void	path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
-    while (cheapest->cost_a < 0 && cheapest->cost_b < 0)
-    {
+	while (cheapest->cost_a < 0 && cheapest->cost_b < 0)
+	{
 		ft_rrr(stack_a, stack_b);
 		cheapest->cost_a++;
 		cheapest->cost_b++;
@@ -57,6 +58,7 @@ void	path2(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->total_cost--;
 	}
 }
+
 // Stack A makes rotate and stack B makes reverse rotate //
 void	path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
@@ -73,6 +75,7 @@ void	path3(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->total_cost--;
 	}
 }
+
 // Stack A makes reverse rotate and stack B makes rotate //
 void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 {
@@ -89,8 +92,9 @@ void	path4(t_node **stack_a, t_node **stack_b, t_node *cheapest)
 		cheapest->total_cost--;
 	}
 }
+
 // Function to generate all scenarios //
-void	four_possibilities(t_node **stack_a, t_node **stack_b, t_node **cheapest)
+void	four_paths(t_node **stack_a, t_node **stack_b, t_node **cheapest)
 {
 	if ((*cheapest)->cost_a >= 0 && (*cheapest)->cost_b >= 0)
 		path1(stack_a, stack_b, (*cheapest));

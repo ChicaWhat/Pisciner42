@@ -28,7 +28,10 @@ SRC_FILES = main.c \
 			utils.c \
 			path.c \
 			av_valids.c \
-			make_sort.c \
+			make_sort1.c \
+			make_sort2.c \
+			costs.c \
+			total_costs.c \
 			one_av.c \
 			parsing.c \
 

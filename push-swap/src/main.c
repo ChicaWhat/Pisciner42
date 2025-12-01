@@ -6,52 +6,35 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:44:38 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/29 16:58:58 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 21:24:47 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 
 int	main(int ac, char **av)
 {
 	t_node	*stack_a;
-	
+	char	*one_av;
+	char	**list;
+
 	if (ac == 1)
-	return (0);
-	ft_parsing(ac, av);
-	stack_a = push_swap(av+1);
+		return (0);
+	one_av = ft_one_argv(av + 1);
+	if (!one_av)
+		ft_error();
+	list = ft_split_argv(one_av);
+	ft_parsing(list);
+	stack_a = push_swap(list);
 	if (!stack_a)
-	return (1);
+		return (1);
+	ft_free_all(list, NULL, NULL);
 	free_circular_list(&stack_a);
 	return (0);
 }
-//! --- Función que unifica todos los **av en un único array ---//
-/* char	*ft_one_argv(char **av)
-{
-	char	*res;
-	char	*temp;
-	int		i;
 
-	res = ft_calloc(1, sizeof(char));
-	if (!res)
-		return (NULL);
-	i = 0;
-	while (av[i])
-	{
-		res = ft_strjoin(res, av[i]);
-		res = ft_strjoin(res, " ");
-		if (!res)
-		{
-			ft_free_all(NULL, res, NULL);
-			//free(res);
-			ft_error();
-		}
-		i++;
-	}
-	return (res);
-} */
 //--- Function to print all the information I need from the nodes ---//
-void	print_nodes(t_node *node)
+/* void	print_nodes(t_node *node)
 {
 	t_node	*aux;
 
@@ -76,4 +59,4 @@ void	print_nodes(t_node *node)
 		if (aux == node)
 			break;
 	}
-}
+} */

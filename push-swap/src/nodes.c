@@ -6,13 +6,14 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 10:49:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/11/29 16:48:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 21:23:07 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../push-swap.h"
+#include "../push_swap.h"
 
-//--- Function to create the first node by allocating memory and initializing all variables ---//
+// Function to create the first node by 
+// allocating memory and initializing all variables
 t_node	*create_node(long num, int size)
 {
 	t_node	*new_node;
@@ -33,19 +34,22 @@ t_node	*create_node(long num, int size)
 	new_node->next = new_node;
 	return (new_node);
 }
-//--- Function to create a second node and link it to the doubly linked list ---//
+
+// Function to create a second node and 
+// link it to the doubly linked list
 void	add_new_node(t_node **node1, long num, int size)
 {
 	t_node	*node2;
 
 	node2 = create_node(num, size);
 	if (!node2)
-		return;
-	(*node1)->next = node2; 
+		return ;
+	(*node1)->next = node2;
 	node2->next = (*node1);
-	(*node1)->prev = node2; 
+	(*node1)->prev = node2;
 	node2->prev = (*node1);
 }
+
 //--- Function needed to link when we have more than 2 nodes in the list ---//
 void	add_more_nodes(t_node **stack, t_node **node)
 {
@@ -54,6 +58,7 @@ void	add_more_nodes(t_node **stack, t_node **node)
 	(*node)->prev = (*stack)->prev;
 	(*stack)->prev = (*node);
 }
+
 //--- Function to create the stack without updated values yet ---//
 t_node	*create_stack(long *list_num, int size)
 {
@@ -74,16 +79,16 @@ t_node	*create_stack(long *list_num, int size)
 		if (!node2)
 		{
 			free(node1);
-			//free(list_num);
 			return (NULL);
 		}
 		add_more_nodes(&node1, &node2);
 		i++;
 	}
-	//free(list_num);
 	return (node1);
 }
-//--- Function to 'fill' each node in the stack with the number and the size of the list ---//
+
+// Function to 'fill' each node in the stack with 
+// the number and the size of the list
 t_node	*init_stack(char **av)
 {
 	char	*one_av;
