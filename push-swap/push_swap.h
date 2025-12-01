@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 13:43:56 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/01 21:25:23 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/01 22:46:16 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,11 @@ void	order_nodes(t_node **stack_a, int size);
 void	move_stacks(t_node **stack_a, t_node **stack_b, int size);
 void	cost_a(t_node **stack_a);
 void	cost_b(t_node **stack_b);
+void	calculate_combined_cost(t_node **a, t_node **b);
+void	total_cost(t_node **stack_a, t_node **stack_b);
+int		abs_cost(int cost);
 void	set_target(t_node **a, t_node **stack_b);
 void	set_all_targets(t_node **stack_a, t_node **stack_b);
-void	total_cost(t_node **stack_a, t_node **stack_b);
 void	set_total_cost(t_node **stack_a, t_node **stack_b);
 t_node	*cheapest_node(t_node **stack_b);
 void	path1(t_node **stack_a, t_node **stack_b, t_node *cheapest);
@@ -85,6 +87,6 @@ void	four_paths(t_node **stack_a, t_node **stack_b, t_node **cheapest);
 void	make_sort(t_node **stack_a, t_node **stack_b, int size);
 void	last_moves(t_node **stack_a, int size);
 t_node	*find_min_node(t_node **stack_a);
-void	print_nodes(t_node *node);
+//void	print_nodes(t_node *node);
 
 #endif
