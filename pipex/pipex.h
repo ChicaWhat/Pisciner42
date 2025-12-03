@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 16:03:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/29 20:24:34 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/02 21:15:10 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,15 @@
 #  define RESET "\033[0m"
 # endif
 
+void	ft_daddy(char **av, char **envp, int *fd);
+void	ft_first_child(char **av, char **envp, int *fd);
+void	ft_second_child(char **av, char **envp, int *fd);
 void	pipex_error(int error_code);
 char	**get_path(char **env);
 void	ft_free_all(char **list, char *str);
 char	*find_command_path(char **path_list, char *command);
-int count_sigle_quotes(char *str, char c);
-char **filter_array(char **command);
-char **check_commands(char **av);
+int		count_sigle_quotes(char *str, char c);
+char	**filter_array(char **command);
+char	**check_commands(char **av);
 
 #endif

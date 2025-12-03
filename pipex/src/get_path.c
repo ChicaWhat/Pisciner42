@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 15:20:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/30 20:48:54 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/03 21:15:44 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void ft_free_all(char **list, char *str)
+void	ft_free_all(char **list, char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (list)
@@ -30,14 +30,15 @@ void ft_free_all(char **list, char *str)
 		free(str);
 }
 
-char **get_path(char **env)
+char	**get_path(char **env)
 {
-	char *path_env;
-	char **path_list;
-	int i;
+	char	*path_env;
+	char	**path_list;
+	int		i;
 
 	i = 0;
 	path_list = NULL;
+	printf("llega1\n");
 	while (env[i])
 	{
 		if (ft_strnstr(env[i], "PATH=", 5) != 0)
@@ -48,17 +49,18 @@ char **get_path(char **env)
 		}
 		i++;
 	}
-	ft_free_all(path_list, NULL); //Comprobar si en vez de NULL poner path_env
+	ft_free_all(path_list, NULL);
 	return (NULL);
 }
 
-char *find_command_path(char **path_list, char *command)
+char	*find_command_path(char **path_list, char *command)
 {
-	char *full_path;
-	char *new_path;
-	int i;
+	char	*full_path;
+	char	*new_path;
+	int		i;
 
 	i = 0;
+	full_path = NULL;
 	while (path_list[i])
 	{
 		new_path = ft_strjoin(path_list[i], "/");
@@ -70,7 +72,7 @@ char *find_command_path(char **path_list, char *command)
 		}
 		free(new_path);
 		if (access(full_path, X_OK) == 0)
-			break;
+			break ;
 		free(full_path);
 		i++;
 	}
