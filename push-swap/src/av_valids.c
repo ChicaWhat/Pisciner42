@@ -19,8 +19,6 @@ int	ft_digit_space(char c)
 		return (0);
 	else if (c >= 48 && c < 58)
 		return (0);
-	else if (c == 32)
-		return (0);
 	else
 		return (1);
 }

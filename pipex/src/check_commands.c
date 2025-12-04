@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:59 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/02 21:04:01 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/04 18:59:19 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char	**check_commands(char **av)
 	char	**new_array;
 
 	count = count_sigle_quotes(*av, '\'');
+	printf("%d\n", count);
 	if (count == 2)
 	{
 		command_split = ft_split(*av, '\'');

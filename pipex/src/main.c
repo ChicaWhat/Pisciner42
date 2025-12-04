@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:51 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/03 21:16:47 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/04 20:11:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_daddy(char **av, char **envp, int *fd)
 	else
 	{
 		close(fd[1]);
-		waitpid(pid_first_child, NULL, WNOHANG);
+		waitpid(pid_first_child, NULL, 0);
 		pid_second_child = fork();
 		if (pid_second_child < 0)
 			pipex_error(1);
@@ -34,7 +34,7 @@ void	ft_daddy(char **av, char **envp, int *fd)
 		else
 		{
 			close(fd[0]);
-			waitpid(pid_second_child, NULL, WNOHANG);
+			waitpid(pid_second_child, NULL, 0);
 		}
 	}
 }
@@ -53,17 +53,12 @@ void	ft_first_child(char **av, char **envp, int *fd)
 	if (dup2(input_fd, STDIN_FILENO) == -1)
 		pipex_error(9);
 	close(input_fd);
-	printf("llega1\n");
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
-	{
-		printf("llega2\n");
 		pipex_error(9);
-	}
 	close(fd[1]);
-	printf("llega3\n");
 	path = get_path(envp);
-	command_path = find_command_path(path, av[2]);
 	command_split = check_commands(&av[2]);
+	command_path = find_command_path(path, command_split[0]);
 	if (execve(command_path, command_split, envp) == -1)
 	{
 		pipex_error(127);
@@ -89,8 +84,8 @@ void	ft_second_child(char **av, char **envp, int *fd)
 		pipex_error(9);
 	close(output_fd);
 	path = get_path(envp);
-	command_path = find_command_path(path, av[3]);
 	command_split = check_commands(&av[3]);
+	command_path = find_command_path(path, command_split[0]);
 	if (execve(command_path, command_split, envp) == -1)
 		pipex_error(127);
 	exit(1);

@@ -23,8 +23,8 @@ SRC_FILES = main.c \
 			move_reverse_rotate.c \
 			move_swap.c \
 			move_push.c \
-			order_array.c \
-			algorith.c \
+			push_swap.c \
+			set_target.c \
 			utils.c \
 			path.c \
 			av_valids.c \

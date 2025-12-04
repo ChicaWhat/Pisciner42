@@ -45,7 +45,13 @@ int	ft_is_valid(char **av)
 void	ft_parsing(char **av)
 {
 	if (ft_is_valid(av))
+	{
+		ft_free_all(av, NULL, NULL);
 		ft_error();
+	}
 	if (!is_order(av))
+	{
+		ft_free_all(av, NULL, NULL);
 		exit(0);
+	}
 }
