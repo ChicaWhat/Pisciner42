@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 15:20:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/04 19:11:29 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:57:55 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ char	**get_path(char **env)
 		{
 			path_env = env[i] + 5;
 			path_list = ft_split(path_env, ':');
-/* 			for (int j = 0; path_list[j]; j++)
-				printf("%s\n", path_list[j]); */
 			return (path_list);
 		}
 		i++;
 	}
 	ft_free_all(path_list, NULL);
+	if (!path_list)
+		return (printf("PATH not found\n"), NULL);
 	return (NULL);
 }
 
@@ -73,10 +73,7 @@ char	*find_command_path(char **path_list, char *command)
 		}
 		free(new_path);
 		if (access(full_path, X_OK) == 0)
-		{
-			printf("%s\n", full_path);
 			break ;
-		}
 		free(full_path);
 		i++;
 	}

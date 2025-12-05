@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:59 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/04 18:59:19 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/05 21:54:49 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,23 @@ char	**filter_array(char **command)
 	if (!new_array)
 		return (NULL);
 	new_array[0] = command[0];
+	//printf("Este es new_array[0]: %s\n", new_array[0]);
 	new_array[1] = command[1];
+	//printf("Este es new_array[1]: %s\n", new_array[1]);
 	new_array[2] = command[3];
+	//printf("Este es new_array[2]: %s\n", new_array[2]);
+	//ft_free_all(new_array, NULL);
 	return (new_array);
 }
 
-char	**check_commands(char **av)
+/* char	**check_commands(char **av)
 {
 	int		count;
 	char	**command_split;
 	char	**new_array;
 
 	count = count_sigle_quotes(*av, '\'');
-	printf("%d\n", count);
+	//printf("Esto es para saber cuantas comillas simples tengo: %d\n", count);
 	if (count == 2)
 	{
 		command_split = ft_split(*av, '\'');
@@ -59,8 +63,12 @@ char	**check_commands(char **av)
 	else if (count == 4)
 	{
 		command_split = ft_split(*av, '\'');
+		for (int j = 0; command_split[j]; j++)
+			printf("Los comandos spliteados: [%s]\n", command_split[j]);
 		command_split[0] = ft_strtrim(command_split[0], " ");
 		new_array = filter_array(command_split);
+		for (int x = 0; new_array[x]; x++)
+			printf("Este es new_array completo en check_commands: %s\n", new_array[x]);
 		ft_free_all(command_split, NULL);
 		return (new_array);
 	}
@@ -69,4 +77,22 @@ char	**check_commands(char **av)
 		command_split = ft_split(*av, ' ');
 		return (command_split);
 	}
+} */
+
+char	**check_commands(char **av)
+{
+	char	**command_split;
+/* 	int		i;
+	int		flag;
+
+	i = 0;
+	flag = 0;
+	while (*av[i])
+	{
+		if (*av[i] == '\'')
+			flag = 1;
+	} */
+
+	command_split = ft_split(*av, ' ');
+	return (command_split);
 }
