@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:02:18 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/03 20:55:45 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/08 10:33:29 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,13 @@ void	pipex_error(int error_code)
 		ft_putstr_fd(RESET, 2);
 		exit(2);
 	}
+}
+
+void	path_not_found(char **envp)
+{
+	envp = NULL;
+	ft_putstr_fd(RED, 2);
+	write(2, "Error: PATH not found\n", 22);
+	ft_putstr_fd(RESET, 2);
+	exit(1);
 }

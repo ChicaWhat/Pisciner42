@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 15:20:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/05 21:57:55 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/08 21:06:46 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,26 @@ char	**get_path(char **env)
 		}
 		i++;
 	}
-	ft_free_all(path_list, NULL);
 	if (!path_list)
-		return (printf("PATH not found\n"), NULL);
+		return (NULL);
+	ft_free_all(path_list, NULL);
 	return (NULL);
+}
+
+char	*get_command_path(char **path_list, char *command)
+{
+	char	*full_path;
+
+	if (access(command, X_OK) == 0)
+		return (command);
+	else
+		full_path = find_command_path(path_list, command);
+	if (!*path_list)
+	{
+		ft_free_all(path_list, NULL);
+		pipex_error(127);
+	}
+	return (full_path);
 }
 
 char	*find_command_path(char **path_list, char *command)
@@ -61,26 +77,22 @@ char	*find_command_path(char **path_list, char *command)
 	int		i;
 
 	i = 0;
-	full_path = NULL;
 	while (path_list[i])
 	{
-		new_path = ft_strjoin(path_list[i], "/");
-		full_path = ft_strjoin(new_path, command);
-		if (!full_path)
+		if (access(command, X_OK) == 0)
+			return (command);
+		else
 		{
-			ft_free_all(path_list, new_path);
-			return (NULL);
+			new_path = ft_strjoin(path_list[i], "/");
+			full_path = ft_strjoin(new_path, command);
+			if (!full_path)
+				return (ft_free_all(path_list, new_path), NULL);
+			free(new_path);
+			if (access(full_path, X_OK) == 0)
+				break ;
+			free(full_path);
 		}
-		free(new_path);
-		if (access(full_path, X_OK) == 0)
-			break ;
-		free(full_path);
 		i++;
-	}
-	if (!path_list[i])
-	{
-		ft_free_all(path_list, NULL);
-		pipex_error(127);
 	}
 	return (full_path);
 }

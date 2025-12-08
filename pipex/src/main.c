@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:51 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/05 21:54:17 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/08 20:53:06 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void	ft_first_child(char **av, char **envp, int *fd)
 		pipex_error(9);
 	close(fd[1]);
 	path = get_path(envp);
+	if (!path)
+		path_not_found(envp);
 	command_split = check_commands(&av[2]);
-	command_path = find_command_path(path, command_split[0]);
+	command_path = get_command_path(path, command_split[0]);
 	if (execve(command_path, command_split, envp) == -1)
-	{
 		pipex_error(127);
-	}
 	exit(1);
 }
 
@@ -84,8 +84,10 @@ void	ft_second_child(char **av, char **envp, int *fd)
 		pipex_error(9);
 	close(output_fd);
 	path = get_path(envp);
+	if (!path)
+		path_not_found(envp);
 	command_split = check_commands(&av[3]);
-	command_path = find_command_path(path, *command_split);
+	command_path = get_command_path(path, *command_split);
 	if (execve(command_path, command_split, envp) == -1)
 		pipex_error(127);
 	exit(1);
@@ -97,7 +99,6 @@ int	main(int ac, char **av, char **envp)
 
 	if (ac != 5)
 		write(2, "./pipex file1 comand1 comand2 file2\n", 36);
-	printf("av[1]: %s; av[2]: %s\n", av[2], av[3]);
 	if (pipe(fd) == -1)
 		pipex_error(24);
 	ft_daddy(av, envp, fd);

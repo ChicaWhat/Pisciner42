@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:59 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/05 21:54:49 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/08 19:49:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,6 @@ char	**filter_array(char **command)
 char	**check_commands(char **av)
 {
 	char	**command_split;
-/* 	int		i;
-	int		flag;
-
-	i = 0;
-	flag = 0;
-	while (*av[i])
-	{
-		if (*av[i] == '\'')
-			flag = 1;
-	} */
 
 	command_split = ft_split(*av, ' ');
 	return (command_split);
