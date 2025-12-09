@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:51 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/09 21:43:34 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:01:53 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	ft_daddy(char **av, char **envp, int *fd)
 	else
 	{
 		close(fd[1]);
-		waitpid(pid_first_child, NULL, 0);
 		pid_second_child = fork();
 		if (pid_second_child < 0)
 			pipex_error(1);
@@ -34,6 +33,7 @@ void	ft_daddy(char **av, char **envp, int *fd)
 		else
 		{
 			close(fd[0]);
+			waitpid(pid_first_child, NULL, 0);
 			waitpid(pid_second_child, NULL, 0);
 		}
 	}
