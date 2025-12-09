@@ -1,6 +1,3 @@
 {
-    "files.associations": {
-        "stdio.h": "c",
-        "../pipex.h": "c"
-    }
+	"makefile.configureOnOpen": true
 }

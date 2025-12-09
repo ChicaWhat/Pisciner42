@@ -18,7 +18,7 @@ OBJ_DIR = obj
 # Sources files
 SRC_FILES = pipex_error.c \
             get_path.c \
-            check_commands.c \
+            launch_childs.c \
             main.c
 
 # Full paths to source files

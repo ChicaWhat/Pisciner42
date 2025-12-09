@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:51 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/08 20:53:06 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/09 21:43:34 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,55 +41,49 @@ void	ft_daddy(char **av, char **envp, int *fd)
 
 void	ft_first_child(char **av, char **envp, int *fd)
 {
-	int		input_fd;
 	char	**path;
 	char	*command_path;
 	char	**command_split;
 
-	close(fd[0]);
-	input_fd = open(av[1], O_RDONLY);
-	if (input_fd == -1)
-		pipex_error(2);
-	if (dup2(input_fd, STDIN_FILENO) == -1)
-		pipex_error(9);
-	close(input_fd);
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		pipex_error(9);
-	close(fd[1]);
+	launch_first_child(av, fd);
 	path = get_path(envp);
 	if (!path)
 		path_not_found(envp);
 	command_split = check_commands(&av[2]);
+	if (!command_split)
+		ft_free_all(path, NULL, 127);
 	command_path = get_command_path(path, command_split[0]);
+	if (!command_path)
+		ft_free_all(path, command_split, 127);
 	if (execve(command_path, command_split, envp) == -1)
-		pipex_error(127);
+	{
+		free(command_path);
+		ft_free_all(command_split, path, 127);
+	}
 	exit(1);
 }
 
 void	ft_second_child(char **av, char **envp, int *fd)
 {
-	int		output_fd;
 	char	**path;
 	char	*command_path;
 	char	**command_split;
 
-	close(fd[1]);
-	output_fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
-	if (output_fd == -1)
-		pipex_error(2);
-	if (dup2(fd[0], STDIN_FILENO) == -1)
-		pipex_error(9);
-	close(fd[0]);
-	if (dup2(output_fd, STDOUT_FILENO) == -1)
-		pipex_error(9);
-	close(output_fd);
+	launch_second_child(av, fd);
 	path = get_path(envp);
 	if (!path)
 		path_not_found(envp);
 	command_split = check_commands(&av[3]);
+	if (!command_split)
+		ft_free_all(path, NULL, 127);
 	command_path = get_command_path(path, *command_split);
+	if (!command_path)
+		ft_free_all(command_split, path, 127);
 	if (execve(command_path, command_split, envp) == -1)
-		pipex_error(127);
+	{
+		free(command_path);
+		ft_free_all(command_split, path, 127);
+	}
 	exit(1);
 }
 
@@ -98,7 +92,10 @@ int	main(int ac, char **av, char **envp)
 	int	fd[2];
 
 	if (ac != 5)
+	{
 		write(2, "./pipex file1 comand1 comand2 file2\n", 36);
+		return (1);
+	}
 	if (pipe(fd) == -1)
 		pipex_error(24);
 	ft_daddy(av, envp, fd);

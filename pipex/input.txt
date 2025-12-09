@@ -10,8 +10,14 @@ cuenta las veces que hay manzana escrita y lo pasa al outfile
 "wc -w" "cat"
 cuenta palabras y guarda el resultado
 
+"cat" "cat"
+Pasa todo lo que haya del input al output. Tal cual
+
+"cat" "wc"
+Cuenta lineas, palabras y bytes del archivo input.txt
+
+"cat" "sort"
+Ordena el contenido por orden alfabetico
+
 "tr 'a-z' 'A-Z'" "head -3"
 convierte a mayusculas y toma las primeras 3 lineas
-
-"cut -d' ' -f1" "sort" "uniq"
-toma la primera palabra de cada linea, ordena y elimina duplicados
