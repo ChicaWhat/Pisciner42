@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:02:18 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/08 10:33:29 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/09 12:31:12 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,5 @@ void	path_not_found(char **envp)
 	ft_putstr_fd(RED, 2);
 	write(2, "Error: PATH not found\n", 22);
 	ft_putstr_fd(RESET, 2);
-	exit(1);
+	exit(2);
 }

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:59 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/08 19:49:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/09 12:28:14 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ char	**filter_array(char **command)
 	}
 } */
 
-char	**check_commands(char **av)
+/* char	**check_commands(char **av)
 {
 	char	**command_split;
 
 	command_split = ft_split(*av, ' ');
 	return (command_split);
-}
+} */
