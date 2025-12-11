@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:37:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/23 16:14:32 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:43:07 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-char *ft_free_gnl(char **str)
+char	*ft_free_gnl(char **str)
 {
 	if (*str)
 		free(*str);
@@ -20,12 +20,12 @@ char *ft_free_gnl(char **str)
 	return (NULL);
 }
 
-char *ft_strjoin_gnl(char *stash, char *str)
+char	*ft_strjoin_gnl(char *stash, char *str)
 {
-	char *new_stash;
-	size_t len_new;
-	size_t i;
-	size_t len_stash;
+	char	*new_stash;
+	size_t	len_new;
+	size_t	i;
+	size_t	len_stash;
 
 	i = 0;
 	len_new = ft_strlen_gnl(str) + ft_strlen_gnl(stash) + 1;
@@ -49,9 +49,9 @@ char *ft_strjoin_gnl(char *stash, char *str)
 	return (new_stash);
 }
 
-size_t ft_strlen_gnl(char *s)
+size_t	ft_strlen_gnl(char *s)
 {
-	size_t i;
+	size_t	i;
 
 	if (!s)
 		return (0);
@@ -61,10 +61,10 @@ size_t ft_strlen_gnl(char *s)
 	return (i);
 }
 
-char *ft_substr_gnl(char *stash, unsigned int start, size_t len)
+char	*ft_substr_gnl(char *stash, unsigned int start, size_t len)
 {
-	char *line;
-	unsigned int i;
+	char			*line;
+	unsigned int	i;
 
 	line = (char *)malloc((len + 1) * sizeof(char));
 	if (!line)
@@ -83,10 +83,10 @@ char *ft_substr_gnl(char *stash, unsigned int start, size_t len)
 	return (line);
 }
 
-char *ft_strchr_gnl(char *stash, char c)
+char	*ft_strchr_gnl(char *stash, char c)
 {
-	char *line;
-	int i;
+	char	*line;
+	int		i;
 
 	i = 0;
 	while (stash[i] != '\0')

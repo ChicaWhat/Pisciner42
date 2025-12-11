@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:57:08 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/23 16:54:37 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:44:50 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int		ft_print_hex_top(unsigned int num);
 int		ft_print_hex_bottom(unsigned long long num);
 int		ft_print_ptr(void *ptr);
 int		ft_print_uns(unsigned int num);
-
 
 //t_list	*ft_lstnew(void *content);
 //void	ft_lstadd_front(t_list **lst, t_list *new);

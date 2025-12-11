@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_complements.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 16:51:53 by marvin            #+#    #+#             */
-/*   Updated: 2025/09/23 16:51:53 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:34:25 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	ft_print_nbr(int num)
 
 int	ft_print_ptr(void *ptr)
 {
-	unsigned long long int			cst;
-	int					printed_bytes;
+	unsigned long long int	cst;
+	int						printed_bytes;
 
 	printed_bytes = 0;
 	cst = (unsigned long long int)ptr;
@@ -72,6 +72,7 @@ int	ft_print_str(char *str)
 	}
 	return (i);
 }
+
 int	ft_print_uns(unsigned int num)
 {
 	int					printed_bytes;

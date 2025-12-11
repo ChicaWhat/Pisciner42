@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 15:20:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/09 21:44:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/10 18:31:54 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	ft_free_all(char **list1, char **list2, int flag)
 		}
 		free(list2);
 	}
-/* 	if (str)
-		free(str); */
 	if (flag)
 		pipex_error(flag);
 }
@@ -79,11 +77,6 @@ char	*get_command_path(char **path_list, char *command)
 		return (command);
 	else
 		full_path = find_command_path(path_list, command);
-	if (!*path_list || !path_list[0])
-	{
-		ft_free_all(path_list, NULL, 0);
-		return (NULL);
-	}
 	return (full_path);
 }
 
@@ -96,17 +89,12 @@ char	*find_command_path(char **path_list, char *command)
 	i = 0;
 	while (path_list[i])
 	{
-		if (access(command, X_OK) == 0)
-			return (command);
-		else
-		{
-			new_path = ft_strjoin(path_list[i], "/");
-			full_path = ft_strjoin(new_path, command);
-			free(new_path);
-			if (access(full_path, X_OK) == 0)
-				return (full_path);
-			free(full_path);
-		}
+		new_path = ft_strjoin(path_list[i], "/");
+		full_path = ft_strjoin(new_path, command);
+		free(new_path);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
 		i++;
 	}
 	return (NULL);

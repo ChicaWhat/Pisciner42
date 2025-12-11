@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:51 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/09 22:01:53 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/10 17:56:55 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ void	ft_first_child(char **av, char **envp, int *fd)
 	if (!command_path)
 		ft_free_all(path, command_split, 127);
 	if (execve(command_path, command_split, envp) == -1)
-	{
-		free(command_path);
 		ft_free_all(command_split, path, 127);
-	}
 	exit(1);
 }
 
@@ -80,10 +77,7 @@ void	ft_second_child(char **av, char **envp, int *fd)
 	if (!command_path)
 		ft_free_all(command_split, path, 127);
 	if (execve(command_path, command_split, envp) == -1)
-	{
-		free(command_path);
 		ft_free_all(command_split, path, 127);
-	}
 	exit(1);
 }
 

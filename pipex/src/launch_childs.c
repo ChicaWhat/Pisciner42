@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_commands.c                                   :+:      :+:    :+:   */
+/*   launch_childs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 21:01:59 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/09 18:19:26 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:40:37 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	launch_second_child(char **av, int *fd)
 	int	output_fd;
 
 	close(fd[1]);
-	output_fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0777);
+	output_fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (output_fd == -1)
 		pipex_error(2);
 	if (dup2(fd[0], STDIN_FILENO) == -1)

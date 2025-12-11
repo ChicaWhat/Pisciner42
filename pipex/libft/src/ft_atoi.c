@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:48 by carmegon          #+#    #+#             */
-/*   Updated: 2025/09/23 16:14:48 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/01 21:29:41 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-int ft_atoi(const char *nptr)
+int	ft_atoi(const char *nptr)
 {
-	int sign;
-	int d;
-	int result;
+	int	sign;
+	int	d;
+	int	result;
 
-	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' || *nptr == '\r' || *nptr == '\f' || *nptr == '\v')
+	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n'
+		|| *nptr == '\r' || *nptr == '\f' || *nptr == '\v')
 		nptr++;
 	sign = 1;
 	if (*nptr == '+' || *nptr == '-')
