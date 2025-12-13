@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/13 14:11:39 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/13 15:23:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include "libft/libft.h"
+# include "MLX42/include/MLX42/MLX42.h"
 
 /* Windows dimensions */
 # define WIDTH 1920
