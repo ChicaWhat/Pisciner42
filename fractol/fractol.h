@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/13 15:23:38 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/15 11:40:18 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,18 @@
 
 typedef struct fractal
 {
-	char	*fractal_name;
-	int		id;
-	double	julia_real;
-	double	julia_imaginary;
+	//--- MLX ---//
+	mlx_t		*mlx_connection;
+	mlx_image_t	*img;
+	//--- FRACTOL ---//
+	char		*fractal_name;
+	int			id;
+	double		julia_real;
+	double		julia_imaginary;
+	//---RENDERIZADO---//
+	double		escape_value;
+	int			iterations;
+	double		zoom;
 }	t_fractal;
 
 void	init_values(t_fractal *fractal);

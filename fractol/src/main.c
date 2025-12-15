@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/13 14:37:37 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/15 21:28:46 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,15 @@
 
 void	init_values(t_fractal *fractal)
 {
+	fractal->mlx_connection = NULL;
+	fractal->img = NULL;
 	fractal->fractal_name = NULL;
 	fractal->id = -1;
 	fractal->julia_imaginary = 0.0;
 	fractal->julia_real = 0.0;
+	fractal->escape_value = 4.0; //? Buscar más adelante por qué inicializo a 4.0
+	fractal->iterations = 42; //? Por inicializarlo con algo
+	fractal->zoom = 1.0; //? Zoom estandar
 }
 
 int	ft_isspace(char c)
@@ -90,19 +95,19 @@ void	parsing_av(int ac, char **av, t_fractal *fractal)
 		fractal->id = 1;
 		fractal->julia_real = ft_atod(av[2]);
 		fractal->julia_imaginary = ft_atod(av[3]);
+		printf("El nombre de mi fractal: %s\n", fractal->fractal_name);
+		printf("Valor de julia imaginario: %f\n", fractal->julia_imaginary);
+		printf("Valor de julia real: %f\n", fractal->julia_real);
 	}
 	else
 		ft_error_av();
-	//!Creo que aqui iria el init_values porque despues de comprobar que todo ha
-	//!ido bien, debo de inicializarlo todo. Prefiero hacerlo aqui antes que en
-	//!el main
 }
 
 int	main(int ac, char **av)
 {
 	t_fractal	fractal;
 
+	init_values(&fractal);
 	parsing_av(ac, av, &fractal);
-	//init_mlx();
 	return (0);
 }
