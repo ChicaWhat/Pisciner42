@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/15 21:28:46 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:20:48 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	parsing_av(int ac, char **av, t_fractal *fractal)
 	{
 		fractal->fractal_name = "mandelbrot";
 		fractal->id = 0;
+		printf("El nombre de mi fractal: %s\n", fractal->fractal_name);
 	}
 	else if (ac == 4 && (!ft_strncmp(av[1], "julia", 6)))
 	{
@@ -109,5 +110,6 @@ int	main(int ac, char **av)
 
 	init_values(&fractal);
 	parsing_av(ac, av, &fractal);
+	fractal_init(&fractal);
 	return (0);
 }

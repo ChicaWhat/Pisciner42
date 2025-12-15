@@ -35,6 +35,7 @@ MLX_FLAGS = -ldl -lglfw -pthread -lm
 # Source files (Solo pongo main.c porque es lo que tienes ahora)
 SRC_FILES = main.c \
 			error.c \
+			init.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/15 11:40:18 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:20:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ int		ft_isspace(char c);
 double	ft_double(char *str);
 double	ft_atod(char *str);
 void	parsing_av(int ac, char **av, t_fractal *fractal);
+void	fractal_init(t_fractal *fractal);
 void	ft_error_av(void);
+void	clean_and_exit(t_fractal *fractal);
+void	ft_error_mlx(void);
 
 #endif
