@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 12:51:40 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/15 22:14:06 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:15:15 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_error_mlx(void)
 	exit(2);
 }
 
-void	clean_and_exit(t_fractal *fractal)
+void	clean_and_exit(t_fractal *f)
 {
-	mlx_terminate(fractal->mlx_connection);
+	mlx_terminate(f->mlx_connection);
 }

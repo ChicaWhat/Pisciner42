@@ -4,10 +4,10 @@ graph TD
     B --> C{¿Argumentos<br/>válidos?}
     C -->|NO| D[Mostrar mensaje de uso<br/>mandelbrot o julia x y]
     D --> E[EXIT]
-    C -->|SÍ| F[Parsear tipo de fractal<br/>y parámetros]
+    C -->|SÍ| F[Parsear tipo de f<br/>y parámetros]
     
     F --> G[Inicializar estructura t_data]
-    G --> G1[Guardar tipo de fractal]
+    G --> G1[Guardar tipo de f]
     G1 --> G2[Guardar parámetros de Julia si aplica]
     G2 --> G3[Configurar valores iniciales:<br/>zoom, centro, max_iter]
     
@@ -15,7 +15,7 @@ graph TD
     H --> I[mlx_new_image<br/>Crear buffer de imagen]
     I --> J[mlx_image_to_window<br/>Colocar imagen en ventana]
     
-    J --> K[RENDERIZAR FRACTAL]
+    J --> K[RENDERIZAR f]
     K --> L[Recorrer cada píxel<br/>y=0 hasta height]
     L --> M[Recorrer cada píxel<br/>x=0 hasta width]
     
@@ -23,7 +23,7 @@ graph TD
     N --> N1[x_complejo = mapear x a rango real]
     N1 --> N2[y_complejo = mapear y a rango imaginario]
     
-    N2 --> O{¿Qué tipo<br/>de fractal?}
+    N2 --> O{¿Qué tipo<br/>de f?}
     O -->|Mandelbrot| P[Calcular Mandelbrot<br/>c = x+yi<br/>z empieza en 0]
     O -->|Julia| Q[Calcular Julia<br/>z = x+yi<br/>c = parámetros fijos]
     

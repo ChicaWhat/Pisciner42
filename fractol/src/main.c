@@ -6,23 +6,23 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/15 22:20:48 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:10:52 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
-void	init_values(t_fractal *fractal)
+void	init_values(t_fractal *f)
 {
-	fractal->mlx_connection = NULL;
-	fractal->img = NULL;
-	fractal->fractal_name = NULL;
-	fractal->id = -1;
-	fractal->julia_imaginary = 0.0;
-	fractal->julia_real = 0.0;
-	fractal->escape_value = 4.0; //? Buscar más adelante por qué inicializo a 4.0
-	fractal->iterations = 42; //? Por inicializarlo con algo
-	fractal->zoom = 1.0; //? Zoom estandar
+	f->mlx_connection = NULL;
+	f->img = NULL;
+	f->f_name = NULL;
+	f->id = -1;
+	f->julia_imaginary = 0.0;
+	f->julia_real = 0.0;
+	f->escape_value = 4.0; //? Buscar más adelante por qué inicializo a 4.0
+	f->iterations = 42; //? Por inicializarlo con algo
+	f->zoom = 1.0; //? Zoom estandar
 }
 
 int	ft_isspace(char c)
@@ -82,23 +82,23 @@ double	ft_atod(char *str)
 }
 
 
-void	parsing_av(int ac, char **av, t_fractal *fractal)
+void	parsing_av(int ac, char **av, t_fractal *f)
 {
 	if (ac == 2 && (!ft_strncmp(av[1], "mandelbrot", 11)))
 	{
-		fractal->fractal_name = "mandelbrot";
-		fractal->id = 0;
-		printf("El nombre de mi fractal: %s\n", fractal->fractal_name);
+		f->f_name = "mandelbrot";
+		f->id = 0;
+		printf("El nombre de mi f: %s\n", f->f_name);
 	}
 	else if (ac == 4 && (!ft_strncmp(av[1], "julia", 6)))
 	{
-		fractal->fractal_name = "julia";
-		fractal->id = 1;
-		fractal->julia_real = ft_atod(av[2]);
-		fractal->julia_imaginary = ft_atod(av[3]);
-		printf("El nombre de mi fractal: %s\n", fractal->fractal_name);
-		printf("Valor de julia imaginario: %f\n", fractal->julia_imaginary);
-		printf("Valor de julia real: %f\n", fractal->julia_real);
+		f->f_name = "julia";
+		f->id = 1;
+		f->julia_real = ft_atod(av[2]);
+		f->julia_imaginary = ft_atod(av[3]);
+		printf("El nombre de mi f: %s\n", f->f_name);
+		printf("Valor de julia imaginario: %f\n", f->julia_imaginary);
+		printf("Valor de julia real: %f\n", f->julia_real);
 	}
 	else
 		ft_error_av();
@@ -106,10 +106,10 @@ void	parsing_av(int ac, char **av, t_fractal *fractal)
 
 int	main(int ac, char **av)
 {
-	t_fractal	fractal;
+	t_fractal	f;
 
-	init_values(&fractal);
-	parsing_av(ac, av, &fractal);
-	fractal_init(&fractal);
+	init_values(&f);
+	parsing_av(ac, av, &f);
+	fractal_init(&f);
 	return (0);
 }

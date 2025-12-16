@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/15 22:20:38 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:10:10 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 
-typedef struct fractal
+typedef struct f
 {
 	//--- MLX ---//
 	mlx_t		*mlx_connection;
 	mlx_image_t	*img;
 	//--- FRACTOL ---//
-	char		*fractal_name;
+	char		*f_name;
 	int			id;
 	double		julia_real;
 	double		julia_imaginary;
@@ -52,14 +52,14 @@ typedef struct fractal
 	double		zoom;
 }	t_fractal;
 
-void	init_values(t_fractal *fractal);
+void	init_values(t_fractal *f);
 int		ft_isspace(char c);
 double	ft_double(char *str);
 double	ft_atod(char *str);
-void	parsing_av(int ac, char **av, t_fractal *fractal);
-void	fractal_init(t_fractal *fractal);
+void	parsing_av(int ac, char **av, t_fractal *f);
+void	fractal_init(t_fractal *f);
 void	ft_error_av(void);
-void	clean_and_exit(t_fractal *fractal);
+void	clean_and_exit(t_fractal *f);
 void	ft_error_mlx(void);
 
 #endif
