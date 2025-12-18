@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/16 23:18:04 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:53:44 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ typedef struct f
 	double		julia_real;
 	double		julia_imaginary;
 	//---RENDERIZADO---//
+	double		min_real;
+	double		max_real;
+	double		min_imag;
+	double		max_imag;
 	double		escape_value;
 	int			iterations;
 	double		zoom;
@@ -60,6 +64,7 @@ void	parsing_av(int ac, char **av, t_fractal *f);
 void	fractal_init(t_fractal *f);
 void	ft_key_hook(mlx_key_data_t keydata, void *param);
 void	ft_close_hook(void *param);
+double	map(double pixel, double min_map, double max_map, double total_pixels);
 void	ft_error_av(void);
 void	ft_clean(t_fractal *f);
 void	ft_error_mlx(void);

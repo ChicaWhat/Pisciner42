@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/16 11:10:52 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:14:57 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	init_values(t_fractal *f)
 	f->id = -1;
 	f->julia_imaginary = 0.0;
 	f->julia_real = 0.0;
+	f->min_real = -2.0;
+	f->max_real = +2.0;
+	f->min_imag = -2.0;
+	f->max_imag = +2.0;
 	f->escape_value = 4.0; //? Buscar más adelante por qué inicializo a 4.0
 	f->iterations = 42; //? Por inicializarlo con algo
 	f->zoom = 1.0; //? Zoom estandar
@@ -111,5 +115,6 @@ int	main(int ac, char **av)
 	init_values(&f);
 	parsing_av(ac, av, &f);
 	fractal_init(&f);
+	ft_clean(&f);
 	return (0);
 }
