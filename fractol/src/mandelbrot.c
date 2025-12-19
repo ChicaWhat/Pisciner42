@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:32:24 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:55 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/19 23:20:08 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,16 @@ int	mandelbrot(t_fractal *f, double c_re, double c_imag)
 	double	z_re;
 	double	z_imag;
 	int		i;
+	double	aux;
 
 	z_re = 0.0;
 	z_imag = 0.0;
 	i = 0;
-	while ((z_re < 4 && z_imag < 4) && i <= f->iterations)
+	while (((z_re * z_re) + (z_imag * z_imag) <= 4.0) && i < f->iterations)
 	{
-		z_re = (z_re * z_re) + c_re;
-		z_imag = (z_imag * z_imag) + c_imag;
+		aux = z_re;
+		z_re = ((z_re * z_re) - (z_imag * z_imag)) + c_re;
+		z_imag = 2 * (aux * z_imag) + c_imag;
 		i++;
 	}
 	return (i);
@@ -48,6 +50,7 @@ void	render(t_fractal *f)
 	int		y;
 	double	c_real;
 	double	c_imag;
+	int		iteri;
 
 	y = 0;
 	if (!f || !f->mlx_connection)
@@ -59,7 +62,11 @@ void	render(t_fractal *f)
 		while (x < WIDTH)
 		{
 			c_real = map(x, f->min_real, f->max_real, WIDTH);
-			mlx_put_pixel(f->img, x, y, 0xFF0000FF);
+			iteri = mandelbrot(f, c_real, c_imag);
+			if (iteri == f->iterations)
+				mlx_put_pixel(f->img, x, y, 0x000000FF);
+			else
+				mlx_put_pixel(f->img, x, y, 0xFFFFFFFF);
 			x++;
 		}
 		y++;
