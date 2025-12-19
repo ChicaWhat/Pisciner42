@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/18 16:53:44 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/19 20:49:23 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	fractal_init(t_fractal *f);
 void	ft_key_hook(mlx_key_data_t keydata, void *param);
 void	ft_close_hook(void *param);
 double	map(double pixel, double min_map, double max_map, double total_pixels);
+void	render(t_fractal *f);
 void	ft_error_av(void);
 void	ft_clean(t_fractal *f);
 void	ft_error_mlx(void);
