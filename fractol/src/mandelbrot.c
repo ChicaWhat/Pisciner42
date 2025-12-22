@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:32:24 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/19 23:20:08 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/22 19:27:50 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,7 @@ void	render(t_fractal *f)
 		{
 			c_real = map(x, f->min_real, f->max_real, WIDTH);
 			iteri = mandelbrot(f, c_real, c_imag);
-			if (iteri == f->iterations)
-				mlx_put_pixel(f->img, x, y, 0x000000FF);
-			else
-				mlx_put_pixel(f->img, x, y, 0xFFFFFFFF);
+			mlx_put_pixel(f->img, x, y, get_color(iteri, f->iterations));
 			x++;
 		}
 		y++;

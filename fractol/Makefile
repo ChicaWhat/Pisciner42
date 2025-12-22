@@ -37,6 +37,7 @@ SRC_FILES = main.c \
 			error.c \
 			init.c \
 			mandelbrot.c \
+			colors.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
