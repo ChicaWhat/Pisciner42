@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 21:32:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/19 20:51:26 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/23 15:24:37 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	fractal_init(t_fractal *f)
 	render(f);
 	mlx_key_hook(f->mlx_connection, ft_key_hook, f);
 	mlx_close_hook(f->mlx_connection, ft_close_hook, f);
+	mlx_scroll_hook(f->mlx_connection, ft_get_mouse, f);
 	mlx_loop(f->mlx_connection);
 }
 
@@ -50,3 +51,21 @@ void	ft_close_hook(void *param)
 	f = (t_fractal *)param;
 	mlx_close_window(f->mlx_connection);
 }
+
+void	ft_get_mouse(double xdelta, double ydelta, void *param)
+{
+	t_fractal	*f;
+	int32_t		x;
+	int32_t		y;
+
+	(void)xdelta;
+	f = (t_fractal *)param;
+	mlx_get_mouse_pos(f->mlx_connection, &x, &y);
+	if (ydelta > 0.0)
+		ydelta = f->zoom * 0.95;
+	else
+		ydelta = f->zoom / (-0.95);
+}
+
+/* void mlx_scroll_hook(mlx_t* mlx, mlx_scrollfunc func, void* param);
+void mlx_get_mouse_pos(mlx_t* mlx, int32_t* x, int32_t* y); */
