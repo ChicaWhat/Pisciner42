@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/23 14:40:24 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/26 23:16:26 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct f
 	double		max_real;
 	double		min_imag;
 	double		max_imag;
+	double		center_real;
+	double		center_imag;
 	double		escape_value;
 	int			iterations;
 	double		zoom;
@@ -67,6 +69,7 @@ void	ft_close_hook(void *param);
 void	ft_get_mouse(double xdelta, double ydelta, void *param);
 double	map(double pixel, double min_map, double max_map, double total_pixels);
 void	render(t_fractal *f);
+void	ft_zoom(t_fractal *f);
 int		get_color(int i, int max_iter);
 void	ft_error_av(void);
 void	ft_clean(t_fractal *f);
