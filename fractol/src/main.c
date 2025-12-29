@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/29 17:33:55 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/29 21:25:52 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_values(t_fractal *f)
 	f->img = NULL;
 	f->f_name = NULL;
 	f->id = -1;
-	f->julia_imaginary = 0.0;
+	f->julia_imag = 0.0;
 	f->julia_real = 0.0;
 	f->min_real = -2.0;
 	f->max_real = +2.0;
@@ -92,16 +92,15 @@ void	parsing_av(int ac, char **av, t_fractal *f)
 	{
 		f->f_name = "mandelbrot";
 		f->id = 0;
-		printf("El nombre de mi f: %s\n", f->f_name);
 	}
 	else if (ac == 4 && (!ft_strncmp(av[1], "julia", 6)))
 	{
 		f->f_name = "julia";
 		f->id = 1;
 		f->julia_real = ft_atod(av[2]);
-		f->julia_imaginary = ft_atod(av[3]);
+		f->julia_imag = ft_atod(av[3]);
 		printf("El nombre de mi f: %s\n", f->f_name);
-		printf("Valor de julia imaginario: %f\n", f->julia_imaginary);
+		printf("Valor de julia imaginario: %f\n", f->julia_imag);
 		printf("Valor de julia real: %f\n", f->julia_real);
 	}
 	else

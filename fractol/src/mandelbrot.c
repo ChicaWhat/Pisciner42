@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:32:24 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/22 19:27:50 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/29 22:07:31 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	render(t_fractal *f)
 		while (x < WIDTH)
 		{
 			c_real = map(x, f->min_real, f->max_real, WIDTH);
-			iteri = mandelbrot(f, c_real, c_imag);
+			if (f->id == 0)
+				iteri = mandelbrot(f, c_real, c_imag);
+			else
+				iteri = julia(f, c_real, c_imag);
 			mlx_put_pixel(f->img, x, y, get_color(iteri, f->iterations));
 			x++;
 		}
@@ -70,4 +73,4 @@ void	render(t_fractal *f)
 	}
 }
 
-//void mlx_put_pixel(mlx_image_t* image, uint32_t x, uint32_t y, uint32_t color);
+
