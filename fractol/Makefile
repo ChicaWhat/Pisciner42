@@ -8,6 +8,7 @@ NAME = fractol
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+ //-fsanitize=address -g
 
 # Directories
 LIBFT_DIR = ./libft

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 21:32:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/26 23:57:25 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/29 17:31:16 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,36 +55,32 @@ void	ft_close_hook(void *param)
 void	ft_get_mouse(double xdelta, double ydelta, void *param)
 {
 	t_fractal	*f;
-	int32_t		x;
-	int32_t		y;
 
 	(void)xdelta;
 	f = (t_fractal *)param;
 	f->zoom = 1.0;
-	mlx_get_mouse_pos(f->mlx_connection, &x, &y);
 	if (ydelta >= 1.0)
 		f->zoom *= 0.95;
 	else
 		f->zoom /= 0.95;
+	ft_zoom(f);
+	render(f);
 }
 
 void	ft_zoom(t_fractal *f)
 {
-	double	new_width;
-	double	new_height;
-	double	actual_width;
-	double	actual_height;
-	double	center_real;
-	double	center_imag;
+	double	new_radius_r;
+	double	new_radius_i;
+	double	real_center;
+	double	imag_center;
 
-	center_real = (f->max_real + f->min_real) / 2;
-	actual_width = f->max_real - f->min_real;
-	new_width = actual_width * f->zoom;
-	f->min_real = center_real - (new_width / 2);
-	f->max_real = center_real + (new_width / 2);
-	center_imag = (f->max_imag + f->min_imag) / 2;
-	actual_height = f->max_imag - f->min_imag;
-	new_height = actual_height * f->zoom;
-	f->min_imag = center_imag - (new_height / 2);
-	f->max_imag = center_imag + (new_height / 2);
+	real_center = (f->max_real + f->min_real) / 2;
+	imag_center = (f->max_imag + f->min_imag) / 2;
+	new_radius_r = (f->max_real - f->min_real) / 2 * f->zoom;
+	new_radius_i = (f->max_imag - f->min_imag) / 2 * f->zoom;
+	f->max_real = real_center + new_radius_r;
+	f->min_real = real_center - new_radius_r;
+	f->max_imag = imag_center + new_radius_i;
+	f->min_imag = imag_center - new_radius_i;
 }
+//mlx_get_mouse_pos(f->mlx_connection, &x, &y);

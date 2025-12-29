@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/26 23:56:59 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/29 17:33:55 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	init_values(t_fractal *f)
 	f->max_real = +2.0;
 	f->min_imag = -2.0;
 	f->max_imag = +2.0;
-/* 	f->center_real = 0.0;
-	f->center_imag = 0.0; */
 	f->escape_value = 4.0; //? Buscar más adelante por qué inicializo a 4.0
 	f->iterations = 42;
 	f->zoom = 1.0;

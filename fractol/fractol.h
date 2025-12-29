@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/26 23:16:26 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/29 17:38:11 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ typedef struct f
 	double		max_real;
 	double		min_imag;
 	double		max_imag;
-	double		center_real;
-	double		center_imag;
 	double		escape_value;
 	int			iterations;
 	double		zoom;
