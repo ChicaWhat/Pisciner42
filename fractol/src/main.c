@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/29 21:25:52 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 20:10:27 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,63 +29,6 @@ void	init_values(t_fractal *f)
 	f->zoom = 1.0;
 }
 
-int	ft_isspace(char c)
-{
-	if (c < 33)
-		return (1);
-	return (0);
-}
-
-double	ft_double(char *str)
-{
-	double	div;
-	int		i;
-	double	num;
-	double	digit;
-
-	i = 0;
-	num = 0.0;
-	digit = 0;
-	div = 1.0;
-	while (ft_isdigit(str[i]))
-	{
-		div = div * 10;
-		digit = str[i] - '0';
-		num = num + (digit / div);
-		i++;
-	}
-	return (num);
-}
-
-double	ft_atod(char *str)
-{
-	double	num;
-	int		i;
-	int		sign;
-
-	i = 0;
-	while (ft_isspace(str[i]))
-		i++;
-	sign = 1;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
-	}
-	num = 0.0;
-	while (ft_isdigit(str[i]))
-	{
-		num = (num * 10) + (str[i] - '0');
-		i++;
-	}
-	if (str[i] == '.')
-		i++;
-	num += ft_double(&str[i]);
-	return (num * sign);
-}
-
-
 void	parsing_av(int ac, char **av, t_fractal *f)
 {
 	if (ac == 2 && (!ft_strncmp(av[1], "mandelbrot", 11)))
@@ -99,9 +42,6 @@ void	parsing_av(int ac, char **av, t_fractal *f)
 		f->id = 1;
 		f->julia_real = ft_atod(av[2]);
 		f->julia_imag = ft_atod(av[3]);
-		printf("El nombre de mi f: %s\n", f->f_name);
-		printf("Valor de julia imaginario: %f\n", f->julia_imag);
-		printf("Valor de julia real: %f\n", f->julia_real);
 	}
 	else
 		ft_error_av();

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:58:25 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/29 19:12:26 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 20:09:40 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	get_color(int i, int max_iter)
 		b = (i * 11) % 255;
 */
 
-// --- Burdeo --- //
+// --- Burgundy or burdeaux --- //
 /* 
 		r = (i * 40) % 255;
 		g = (i * 2) % 255;

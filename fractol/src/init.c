@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 21:32:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/29 17:31:16 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 20:04:35 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,3 @@ void	ft_zoom(t_fractal *f)
 	f->max_imag = imag_center + new_radius_i;
 	f->min_imag = imag_center - new_radius_i;
 }
-//mlx_get_mouse_pos(f->mlx_connection, &x, &y);
