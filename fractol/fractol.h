@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:39 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/29 21:39:43 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 23:37:37 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,31 @@
 # include "MLX42/include/MLX42/MLX42.h"
 
 /* Windows dimensions */
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 2560
+# define HEIGHT 1600
 
 typedef struct f
 {
 	//--- MLX ---//
 	mlx_t		*mlx_connection;
 	mlx_image_t	*img;
-	//--- FRACTOL ---//
+	//--- FRACTAL ---//
 	char		*f_name;
 	int			id;
 	double		julia_real;
 	double		julia_imag;
-	//---RENDERIZADO---//
+	//---RENDERING---//
 	double		min_real;
 	double		max_real;
 	double		min_imag;
 	double		max_imag;
-	double		escape_value;
 	int			iterations;
 	double		zoom;
 }	t_fractal;
 
 void	init_values(t_fractal *f);
 int		ft_isspace(char c);
+void	is_valid(char *str);
 double	ft_double(char *str);
 double	ft_atod(char *str);
 void	parsing_av(int ac, char **av, t_fractal *f);

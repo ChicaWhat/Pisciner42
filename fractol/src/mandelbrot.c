@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:32:24 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:12:20 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 20:24:28 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,3 @@ int	mandelbrot(t_fractal *f, double c_re, double c_imag)
 	}
 	return (i);
 }
-
-
-

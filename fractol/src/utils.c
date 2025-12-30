@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 20:05:58 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:06:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 22:48:08 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_isspace(char c)
 {
-	if (c < 33)
+	if ((c >= 7 && c <= 13) || c == 32)
 		return (1);
 	return (0);
 }
@@ -62,8 +62,21 @@ double	ft_atod(char *str)
 		num = (num * 10) + (str[i] - '0');
 		i++;
 	}
+	is_valid(&str[i]);
 	if (str[i] == '.')
 		i++;
 	num += ft_double(&str[i]);
 	return (num * sign);
+}
+
+void	is_valid(char *str)
+{
+	int	i;
+
+	i = 0;
+	if ((str[i] < '0' || str[i] > '9'))
+	{
+		if (str[i] != '.' && str[i] != '\0')
+			ft_error_av();
+	}
 }

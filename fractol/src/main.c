@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:10:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2025/12/30 23:41:24 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	init_values(t_fractal *f)
 	f->max_real = +2.0;
 	f->min_imag = -2.0;
 	f->max_imag = +2.0;
-	f->escape_value = 4.0; //? Buscar más adelante por qué inicializo a 4.0
-	f->iterations = 42;
+	f->iterations = 60;
 	f->zoom = 1.0;
 }
 
@@ -40,8 +39,10 @@ void	parsing_av(int ac, char **av, t_fractal *f)
 	{
 		f->f_name = "julia";
 		f->id = 1;
-		f->julia_real = ft_atod(av[2]);
+		if (av[2][0] == '\0' || av[3][0] == '\0')
+			ft_error_av();
 		f->julia_imag = ft_atod(av[3]);
+		f->julia_real = ft_atod(av[2]);
 	}
 	else
 		ft_error_av();
