@@ -8,7 +8,7 @@ NAME = fractol
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
- //-fsanitize=address -g
+#-fsanitize=address -g
 
 # Directories
 LIBFT_DIR = ./libft
@@ -22,26 +22,26 @@ LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_MAKE = $(MAKE) -C $(LIBFT_DIR)
 
 # MLX42
-# IMPORTANTE: Asumo que la librería estática se genera en build/
+# IMPORTANT: Assuming the static library is generated in build/
 MLX_LIB = $(MLX_DIR)/build/libmlx42.a
-# Headers de MLX para que el compilador los encuentre
+# MLX headers so the compiler can find them
 MLX_INC = -I $(MLX_DIR)/include
-# Flags OBLIGATORIAS para linkar MLX42 en Linux/42 School
+# MANDATORY flags to link MLX42
 # -ldl: Dynamic Loader
-# -lglfw: La librería gráfica base
-# -pthread: Multihilo
-# -lm: Librería matemática (Math)
+# -lglfw: Base graphics library
+# -pthread: Multithreading
+# -lm: Math library
 MLX_FLAGS = -ldl -lglfw -pthread -lm
 
 # Source files
 SRC_FILES = main.c \
-			error.c \
-			init.c \
-			mandelbrot.c \
-			colors.c \
-			julia.c \
-			utils.c \
-			maths.c \
+            error.c \
+            init.c \
+            mandelbrot.c \
+            colors.c \
+            julia.c \
+            utils.c \
+            maths.c \
 
 # Full paths to source files
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
@@ -58,27 +58,26 @@ RESET = \033[0m
 
 all: $(NAME)
 
-# Regla principal
-# Depende de que existan la Libft, la MLX y tus objetos
+# Main rule
+# Depends on Libft, MLX, and my objects existing
 $(NAME): $(LIBFT) $(MLX_LIB) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MLX_LIB) $(MLX_FLAGS) -o $(NAME)
 	@echo "$(GREEN)✅ $(NAME) compiled successfully!$(RESET)"
 
-# Compilación de objetos (.c -> .o)
-# AÑADIDO $(MLX_INC): Necesario para que encuentre "MLX42/MLX42.h"
+# Compiling objects (.c -> .o)
+# ADDED $(MLX_INC): Necessary to find "MLX42/MLX42.h"
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(MLX_INC) -c $< -o $@
 	@echo "$(GREEN)🔨 Compiling: $<$(RESET)"
 
-# Regla para compilar la Libft si no existe
+# Rule to compile Libft if it doesn't exist
 $(LIBFT):
 	@echo "$(GREEN)📦 Building Libft...$(RESET)"
 	@$(LIBFT_MAKE)
 
-# Regla para compilar la MLX42 si no existe
-# MLX42 usa CMAKE, no Make standard. Esta es la forma correcta de compilarla.
-# Regla para compilar la MLX42
+# Rule to compile MLX42 if it doesn't exist
+# MLX42 uses CMAKE, not standard Make.
 $(MLX_LIB):
 	@echo "$(GREEN)📦 Building MLX42...$(RESET)"
 	@cmake -B $(MLX_DIR)/build -S $(MLX_DIR)
