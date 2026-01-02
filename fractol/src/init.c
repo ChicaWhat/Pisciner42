@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 21:32:26 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:43:58 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:12:16 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
+// Initialize MLX, create window and image, register all callback hooks
 void	fractal_init(t_fractal *f)
 {
 	f->mlx_connection = mlx_init(WIDTH, HEIGHT, f->f_name, 0);
@@ -35,6 +36,7 @@ void	fractal_init(t_fractal *f)
 	mlx_loop(f->mlx_connection);
 }
 
+// Callback: Handle keyboard input (ESC key closes window)
 void	ft_key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_fractal	*f;
@@ -44,6 +46,7 @@ void	ft_key_hook(mlx_key_data_t keydata, void *param)
 		mlx_close_window(f->mlx_connection);
 }
 
+// Callback: Handle window close event (X button)
 void	ft_close_hook(void *param)
 {
 	t_fractal	*f;
@@ -52,6 +55,7 @@ void	ft_close_hook(void *param)
 	mlx_close_window(f->mlx_connection);
 }
 
+// Callback: Handle mouse scroll for zoom
 void	ft_get_mouse(double xdelta, double ydelta, void *param)
 {
 	t_fractal	*f;
@@ -67,6 +71,7 @@ void	ft_get_mouse(double xdelta, double ydelta, void *param)
 	render(f);
 }
 
+// Calculate new fractal after zoom
 void	ft_zoom(t_fractal *f)
 {
 	double	new_radius_r;

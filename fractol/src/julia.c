@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 20:01:52 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 23:36:41 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:02:26 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
+// Calculate Julia set: z = z² + c, where c is constant and z varies per pixel
 int	julia(t_fractal *f, double z_re, double z_imag)
 {
 	double	c_real;
@@ -34,15 +35,9 @@ int	julia(t_fractal *f, double z_re, double z_imag)
 
 // --- Values to julia_real and julia_imag --- //
 /* 
-	av2 = -0.8;
-	av3 = 0.156;
-
-	av2 = -0.123;
-	av3 = 0.745;
-
-	av2 = 0.285;
-	av3 = 0.01
-	
+	-0.8 0.156;
+	-0.123 0.745;
+	0.285 0.01;
 	-0.704 0.296;
 	-0.704 0.265;
 	-0.763 0.092;

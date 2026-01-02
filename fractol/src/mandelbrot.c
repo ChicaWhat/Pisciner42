@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 16:32:24 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:24:28 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:00:57 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
+// Calculate Mandelbrot set: z = z² + c, starting with z=0
 int	mandelbrot(t_fractal *f, double c_re, double c_imag)
 {
 	double	z_re;

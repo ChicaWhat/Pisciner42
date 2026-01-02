@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 20:11:24 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:24:58 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:00:20 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
+// Map a pixel value from one range to another (pixel coords to complex coords)
 double	map(double pixel, double min_map, double max_map, double total_pixels)
 {
 	double	range;
@@ -24,6 +25,7 @@ double	map(double pixel, double min_map, double max_map, double total_pixels)
 	return (result);
 }
 
+// Render the fractal pixel by pixel
 void	render(t_fractal *f)
 {
 	int		x;

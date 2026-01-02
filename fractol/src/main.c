@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 12:59:20 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 23:41:24 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:08:17 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
+// Initialize all fractal structure values to defaults
 void	init_values(t_fractal *f)
 {
 	f->mlx_connection = NULL;
@@ -28,6 +29,7 @@ void	init_values(t_fractal *f)
 	f->zoom = 1.0;
 }
 
+// Parse and validate command line av
 void	parsing_av(int ac, char **av, t_fractal *f)
 {
 	if (ac == 2 && (!ft_strncmp(av[1], "mandelbrot", 11)))

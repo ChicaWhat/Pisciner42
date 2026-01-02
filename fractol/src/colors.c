@@ -6,12 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:58:25 by carmegon          #+#    #+#             */
-/*   Updated: 2025/12/30 20:24:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/02 16:06:20 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../fractol.h"
 
+// Calculate color based on iteration count
 int	get_color(int i, int max_iter)
 {
 	uint8_t	r;
