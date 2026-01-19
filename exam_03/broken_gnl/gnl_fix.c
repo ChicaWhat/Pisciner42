@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 23:16:50 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/18 23:16:50 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:11:52 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,28 @@ char	*ft_strchr(char *s, int c)
 //! FALLO 2. Condicion del bucle tambien.
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-    // Aqui cambiamos el (--n > 0) por lo que tengo ahora declarado en el bucle.
+    // Aqui cambiamos el (--n > 0) por lo que tengo ahora declarado en el bucle. (n--)
     //Además, se quita el n - 1, porque sino estoy perdiendo un valor de lo que necesito copiar de src a dest!
-	while (n-- > 0)
-		((char *)dest)[n] = ((char *)src)[n];
+	size_t i = 0;
+	while (i < n)
+	{
+		((char *)dest)[i] = ((char *)src)[i];
+		i++;
+	}
 	return (dest);
 }
 
+//! FALLO 3. Debo de proteger la funcion de punteros NULL. Por eso, me falta una comprobacion antes de entrar en el while. 
 size_t	ft_strlen(char *s)
 {
 	size_t	res = 0;
+/* 
+	?Existe el puntero?? (es NULL o no?) -> !s
+	?Tiene contenido -> !*s
+*/
+	if (!s)
+		return (0);
+
 	while (*s)
 	{
 		s++;
@@ -68,14 +80,16 @@ int	str_append_str(char **s1, char *s2)
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	if (dest > src)
-		return (ft_memmove(dest, src, n));
+		return (ft_memcpy(dest, src, n));
 	else if (dest == src)
 		return (dest);
-	size_t	i = ft_strlen((char *)src) - 1;
-	while (i >= 0)
+	else
 	{
-		((char *)dest)[i] = ((char *)src)[i];
-		i--;
+		while (n > 0)
+		{
+			((char *)dest)[n - 1] = ((char *)src)[n - 1];
+			n--;
+		}
 	}
 	return (dest);
 }
@@ -93,11 +107,20 @@ char	*get_next_line(int fd)
 		if (read_ret == -1)
 			return (NULL);
 		b[read_ret] = 0;
+		if (read_ret == 0)
+		{
+			if (*ret)
+				return (ret);
+			free(ret);
+			return (NULL);
+		}
+		tmp = ft_strchr(b, '\n');
 	}
 	if (!str_append_mem(&ret, b, tmp - b + 1))
 	{
 		free(ret);
 		return (NULL);
 	}
+	memmove(b, tmp + 1, ft_strlen(tmp + 1));
 	return (ret);
 }
