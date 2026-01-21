@@ -6,13 +6,15 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 23:16:50 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/19 17:11:52 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/21 09:42:23 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gnl.h"
 #include <stdlib.h>
 #include <unistd.h>
+
+//:%s/size_t/int
 
 char	*ft_strchr(char *s, int c)
 {
@@ -121,6 +123,6 @@ char	*get_next_line(int fd)
 		free(ret);
 		return (NULL);
 	}
-	memmove(b, tmp + 1, ft_strlen(tmp + 1));
+	ft_memmove(b, tmp + 1, ft_strlen(tmp + 1));
 	return (ret);
 }

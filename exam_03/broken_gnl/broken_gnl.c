@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 22:25:38 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/19 13:50:05 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/21 09:13:41 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ char	*ft_strchr(char *s, int c)
 		return (NULL);
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, int n)
 {
 	while (--n > 0)
 		((char *)dest)[n - 1] = ((char *)src)[n - 1];
 	return (dest);
 }
 
-size_t	ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
-	size_t	res = 0;
+	int	res = 0;
 	while (*s)
 	{
 		s++;
@@ -43,9 +43,9 @@ size_t	ft_strlen(char *s)
 	return (res);
 }
 
-int	str_append_mem(char **s1, char *s2, size_t size2)
+int	str_append_mem(char **s1, char *s2, int size2)
 {
-	size_t	size1 = ft_strlen(*s1);
+	int	size1 = ft_strlen(*s1);
 	char	*tmp = malloc(size2 + size1 + 1);
 	if (!tmp)
 		return (0);
@@ -62,13 +62,13 @@ int	str_append_str(char **s1, char *s2)
 	return (str_append_mem(s1, s2, ft_strlen(s2)));
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, int n)
 {
 	if (dest > src)
 		return (ft_memmove(dest, src, n));
 	else if (dest == src)
 		return (dest);
-	size_t	i = ft_strlen((char *)src) - 1;
+	int	i = ft_strlen((char *)src) - 1;
 	while (i >= 0)
 	{
 		((char *)dest)[i] = ((char *)src)[i];
