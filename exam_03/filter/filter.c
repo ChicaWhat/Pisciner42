@@ -21,7 +21,6 @@ int main(int ac, char **av)
 		int i = 0;
 		char *buf = (char *)malloc(9999 * sizeof(char));
 		ssize_t byte;
-		//char *s;
 		int j = 0;
 
 		if (!buf)
@@ -29,7 +28,7 @@ int main(int ac, char **av)
 				perror("Error");
 				return (1);
 		}
-		if (ac != 2 || av[1] == NULL)
+		if (ac != 2 || av[1] == NULL || av[1][j] == '\0')
 		{
 			printf("Not av valid\n");
 			return (1);
@@ -39,7 +38,7 @@ int main(int ac, char **av)
 			*buf: La direccion de memoria donde guardo lo que leo.
 			count: la cantidad de caracteres que voy a leer de golpe.
 		*/
-		while ((byte = read(0, &buf[i], 1)) != 0 && &buf[i])
+		while ((byte = read(0, &buf[i], 1)) > 0 && &buf[i])
 		{
 			if (byte == -1)
 			{
@@ -51,7 +50,6 @@ int main(int ac, char **av)
 		buf[i] = '\0';
 		i = 0;
 		j = 0;
-		//printf("%s\n", &buf[i]);
 		while (buf[i])
 		{
 			j = 0;
@@ -60,7 +58,6 @@ int main(int ac, char **av)
 				while (av[1][j])
 				{
 					printf("*");
-					//i += strlen(av[1]);
 					j++;
 				}
 				i += strlen(av[1]) - 1;

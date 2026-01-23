@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 09:48:31 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/19 11:09:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/22 13:27:04 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
-# endif
+#endif
 
 char	*get_next_line(int fd);
 char	*ft_strchr(char *s, int c);
@@ -31,6 +31,5 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 int	str_append_mem(char **s1, char *s2, size_t size2);
 int	str_append_str(char **s1, char *s2);
 void	*ft_memmove(void *dest, const void *src, size_t n);
-
 
 #endif
