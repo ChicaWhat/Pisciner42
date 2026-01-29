@@ -24,30 +24,25 @@ int	open_and_close(char *s)
 
 void	solve(char *s, int i, int total)
 {
-	//int i = 0;
-	int	rm = 0;
+	char	tmp;
 
-	if (total == 0 || rm == total)
+	if (!s[i])
 	{
-		puts(s);
+		if (total == 0 && open_and_close(s) == 0)
+			puts(s);
 		return ;
 	}
 
-	while (s[i])
+	tmp = s[i];
+	if (s[i])
 	{
-		s[i] = s[i];
-		if (rm <= total)
-		{
-			solve(s, i + 1, total);
-			rm++;
-		}
-		else
+		if ((s[i] == ')' || s[i] == '(') && total > 0)
 		{
 			s[i] = ' ';
-			solve(s, i + 1, total);
-			rm++;
+			solve(s, i + 1, total - 1);
 		}
-		i++;
+		s[i] = tmp;
+		solve(s, i + 1, total);
 	}
 }
 
@@ -56,7 +51,7 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (1);
 	int total = open_and_close(av[1]);
-	solve(av[1], 0, total);
-	//printf("%d\n", open_and_close(av[1]));
+	int i = 0;
+	solve(&av[1][i], 0, total);
 	return (0);
 }
