@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 23:16:50 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/22 13:33:14 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/01/30 12:32:59 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,10 @@ char	*ft_strchr(char *s, int c)
 	else
 		return (NULL);
 }
-//! FALLO 2. Condicion del bucle tambien.
+//! FALLO 2. Cambiamos el metodo de copiar.
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-    // Aqui cambiamos el (--n > 0) por lo que tengo ahora declarado en el bucle. (n--)
-    //Además, se quita el n - 1, porque sino estoy perdiendo un valor de lo que necesito copiar de src a dest!
+    // Aqui recreamos lo que hace la funcion de mempcy: copiar de izquierda a derecha.
 	size_t i = 0;
 	while (i < n)
 	{
@@ -59,7 +58,8 @@ size_t	ft_strlen(char *s)
 	}
 	return (res);
 }
-
+// !FALLO 3. Si *s1 tiene contenido, entremos en esa primera llamada al memcpy.
+// !Si no, pasamos directamente a la segunda llamada.
 int	str_append_mem(char **s1, char *s2, size_t size2)
 {
 	size_t	size1 = ft_strlen(*s1);
@@ -79,7 +79,7 @@ int	str_append_str(char **s1, char *s2)
 {
 	return (str_append_mem(s1, s2, ft_strlen(s2)));
 }
-
+//! FALLO 4. Cambiamos las condiciones para recrear el comportamiento de la funcion de memmove y quitamos la llamada a la funcion strlen.
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
 	if (dest < src)
@@ -96,7 +96,9 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-
+//! FALLO 5. Dentro del bucle debemos de tener en cuenta si la variable estática ha leido 0 byes. 
+//! Volvemos a llamar, al final del bucle, a la funcion strchr.
+//! Antes del ultimo return debemos de copiar la ultima línea que sea del fd. Por eso debemos de llamar a memmove. 
 char	*get_next_line(int fd)
 {
 	static char	b[BUFFER_SIZE + 1] = "";
