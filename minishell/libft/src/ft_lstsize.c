@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ssoto-su <ssoto-su@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 16:54:59 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/26 17:50:49 by carmegon         ###   ########.fr       */
+/*   Created: 2025/05/15 17:59:30 by ssoto-su          #+#    #+#             */
+/*   Updated: 2026/01/28 18:38:48 by ssoto-su         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../libft.h"
 
-int	ft_pwd(void)
+int	ft_lstsize(t_env *lst)
 {
-	char	*cwd;
+	int	i;
 
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-	{
-		printf("%s\n", cwd);
-		free(cwd);
-	}
-	else
-	{
-		perror("pwd");
+	if (!lst)
 		return (0);
+	i = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		i++;
 	}
-	return (1);
+	return (i);
 }
-

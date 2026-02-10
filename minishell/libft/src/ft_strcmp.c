@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ssoto-su <ssoto-su@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 11:36:34 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/11 11:41:15 by carmegon         ###   ########.fr       */
+/*   Created: 2026/02/06 17:59:42 by ssoto-su          #+#    #+#             */
+/*   Updated: 2026/02/06 18:00:58 by ssoto-su         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../libft.h"
 
-void	*free_token(char *str, char **env)
+int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
-	if (env)
-	{
-		i = 0;
-		while (env[i])
-		{
-			free(env[i]);
-			i++;
-		}
-		free(env);
-	}
-	if (str)
-		free(str);
-	return (NULL);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

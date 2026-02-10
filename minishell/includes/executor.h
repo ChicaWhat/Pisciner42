@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: ssoto-su <ssoto-su@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 18:08:14 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/26 20:46:44 by carmegon         ###   ########.fr       */
+/*   Created: 2026/02/04 19:20:37 by ssoto-su          #+#    #+#             */
+/*   Updated: 2026/02/07 20:20:08 by ssoto-su         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#ifndef EXECUTOR_H
+# define EXECUTOR_H
 
-char	*ft_env(t_mini mini)
-{
-	while (mini.env)
-}
+char	*get_env_val(char *name, t_mini *mini);
+void	find_full_path(t_mini *mini);
+void	get_cmd_path(char **path_env, t_cmd *cmd);
+void	assign_full_path(char **path_env, t_cmd **cmd);
+
+
+#endif
