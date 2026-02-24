@@ -106,7 +106,6 @@ int	ft_echo(char **av)
 {
 	if (!av || !*av)
 		return (0);
-	
 	if (check_flag(av[1]) == 1)
 		whitout_n(&av[1]);
 	else
@@ -114,26 +113,11 @@ int	ft_echo(char **av)
 	return (1);
 }
 
-/* 	while (av[i])
-	{
-		if (check_flag(av[i]) == 0 && av[i + 1] == NULL)
-		{
-			ft_putstr_fd(av[i], 1);
-			write(1, "\n", 1);
-		}
-		else if (check_flag(av[i]) == 0)
-		{
-			ft_putstr_fd(av[i], 1);
-			write(1, " ", 1);
-		}
-		i++;
-	} */
-
-int main(int ac, char **av)
+/* int main(int ac, char **av)
 {
 	(void)ac;
 
 	//whitout_n(&*av);
 	ft_echo(&av[1]);
 	return (0);
-}
+} */
