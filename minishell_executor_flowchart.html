@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minishell Executor — Diagrama de Flujo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #252a35;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --accent3: #a855f7;
+    --accent4: #22c55e;
+    --accent5: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --pipe-color: #ff6b35;
+    --fork-color: #a855f7;
+    --fd-color: #22c55e;
+    --parent-color: #00e5ff;
+    --child-color: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── HEADER ── */
+  header { text-align: center; margin-bottom: 60px; }
+  header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  header p { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+
+  /* ── NAV TABS ── */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .tab {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { border-color: var(--accent); color: var(--accent); }
+  .tab.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 32px;
+    padding: 16px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── FLOW DIAGRAMS ── */
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .node {
+    position: relative;
+    padding: 14px 24px;
+    border-radius: 10px;
+    border: 1.5px solid;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: default;
+  }
+  .node:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+
+  .node-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+  .node-desc { font-size: 0.75rem; opacity: 0.75; line-height: 1.4; margin-top: 4px; }
+  .node-code { font-size: 0.7rem; margin-top: 6px; padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.3); opacity: 0.9; }
+
+  /* node types */
+  .node-entry { border-color: var(--accent); background: rgba(0,229,255,0.06); color: var(--accent); }
+  .node-func { border-color: #3b82f6; background: rgba(59,130,246,0.06); color: #93c5fd; }
+  .node-fork { border-color: var(--fork-color); background: rgba(168,85,247,0.06); color: #c084fc; }
+  .node-pipe { border-color: var(--pipe-color); background: rgba(255,107,53,0.06); color: #fb923c; }
+  .node-fd { border-color: var(--fd-color); background: rgba(34,197,94,0.06); color: #86efac; }
+  .node-parent { border-color: var(--parent-color); background: rgba(0,229,255,0.04); color: var(--accent); }
+  .node-child { border-color: var(--child-color); background: rgba(245,158,11,0.06); color: #fcd34d; }
+  .node-decision { border-color: var(--accent5); background: rgba(245,158,11,0.06); color: #fcd34d; border-radius: 0; transform: rotate(0deg); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); padding: 24px; display: flex; align-items: center; justify-content: center; height: 80px; }
+  .node-exit { border-color: #ef4444; background: rgba(239,68,68,0.06); color: #fca5a5; }
+  .node-exec { border-color: var(--accent4); background: rgba(34,197,94,0.06); color: #86efac; }
+  .node-builtin { border-color: #06b6d4; background: rgba(6,182,212,0.06); color: #67e8f9; }
+
+  /* arrows */
+  .arrow { display: flex; flex-direction: column; align-items: center; gap: 0; width: 100%; max-width: 480px; }
+  .arrow-line { width: 2px; background: var(--border); flex-shrink: 0; }
+  .arrow-line.h20 { height: 20px; }
+  .arrow-line.h30 { height: 30px; }
+  .arrow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin: 2px 0;
+  }
+  .arrow-head { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 10px solid var(--border); }
+
+  /* BRANCH layout */
+  .branch-container { display: flex; gap: 24px; align-items: flex-start; justify-content: center; width: 100%; max-width: 900px; }
+  .branch { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 200px; }
+  .branch-label { font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
+  .branch-yes { background: rgba(34,197,94,0.15); color: var(--accent4); border: 1px solid var(--accent4); }
+  .branch-no { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid #f87171; }
+  .branch-single { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid #3b82f6; }
+  .branch-pipe { background: rgba(255,107,53,0.15); color: #fb923c; border: 1px solid var(--pipe-color); }
+
+  .h-line { height: 2px; background: var(--border); align-self: stretch; margin-top: 30px; display: none; }
+
+  /* ── PIPE DIAGRAM ── */
+  .pipe-diagram { width: 100%; overflow-x: auto; padding: 20px 0; }
+  .pipe-viz {
+    min-width: 900px;
+    padding: 32px;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .pipe-title { font-size: 1.1rem; font-weight: 700; color: var(--accent2); margin-bottom: 24px; font-family: 'JetBrains Mono', monospace; }
+
+  .pipe-row { display: flex; align-items: center; gap: 0; margin-bottom: 40px; position: relative; }
+
+  .proc-box {
+    flex-shrink: 0;
+    width: 160px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1.5px solid;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .proc-box .proc-name { font-size: 0.85rem; font-weight: 700; }
+  .proc-box .proc-detail { font-size: 0.68rem; opacity: 0.7; margin-top: 4px; }
+
+  .proc-parent { border-color: var(--parent-color); background: rgba(0,229,255,0.06); color: var(--accent); }
+  .proc-child { border-color: var(--child-color); background: rgba(245,158,11,0.08); color: #fcd34d; }
+
+  .pipe-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+  .pipe-tube {
+    height: 32px;
+    width: 80px;
+    border: 2px solid var(--pipe-color);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,107,53,0.1);
+    position: relative;
+  }
+  .pipe-tube-label { font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; color: var(--pipe-color); font-weight: 700; }
+  .pipe-fd-labels { display: flex; justify-content: space-between; width: 100%; font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; color: var(--fd-color); margin-top: 2px; }
+
+  .fd-badge {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid var(--fd-color);
+    color: var(--fd-color);
+    font-size: 0.62rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin-bottom: 32px; }
+  .card {
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .card-title { font-weight: 700; font-size: 1rem; }
+  .card-file { font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: var(--muted); margin-top: 2px; }
+
+  .func-list { display: flex; flex-direction: column; gap: 10px; }
+  .func-item {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .func-name { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .func-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+  /* ── FORK DIAGRAM ── */
+  .fork-visual {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .fork-visual h3 { font-size: 1rem; font-weight: 700; color: var(--accent3); margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  .fork-tree { display: flex; flex-direction: column; align-items: center; }
+  .fork-parent-box {
+    padding: 16px 32px;
+    border: 2px solid var(--parent-color);
+    border-radius: 10px;
+    background: rgba(0,229,255,0.06);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  .fork-stem { width: 2px; height: 40px; background: var(--fork-color); margin: 0 auto; }
+  .fork-label-box {
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: rgba(168,85,247,0.15);
+    border: 1px solid var(--fork-color);
+    color: #c084fc;
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 0;
+  }
+  .fork-branch-row { display: flex; gap: 40px; justify-content: center; align-items: flex-start; margin-top: 0; }
+  .fork-branch { display: flex; flex-direction: column; align-items: center; }
+  .fork-branch-stem { width: 2px; height: 30px; background: var(--border); }
+  .fork-child-box {
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-align: center;
+    min-width: 160px;
+  }
+  .fork-returns { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; margin-top: 6px; padding: 3px 8px; border-radius: 4px; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .section-subtitle { font-size: 0.85rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 32px; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    padding: 16px 20px;
+    border-radius: 10px;
+    border-left: 3px solid;
+    margin: 16px 0;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .callout-info { border-color: var(--accent); background: rgba(0,229,255,0.05); color: #a0d9e8; }
+  .callout-warn { border-color: var(--accent5); background: rgba(245,158,11,0.05); color: #d9c4a0; }
+  .callout-danger { border-color: #ef4444; background: rgba(239,68,68,0.05); color: #e8a0a0; }
+  .callout-success { border-color: var(--accent4); background: rgba(34,197,94,0.05); color: #a0d9b0; }
+
+  code {
+    background: rgba(255,255,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: var(--accent);
+  }
+
+  /* ── BIG PIPE ANIMATION ── */
+  .big-pipe-section { margin-top: 32px; }
+  .big-pipe-section h3 { font-size: 1.1rem; font-weight: 700; color: var(--accent2); margin-bottom: 20px; font-family: 'JetBrains Mono', monospace; }
+
+  .pipe-flow-chart {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    overflow-x: auto;
+  }
+
+  .pipe-chain { display: flex; align-items: center; gap: 0; min-width: 900px; }
+
+  .pchain-proc {
+    flex-shrink: 0;
+    width: 140px;
+    text-align: center;
+    padding: 16px 10px;
+    border-radius: 10px;
+    border: 2px solid;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pchain-proc .pname { font-size: 0.8rem; font-weight: 700; }
+  .pchain-proc .pcmd { font-size: 0.68rem; margin-top: 4px; opacity: 0.8; }
+  .pchain-proc .pfd { font-size: 0.65rem; margin-top: 8px; }
+  .pchain-proc .pfd span { display: block; margin: 1px 0; }
+
+  .pchain-pipe {
+    flex: 1;
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .pchain-pipe-tube {
+    width: 100%;
+    height: 28px;
+    border: 2px solid var(--pipe-color);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,107,53,0.12);
+    gap: 6px;
+  }
+  .pchain-pipe-name { font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--pipe-color); font-weight: 700; }
+  .pchain-pipe-fds { display: flex; justify-content: space-between; width: 100%; font-size: 0.58rem; font-family: 'JetBrains Mono', monospace; }
+
+  .c0 { border-color: #00e5ff; background: rgba(0,229,255,0.06); color: #00e5ff; }
+  .c1 { border-color: #a855f7; background: rgba(168,85,247,0.06); color: #c084fc; }
+  .c2 { border-color: #f59e0b; background: rgba(245,158,11,0.06); color: #fcd34d; }
+  .c3 { border-color: #22c55e; background: rgba(34,197,94,0.06); color: #86efac; }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; font-size: 0.82rem; line-height: 1.6; color: var(--text); }
+  .step-content strong { color: var(--accent); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  @media (max-width: 600px) {
+    .branch-container { flex-direction: column; align-items: center; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<header>
+  <h1>Minishell — Executor</h1>
+  <p>// Diagrama de flujo completo · Pipes · Fork · Procesos padre/hijo · File Descriptors</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showSection('overview')">Vista General</div>
+  <div class="tab" onclick="showSection('executor')">Executor Flow</div>
+  <div class="tab" onclick="showSection('fork')">Fork & Procesos</div>
+  <div class="tab" onclick="showSection('pipes')">Pipes & FDs</div>
+  <div class="tab" onclick="showSection('funcs')">Funciones</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 1: OVERVIEW -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="overview" class="section active">
+  <div class="section-title">Vista General del Sistema</div>
+  <div class="section-subtitle">// Cómo fluye una línea de comandos desde el input hasta la ejecución</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#00e5ff"></div>Entry / Dispatch</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Función lógica</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>fork()</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff6b35"></div>pipe()</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>File Descriptor</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00e5ff; opacity:0.5"></div>Proceso padre</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Proceso hijo</div>
+  </div>
+
+  <div class="flow">
+    <div class="node node-entry">
+      <div class="node-title">🖥️ minishell.c — shell_loop()</div>
+      <div class="node-desc">readline() lee el input del usuario</div>
+    </div>
+    <div class="arrow"><div class="arrow-line h30"></div><div class="arrow-head"></div></div>
+
+    <div class="node node-func">
+      <div class="node-title">input_to_token()</div>
+      <div class="node-desc">Lexer: convierte el string en tokens (WORD, PIPE, REDIR_IN…)</div>
+    </div>
+    <div class="arrow"><div class="arrow-line h30"></div><div class="arrow-head"></div></div>
+
+    <div class="node node-func">
+      <div class="node-title">pre_pars()</div>
+      <div class="node-desc">Validación sintáctica: quotes, pipes colgantes, chars prohibidos</div>
+    </div>
+    <div class="arrow"><div class="arrow-line h30"></div><div class="arrow-head"></div></div>
+
+    <div class="node node-func">
+      <div class="node-title">init_cmd() — parser.c</div>
+      <div class="node-desc">Convierte la lista de tokens en una linked list de t_cmd</div>
+    </div>
+    <div class="arrow"><div class="arrow-line h30"></div><div class="arrow-head"></div></div>
+
+    <div class="node node-func">
+      <div class="node-title">find_full_path() — path.c</div>
+      <div class="node-desc">Busca en $PATH el binario de cada cmd → cmd->cmd_path</div>
+    </div>
+    <div class="arrow"><div class="arrow-line h30"></div><div class="arrow-head"></div></div>
+
+    <div class="node node-entry">
+      <div class="node-title">⚡ executor_dispatch() — executor_main.c</div>
+      <div class="node-desc">PUNTO DE ENTRADA del executor. Decide: ¿single cmd o pipeline?</div>
+    </div>
+    <div class="arrow"><div class="arrow-line h20"></div><div class="arrow-head"></div></div>
+
+    <div class="branch-container">
+      <div class="branch">
+        <div class="branch-label branch-single">cmd->next == NULL</div>
+        <div class="node node-func" style="font-size:0.78rem">handle_single_cmd()</div>
+      </div>
+      <div class="branch">
+        <div class="branch-label branch-pipe">cmd->next != NULL</div>
+        <div class="node node-pipe" style="font-size:0.78rem">handle_pipeline_loop()</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info" style="margin-top:32px">
+    💡 <strong>La linked list t_cmd</strong>: Cada nodo representa un comando separado por <code>|</code>. Por ejemplo <code>ls | grep foo | wc -l</code> genera 3 nodos t_cmd enlazados. El executor itera sobre ellos.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 2: EXECUTOR FLOW -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="executor" class="section">
+  <div class="section-title">Executor — Flujo Detallado</div>
+  <div class="section-subtitle">// executor_main.c · handle_single.c · handle_execution.c</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+
+    <!-- SINGLE CMD -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px">
+      <div style="color:var(--accent);font-weight:700;font-size:0.9rem;margin-bottom:20px;font-family:'JetBrains Mono',monospace">
+        📦 handle_single_cmd()
+      </div>
+      <div class="flow">
+        <div class="node node-func" style="max-width:100%">
+          <div class="node-title">¿Es builtin de padre?</div>
+          <div class="node-desc">cd, export, unset, exit</div>
+        </div>
+        <div class="arrow"><div class="arrow-line h20"></div><div class="arrow-head"></div></div>
+        <div class="branch-container" style="max-width:100%">
+          <div class="branch">
+            <div class="branch-label branch-yes">SÍ</div>
+            <div class="node node-builtin" style="max-width:200px;font-size:0.75rem">
+              <div class="node-title">execute_builtin_in_parent()</div>
+              <div class="node-desc">Sin fork. Corre en el proceso PADRE para poder modificar su estado (PWD, ENV…)</div>
+            </div>
+          </div>
+          <div class="branch">
+            <div class="branch-label branch-no">NO</div>
+            <div class="node node-fork" style="max-width:200px;font-size:0.75rem">
+              <div class="node-title">fork()</div>
+              <div class="node-desc">Crea proceso hijo</div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow" style="margin-top:12px"><div class="arrow-line h20"></div><div class="arrow-head"></div></div>
+        <div class="branch-container" style="max-width:100%">
+          <div class="branch">
+            <div class="branch-label" style="background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid #f59e0b">HIJO (pid==0)</div>
+            <div class="node node-child" style="max-width:200px;font-size:0.75rem">
+              <div class="node-title">single_cmd_child_process()</div>
+              <div class="node-desc">→ execute_command_node()</div>
+            </div>
+          </div>
+          <div class="branch">
+            <div class="branch-label" style="background:rgba(0,229,255,0.1);color:var(--accent);border:1px solid var(--accent)">PADRE (pid>0)</div>
+            <div class="node node-parent" style="max-width:200px;font-size:0.75rem">
+              <div class="node-title">single_cmd_parent_wait()</div>
+              <div class="node-desc">waitpid() → recoge exit_status</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTE CMD NODE -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px">
+      <div style="color:#fb923c;font-weight:700;font-size:0.9rem;margin-bottom:20px;font-family:'JetBrains Mono',monospace">
+        ⚙️ execute_command_node() — handle_execution.c
+      </div>
+      <div class="flow">
+        <div class="node node-fd" style="max-width:100%">
+          <div class="node-title">setup_redirections(cmd)</div>
+          <div class="node-desc">Abre infile/outfile y hace dup2() sobre STDIN/STDOUT</div>
+        </div>
+        <div class="arrow"><div class="arrow-line h20"></div><div class="arrow-head"></div></div>
+        <div class="node node-func" style="max-width:100%">
+          <div class="node-title">¿Es builtin?</div>
+          <div class="node-desc">echo, pwd, env</div>
+        </div>
+        <div class="arrow"><div class="arrow-line h20"></div><div class="arrow-head"></div></div>
+        <div class="branch-container" style="max-width:100%">
+          <div class="branch">
+            <div class="branch-label branch-yes">SÍ</div>
+            <div class="node node-builtin" style="max-width:200px;font-size:0.75rem">
+              <div class="node-title">execute_builtin_func()</div>
+              <div class="node-desc">Llama ft_echo/ft_pwd/ft_env… luego exit(exit_code)</div>
+            </div>
+          </div>
+          <div class="branch">
+            <div class="branch-label branch-no">NO</div>
+            <div class="node node-exec" style="max-width:200px;font-size:0.75rem">
+              <div class="node-title">execute_system_binary()</div>
+              <div class="node-desc">env_to_array() → execve(cmd_path, args, env)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout callout-warn">
+    ⚠️ <strong>¿Por qué los builtins de padre NO hacen fork?</strong><br>
+    Si hicieras <code>cd /tmp</code> en un hijo, el hijo cambiaría su directorio, pero el proceso padre (tu shell) seguiría en el mismo sitio. La shell NUNCA se enteraría del cambio. Lo mismo con <code>export VAR=x</code> — el hijo tiene su propia copia del env. El padre nunca vería la variable nueva.
+  </div>
+
+  <div class="callout callout-info" style="margin-top:12px">
+    💡 <strong>execute_builtin_in_parent()</strong> hace backup de stdin/stdout con <code>dup()</code> antes de aplicar redirecciones, y los restaura después. Así, aunque el builtin escriba a un archivo, el shell sigue funcionando con la terminal.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 3: FORK & PROCESOS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="fork" class="section">
+  <div class="section-title">Fork — Procesos Padre e Hijo</div>
+  <div class="section-subtitle">// Cómo fork() duplica el proceso y qué hace cada uno</div>
+
+  <div class="fork-visual">
+    <h3>// Anatomía de fork()</h3>
+    <div class="fork-tree">
+      <div class="fork-parent-box">
+        PROCESO PADRE (minishell)<br>
+        <span style="font-size:0.7rem;opacity:0.7">PID=1234 | tiene env, tokens, cmds…</span>
+      </div>
+      <div class="fork-stem"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div class="fork-label-box">pid = fork()</div>
+        <div style="font-size:0.68rem;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-top:4px">El kernel DUPLICA el proceso en memoria</div>
+      </div>
+      <div class="fork-stem" style="height:20px"></div>
+      <div class="fork-branch-row">
+        <div class="fork-branch">
+          <div class="fork-branch-stem"></div>
+          <div class="fork-child-box proc-parent" style="border:2px solid var(--parent-color)">
+            <div style="font-weight:700;font-size:0.82rem">PADRE</div>
+            <div style="font-size:0.68rem;margin-top:4px">pid = PID_HIJO (ej: 1235)</div>
+            <div style="font-size:0.65rem;margin-top:6px;opacity:0.8">→ va a single_cmd_parent_wait()<br>→ waitpid(1235, …) — BLOQUEA<br>→ espera que el hijo termine<br>→ recoge exit_status</div>
+          </div>
+          <div class="fork-returns" style="background:rgba(0,229,255,0.1);border:1px solid var(--accent);color:var(--accent)">fork() devuelve PID_HIJO > 0</div>
+        </div>
+        <div class="fork-branch">
+          <div class="fork-branch-stem"></div>
+          <div class="fork-child-box proc-child" style="border:2px solid var(--child-color)">
+            <div style="font-weight:700;font-size:0.82rem">HIJO</div>
+            <div style="font-size:0.68rem;margin-top:4px">pid = 0</div>
+            <div style="font-size:0.65rem;margin-top:6px;opacity:0.8">→ single_cmd_child_process()<br>→ execute_command_node()<br>→ setup_redirections()<br>→ execve() o builtin<br>→ exit(code) — MUERE</div>
+          </div>
+          <div class="fork-returns" style="background:rgba(245,158,11,0.1);border:1px solid var(--child-color);color:#fcd34d">fork() devuelve 0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-danger">
+    ☠️ <strong>El hijo NUNCA debe volver al loop principal</strong>. Por eso siempre termina con <code>exit()</code> después de <code>execve()</code> o después de ejecutar el builtin. Si no hiciera <code>exit()</code>, el hijo volvería a <code>shell_loop()</code> y habría dos instancias del shell corriendo.
+  </div>
+
+  <div style="margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px">
+    <div style="font-weight:700;font-size:0.9rem;color:var(--accent2);margin-bottom:16px;font-family:'JetBrains Mono',monospace">// ¿Qué ocurre con execve()?</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">El hijo llama <code>execve(cmd->cmd_path, cmd->args, env)</code></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>execve REEMPLAZA el programa del proceso hijo</strong>. El código del hijo desaparece y en su lugar corre el binario (ej: <code>/bin/ls</code>). El PID sigue siendo el mismo.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">Cuando <code>/bin/ls</code> termina, el proceso con ese PID muere y el padre recibe la señal en <code>waitpid()</code>.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">Si <code>execve</code> falla (comando no encontrado), la siguiente línea es <code>perror()</code> + <code>exit(126)</code>. Nunca sigue ejecutándose código del shell.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 4: PIPES & FDs -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="pipes" class="section">
+  <div class="section-title">Pipes — Comunicación entre Procesos</div>
+  <div class="section-subtitle">// handle_pipeline.c · Cómo fluyen los datos a través de File Descriptors</div>
+
+  <!-- Qué es una pipe -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px">
+    <div style="font-weight:700;font-size:0.9rem;color:var(--pipe-color);margin-bottom:16px;font-family:'JetBrains Mono',monospace">// ¿Qué es pipe(fd[2])?</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">📖</div>
+        <div class="step-content"><code>pipe(fd)</code> crea un canal unidireccional en el kernel y devuelve <strong>dos file descriptors</strong>: <code>fd[0]</code> = extremo de LECTURA, <code>fd[1]</code> = extremo de ESCRITURA.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">✍️</div>
+        <div class="step-content">Lo que escribas en <code>fd[1]</code> lo puedes leer de <code>fd[0]</code>. Es como una cola FIFO en memoria.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">🔒</div>
+        <div class="step-content">Si <strong>cierras fd[1]</strong> (escritura) y el lector hace <code>read(fd[0])</code>, obtiene EOF. Si no cierras fd[1], el lector se bloquea para siempre esperando más datos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJEMPLO 4 pipes -->
+  <div class="big-pipe-section">
+    <h3>// Ejemplo: cmd1 | cmd2 | cmd3 | cmd4 | cmd5</h3>
+    <div style="font-size:0.78rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:20px">
+      → 4 pipes · 5 procesos hijo · 1 proceso padre que orquesta todo
+    </div>
+
+    <div class="pipe-flow-chart">
+      <div style="font-size:0.72rem;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:20px">STDIN(terminal) ────────────────────────────────────────────── STDOUT(terminal)</div>
+
+      <div class="pipe-chain">
+        <!-- CMD1 -->
+        <div class="pchain-proc c0">
+          <div class="pname">HIJO 1</div>
+          <div class="pcmd">cmd1</div>
+          <div class="pfd">
+            <span>IN: <span class="fd-badge">STDIN</span></span>
+            <span>OUT: <span class="fd-badge">pipe1[1]</span></span>
+          </div>
+        </div>
+        <!-- PIPE 1 -->
+        <div class="pchain-pipe">
+          <div class="pchain-pipe-tube">
+            <div class="pchain-pipe-name">PIPE 1</div>
+          </div>
+          <div class="pchain-pipe-fds">
+            <span style="color:var(--fd-color)">fd[0]→lect</span>
+            <span style="color:var(--pipe-color)">fd[1]→escr</span>
+          </div>
+        </div>
+        <!-- CMD2 -->
+        <div class="pchain-proc c1">
+          <div class="pname">HIJO 2</div>
+          <div class="pcmd">cmd2</div>
+          <div class="pfd">
+            <span>IN: <span class="fd-badge">pipe1[0]</span></span>
+            <span>OUT: <span class="fd-badge">pipe2[1]</span></span>
+          </div>
+        </div>
+        <!-- PIPE 2 -->
+        <div class="pchain-pipe">
+          <div class="pchain-pipe-tube">
+            <div class="pchain-pipe-name">PIPE 2</div>
+          </div>
+          <div class="pchain-pipe-fds">
+            <span style="color:var(--fd-color)">fd[0]→lect</span>
+            <span style="color:var(--pipe-color)">fd[1]→escr</span>
+          </div>
+        </div>
+        <!-- CMD3 -->
+        <div class="pchain-proc c2">
+          <div class="pname">HIJO 3</div>
+          <div class="pcmd">cmd3</div>
+          <div class="pfd">
+            <span>IN: <span class="fd-badge">pipe2[0]</span></span>
+            <span>OUT: <span class="fd-badge">pipe3[1]</span></span>
+          </div>
+        </div>
+        <!-- PIPE 3 -->
+        <div class="pchain-pipe">
+          <div class="pchain-pipe-tube">
+            <div class="pchain-pipe-name">PIPE 3</div>
+          </div>
+          <div class="pchain-pipe-fds">
+            <span style="color:var(--fd-color)">fd[0]→lect</span>
+            <span style="color:var(--pipe-color)">fd[1]→escr</span>
+          </div>
+        </div>
+        <!-- CMD4 -->
+        <div class="pchain-proc c3">
+          <div class="pname">HIJO 4</div>
+          <div class="pcmd">cmd4</div>
+          <div class="pfd">
+            <span>IN: <span class="fd-badge">pipe3[0]</span></span>
+            <span>OUT: <span class="fd-badge">pipe4[1]</span></span>
+          </div>
+        </div>
+        <!-- PIPE 4 -->
+        <div class="pchain-pipe">
+          <div class="pchain-pipe-tube">
+            <div class="pchain-pipe-name">PIPE 4</div>
+          </div>
+          <div class="pchain-pipe-fds">
+            <span style="color:var(--fd-color)">fd[0]→lect</span>
+            <span style="color:var(--pipe-color)">fd[1]→escr</span>
+          </div>
+        </div>
+        <!-- CMD5 -->
+        <div class="pchain-proc c0">
+          <div class="pname">HIJO 5</div>
+          <div class="pcmd">cmd5</div>
+          <div class="pfd">
+            <span>IN: <span class="fd-badge">pipe4[0]</span></span>
+            <span>OUT: <span class="fd-badge">STDOUT</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;font-size:0.7rem;font-family:'JetBrains Mono',monospace;color:var(--muted)">
+        ▲ El PADRE crea cada pipe ANTES del fork. Ambos (padre e hijo) heredan los FDs. El PADRE cierra los que no necesita. El HIJO hace dup2() para redirigir STDIN/STDOUT.
+      </div>
+    </div>
+  </div>
+
+  <!-- LOOP DETAIL -->
+  <div style="margin-top:32px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px">
+    <div style="font-weight:700;font-size:0.9rem;color:var(--accent3);margin-bottom:20px;font-family:'JetBrains Mono',monospace">// handle_pipeline_loop() — Iteración paso a paso</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content"><strong>init_pipe()</strong> — Si hay un siguiente comando (<code>cmd->next</code>), crea una nueva pipe: <code>pipe(pipe_fd)</code>. Genera <code>pipe_fd[0]</code> (leer) y <code>pipe_fd[1]</code> (escribir). Si es el último comando, no crea pipe.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content"><strong>spawn_process()</strong> — Llama <code>fork()</code>. Si falla, cierra los FDs abiertos y retorna -1.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content"><strong>HIJO (pid==0) → pipe_child_process()</strong>:
+          <br>• Si hay <code>prev_pipe != -1</code>: <code>dup2(prev_pipe, STDIN)</code> → el output del comando anterior ahora es su STDIN.
+          <br>• Si hay siguiente: <code>dup2(pipe_fd[1], STDOUT)</code> → su output va al extremo de escritura de la nueva pipe.
+          <br>• Cierra los FDs ya duplicados (¡importante!).
+          <br>• Llama <code>execute_command_node()</code> → execve() → muere.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content"><strong>PADRE → pipe_parent_process()</strong>:
+          <br>• Cierra <code>prev_pipe</code> (ya no necesita el extremo de lectura anterior).
+          <br>• Cierra <code>pipe_fd[1]</code> (extremo de escritura — el hijo ya lo tiene).
+          <br>• Guarda <code>pipe_fd[0]</code> en <code>prev_pipe</code> para pasárselo al siguiente hijo como STDIN.
+          <br>• Avanza al siguiente nodo: <code>current_cmd = current_cmd->next</code>.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content"><strong>wait_all_children()</strong> — Cuando el loop termina, el padre llama <code>waitpid()</code> sobre TODOS los hijos en orden. El exit_status final es el del último hijo.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-danger" style="margin-top:20px">
+    ☠️ <strong>Error clásico: no cerrar FDs en el padre</strong>. Si el padre NO cierra <code>pipe_fd[1]</code>, el hijo que lee de <code>pipe_fd[0]</code> nunca recibe EOF porque el kernel ve que todavía hay alguien con el extremo de escritura abierto. El hijo se bloquea eternamente en <code>read()</code>. Tu shell se cuelga.
+  </div>
+
+  <div class="callout callout-success" style="margin-top:12px">
+    ✅ <strong>La variable prev_pipe</strong> es la clave del loop. Empieza en -1. En cada iteración, guarda el <code>pipe_fd[0]</code> que el próximo hijo usará como STDIN. El padre cierra el <code>prev_pipe</code> anterior en cada vuelta porque ya se lo pasó al hijo mediante <code>dup2()</code>.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION 5: FUNCIONES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="funcs" class="section">
+  <div class="section-title">Mapa de Funciones</div>
+  <div class="section-subtitle">// Cada función del executor — qué hace, por qué existe</div>
+
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(0,229,255,0.1)">⚡</div>
+        <div>
+          <div class="card-title">executor_main.c</div>
+          <div class="card-file">Dispatch & Single</div>
+        </div>
+      </div>
+      <div class="func-list">
+        <div class="func-item">
+          <div class="func-name">executor_dispatch(mini)</div>
+          <div class="func-desc">Punto de entrada. Mira si <code>cmd->next == NULL</code>. Si solo hay un comando: <code>handle_single_cmd()</code>. Si hay pipeline: <code>handle_pipeline_loop()</code>.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">handle_single_cmd(mini, cmd)</div>
+          <div class="func-desc">Para un solo comando. Si es builtin de padre (cd/export/unset/exit) lo ejecuta SIN fork. Si no, hace fork → hijo ejecuta, padre espera.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(245,158,11,0.1)">🔧</div>
+        <div>
+          <div class="card-title">handle_single.c</div>
+          <div class="card-file">Lógica del single cmd</div>
+        </div>
+      </div>
+      <div class="func-list">
+        <div class="func-item">
+          <div class="func-name">execute_builtin_in_parent(mini, cmd)</div>
+          <div class="func-desc">Backup de FDs → aplica redirecciones → ejecuta builtin → restaura FDs. Todo sin fork, en el proceso padre.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">single_cmd_child_process(mini, cmd)</div>
+          <div class="func-desc">Código que corre el HIJO. Si hay args: <code>execute_command_node()</code>. Si no (solo redirección): setup_redirections + exit(0).</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">single_cmd_parent_wait(mini, cmd)</div>
+          <div class="func-desc">El padre hace <code>waitpid()</code> bloqueante. Extrae el exit_status con WIFEXITED/WIFSIGNALED.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(168,85,247,0.1)">⚙️</div>
+        <div>
+          <div class="card-title">handle_execution.c</div>
+          <div class="card-file">Ejecución del comando</div>
+        </div>
+      </div>
+      <div class="func-list">
+        <div class="func-item">
+          <div class="func-name">execute_command_node(mini, cmd)</div>
+          <div class="func-desc">Corre DENTRO del hijo. 1) setup_redirections 2) si es builtin: execute_builtin_func + exit. 3) si no: execute_system_binary.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">execute_builtin_func(mini, cmd)</div>
+          <div class="func-desc">Dispatcher de builtins: elige entre ft_echo, ft_pwd, ft_env, ft_export, ft_unset según cmd->args[0].</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">execute_system_binary(mini, cmd)</div>
+          <div class="func-desc">Convierte env a array → execve(cmd_path, args, env). Si falla: exit(126). Si cmd_path es NULL: "command not found" exit(127).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(255,107,53,0.1)">🔗</div>
+        <div>
+          <div class="card-title">handle_pipeline.c</div>
+          <div class="card-file">Pipes y procesos</div>
+        </div>
+      </div>
+      <div class="func-list">
+        <div class="func-item">
+          <div class="func-name">init_pipe(mini, cmd, prev_pipe, pipe_fd)</div>
+          <div class="func-desc">Crea la pipe solo si hay comando siguiente. Si falla, cierra prev_pipe y limpia.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">spawn_process(cmd, prev_pipe, pipe_fd)</div>
+          <div class="func-desc">Llama <code>fork()</code>. En caso de error cierra todos los FDs relevantes.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">pipe_child_process(mini, cmd, prev_pipe, pipe_fd)</div>
+          <div class="func-desc">Hijo: dup2(prev_pipe → STDIN), dup2(pipe_fd[1] → STDOUT), cierra FDs, execute_command_node().</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">pipe_parent_process(cmd, prev_pipe, pipe_fd)</div>
+          <div class="func-desc">Padre: cierra prev_pipe antiguo, cierra pipe_fd[1], guarda pipe_fd[0] como nuevo prev_pipe.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">wait_all_children(mini)</div>
+          <div class="func-desc">Loop sobre todos los t_cmd llamando waitpid(). El exit_status final es del último proceso.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(34,197,94,0.1)">↔️</div>
+        <div>
+          <div class="card-title">handle_redirections.c</div>
+          <div class="card-file">Gestión de FDs</div>
+        </div>
+      </div>
+      <div class="func-list">
+        <div class="func-item">
+          <div class="func-name">backup_std_fds(mini)</div>
+          <div class="func-desc">Guarda copias de STDIN y STDOUT con dup() en mini->stdin_backup / stdout_backup. Solo para builtins en padre.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">restore_std_fds(mini)</div>
+          <div class="func-desc">Restaura STDIN/STDOUT usando dup2() desde los backups. Cierra los backups.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">setup_redirections(cmd)</div>
+          <div class="func-desc">Abre infile con O_RDONLY → dup2 a STDIN. Abre outfile con O_WRONLY|O_CREAT|O_TRUNC (o O_APPEND) → dup2 a STDOUT.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(6,182,212,0.1)">🏷️</div>
+        <div>
+          <div class="card-title">executor_builtins.c</div>
+          <div class="card-file">Clasificación de builtins</div>
+        </div>
+      </div>
+      <div class="func-list">
+        <div class="func-item">
+          <div class="func-name">is_builtin(cmd_name)</div>
+          <div class="func-desc">Devuelve 1 si el comando es uno de los 7 builtins: echo, cd, pwd, export, unset, env, exit.</div>
+        </div>
+        <div class="func-item">
+          <div class="func-name">is_parent_builtin(cmd_name)</div>
+          <div class="func-desc">Devuelve 1 solo para los que DEBEN correr en el padre: cd, export, unset, exit. Son los que modifican el estado de la shell.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout callout-warn">
+    🐛 <strong>Bug detectado en execute_builtin_func()</strong>: Hay un <code>ft_strcmp(cmd->args[0], "cmd")</code> que debería ser <code>"cd"</code>. El cd nunca se ejecuta desde ese dispatcher (lo cual está bien porque cd es parent_builtin y nunca llega aquí en un single cmd), pero si en un pipeline pones <code>cd</code>, el dispatcher no lo encontraría.
+  </div>
+</div>
+
+</div><!-- .wrapper -->
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
