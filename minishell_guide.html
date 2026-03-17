@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minishell — Guía de Arquitectura</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c23;
+    --border: #1e2430;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --accent3: #a8ff78;
+    --accent4: #c678dd;
+    --accent5: #e5c07b;
+    --text: #cdd6f4;
+    --text-muted: #6c7086;
+    --text-dim: #45475a;
+    --danger: #f38ba8;
+    --warning: #fab387;
+    --pipe-color: #ff6b35;
+    --fork-color: #c678dd;
+    --fd-color: #a8ff78;
+    --signal-color: #00e5ff;
+    --builtin-color: #e5c07b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,12,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 56px;
+    overflow-x: auto;
+  }
+
+  nav .logo {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    text-transform: uppercase;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 120px 2rem 60px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero .tag {
+    display: inline-block;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -2px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    min-width: 32px;
+  }
+
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.3px;
+  }
+
+  p { color: var(--text-muted); line-height: 1.7; margin-bottom: 0.75rem; }
+  p strong { color: var(--text); }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-accent-cyan { border-left: 3px solid var(--accent); }
+  .card-accent-orange { border-left: 3px solid var(--accent2); }
+  .card-accent-green { border-left: 3px solid var(--accent3); }
+  .card-accent-purple { border-left: 3px solid var(--accent4); }
+  .card-accent-yellow { border-left: 3px solid var(--accent5); }
+
+  .card h3 { margin-bottom: 0.5rem; }
+
+  /* ─── CODE ─── */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+
+  .kw { color: var(--accent4); }
+  .fn { color: var(--accent); }
+  .cm { color: var(--text-dim); font-style: italic; }
+  .str { color: var(--accent3); }
+  .num { color: var(--accent5); }
+  .op { color: var(--accent2); }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  /* ─── FLOW DIAGRAMS ─── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-start;
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+  }
+
+  .flow-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    padding: 0.6rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    min-width: 320px;
+    transition: border-color 0.2s;
+  }
+  .flow-item:hover { border-color: var(--accent); }
+
+  .flow-arrow {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin-left: 1.4rem;
+    position: relative;
+  }
+  .flow-arrow::after {
+    content: '▼';
+    position: absolute;
+    bottom: -8px;
+    left: -5px;
+    color: var(--text-dim);
+    font-size: 0.65rem;
+  }
+
+  .flow-badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .badge-cyan { background: rgba(0,229,255,0.12); color: var(--accent); }
+  .badge-orange { background: rgba(255,107,53,0.12); color: var(--accent2); }
+  .badge-green { background: rgba(168,255,120,0.12); color: var(--accent3); }
+  .badge-purple { background: rgba(198,120,221,0.12); color: var(--accent4); }
+  .badge-yellow { background: rgba(229,192,123,0.12); color: var(--accent5); }
+  .badge-red { background: rgba(243,139,168,0.12); color: var(--danger); }
+
+  /* ─── PIPE DIAGRAM ─── */
+  .pipe-diagram {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .pipe-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0.75rem;
+    flex-wrap: nowrap;
+    min-width: max-content;
+  }
+
+  .pipe-process {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  .pipe-process.parent { border-color: var(--accent4); color: var(--accent4); }
+  .pipe-process.child { border-color: var(--accent3); color: var(--accent3); }
+  .pipe-process.last-child { border-color: var(--accent2); color: var(--accent2); }
+
+  .pipe-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 4px;
+    min-width: 80px;
+  }
+
+  .pipe-line {
+    width: 100%;
+    height: 2px;
+    background: var(--pipe-color);
+    position: relative;
+  }
+  .pipe-line::after {
+    content: '▶';
+    position: absolute;
+    right: -6px;
+    top: -7px;
+    color: var(--pipe-color);
+    font-size: 0.7rem;
+  }
+
+  .pipe-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--pipe-color);
+    margin-top: 3px;
+    white-space: nowrap;
+  }
+
+  .pipe-fd-box {
+    background: rgba(168,255,120,0.08);
+    border: 1px solid rgba(168,255,120,0.2);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--fd-color);
+    white-space: nowrap;
+  }
+
+  /* ─── GRID ─── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* ─── TABLE ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+  }
+
+  th {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface); }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    font-size: 0.9rem;
+  }
+
+  .callout-info { background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.2); }
+  .callout-warn { background: rgba(250,179,135,0.06); border: 1px solid rgba(250,179,135,0.2); }
+  .callout-danger { background: rgba(243,139,168,0.06); border: 1px solid rgba(243,139,168,0.2); }
+  .callout-success { background: rgba(168,255,120,0.06); border: 1px solid rgba(168,255,120,0.2); }
+
+  .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .callout p { margin: 0; color: var(--text); }
+
+  /* ─── PROCESS BOX ─── */
+  .process-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 700px) { .process-split { grid-template-columns: 1fr; } }
+
+  .process-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+
+  .process-box.parent-box { border-top: 3px solid var(--accent4); }
+  .process-box.child-box { border-top: 3px solid var(--accent3); }
+
+  .process-box-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+  }
+
+  .process-box.parent-box .process-box-title { color: var(--accent4); }
+  .process-box.child-box .process-box-title { color: var(--accent3); }
+
+  .process-list {
+    list-style: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 2;
+  }
+
+  .process-list li::before {
+    content: '→ ';
+    color: var(--text-dim);
+  }
+
+  /* ─── FD TABLE ─── */
+  .fd-visual {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .fd-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .fd-row:last-child { border-bottom: none; }
+
+  .fd-num {
+    min-width: 32px;
+    color: var(--accent5);
+    font-weight: 700;
+  }
+
+  .fd-arrow { color: var(--text-dim); }
+  .fd-desc { color: var(--text); }
+  .fd-note { color: var(--text-muted); font-size: 0.72rem; margin-left: auto; }
+
+  /* ─── SIGNAL STATES ─── */
+  .signal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .signal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+  }
+
+  .signal-card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--signal-color);
+    margin-bottom: 0.5rem;
+  }
+
+  .signal-card p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ─── BIG PIPE DIAGRAM ─── */
+  .big-pipe {
+    background: #0a0d12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  .big-pipe-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+  }
+
+  .bp-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    min-width: max-content;
+  }
+
+  .bp-cmd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .bp-cmd-box {
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .bp-cmd-box.c1 { border-color: #61afef; color: #61afef; }
+  .bp-cmd-box.c2 { border-color: #c678dd; color: #c678dd; }
+  .bp-cmd-box.c3 { border-color: #e5c07b; color: #e5c07b; }
+  .bp-cmd-box.c4 { border-color: #a8ff78; color: #a8ff78; }
+
+  .bp-pid {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+  }
+
+  .bp-pipe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    padding: 0 8px;
+  }
+
+  .bp-pipe-line {
+    width: 100%;
+    height: 2px;
+    background: var(--pipe-color);
+    position: relative;
+    margin: 4px 0;
+  }
+  .bp-pipe-line::after {
+    content: '▶';
+    position: absolute;
+    right: -6px;
+    top: -7px;
+    color: var(--pipe-color);
+    font-size: 0.65rem;
+  }
+
+  .bp-fd-pair {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+  }
+
+  .bp-fd-write { color: var(--accent2); }
+  .bp-fd-read { color: var(--accent3); }
+
+  .bp-desc {
+    display: flex;
+    gap: 2rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .bp-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .bp-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  /* ─── SECTION TITLE COLORS ─── */
+  .t-cyan { color: var(--accent); }
+  .t-orange { color: var(--accent2); }
+  .t-green { color: var(--accent3); }
+  .t-purple { color: var(--accent4); }
+  .t-yellow { color: var(--accent5); }
+
+  /* ─── HORIZONTAL RULE ─── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">MINISHELL</div>
+  <a href="#overview">Visión General</a>
+  <a href="#flujo">Flujo Principal</a>
+  <a href="#tokenizer">Tokenizer</a>
+  <a href="#parser">Parser</a>
+  <a href="#expander">Expander</a>
+  <a href="#executor">Executor</a>
+  <a href="#pipeline">Pipelines</a>
+  <a href="#fd">FDs & Procesos</a>
+  <a href="#signals">Señales</a>
+  <a href="#builtins">Builtins</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="tag">42 MÁLAGA · MINISHELL · GUÍA TÉCNICA COMPLETA</div>
+  <h1>Cómo funciona<br><span>Minishell</span></h1>
+  <p>Guía técnica detallada de la arquitectura completa: desde que el usuario pulsa Enter hasta que el proceso termina. Con especial énfasis en el <strong>executor</strong>, <strong>pipelines</strong>, <strong>file descriptors</strong> y <strong>señales</strong>.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 1: VISIÓN GENERAL -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="overview">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="t-cyan">Visión General de la Arquitectura</h2>
+  </div>
+
+  <p>Minishell tiene <strong>5 grandes fases</strong> que ocurren en secuencia cada vez que el usuario introduce un comando. Cada fase transforma los datos de una forma específica:</p>
+
+  <div class="flow">
+    <div class="flow-item">
+      <span class="flow-badge badge-cyan">INPUT</span>
+      <span>Usuario escribe: <code>ls -la | grep foo &gt; out.txt</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-yellow">PRE-PARSER</span>
+      <span>Validación de sintaxis: quotes, pipes, redirects</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-orange">TOKENIZER</span>
+      <span>String → Lista enlazada de <code>t_token</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-purple">EXPANDER</span>
+      <span>Expande <code>$VAR</code> y <code>$?</code> en los tokens</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-green">PARSER</span>
+      <span>Tokens → Lista enlazada de <code>t_cmd</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-red">EXECUTOR</span>
+      <span>Ejecuta: fork, pipe, exec, wait</span>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>Las estructuras clave son <code>t_mini</code> (estado global del shell), <code>t_token</code> (lista de tokens) y <code>t_cmd</code> (lista de comandos ya parseados con sus FDs y args listos).</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 2: FLUJO PRINCIPAL -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="flujo">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="t-yellow">Flujo Principal — <code>minishell.c</code></h2>
+  </div>
+
+  <p>El bucle principal está en <code>shell_loop()</code> que llama repetidamente a <code>minishell_iteration()</code>:</p>
+
+  <div class="code-block">
+<span class="cm">// Cada iteración del shell hace esto:</span>
+<span class="fn">minishell_iteration</span>()
+  <span class="op">├─</span> set_signals_interactive()        <span class="cm">// SIGINT → reprint prompt, SIGQUIT → ignorar</span>
+  <span class="op">├─</span> readline(<span class="str">"Minishell$> "</span>)          <span class="cm">// Lee input del usuario (bloquea)</span>
+  <span class="op">├─</span> g_signal = <span class="num">0</span>                     <span class="cm">// Reset señal global</span>
+  <span class="op">├─</span> input_to_token(input, ...)       <span class="cm">// Pre-parse + tokenizar → mini->tokens</span>
+  <span class="op">├─</span> process_and_execute(mini)        <span class="cm">// Expandir + parsear + ejecutar</span>
+  <span class="op">└─</span> free_iteration_data(mini)        <span class="cm">// Limpiar tokens y cmds</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <p><code>readline()</code> devuelve <code>NULL</code> cuando el usuario pulsa <strong>Ctrl+D</strong> (EOF). En ese caso el shell imprime "exit" y termina limpiamente.</p>
+  </div>
+
+  <p><strong><code>process_and_execute()</code></strong> es el corazón que encadena las fases finales:</p>
+
+  <div class="code-block">
+<span class="fn">process_and_execute</span>(mini)
+  <span class="op">1.</span> ft_lstiter(tokens, expand_checker)   <span class="cm">// Marca qué tokens tienen $VAR</span>
+  <span class="op">2.</span> ft_lstiter(tokens, heredoc_bf_dollar) <span class="cm">// Heredoc delimiters NO expanden</span>
+  <span class="op">3.</span> expander(mini)                        <span class="cm">// Sustituye $VAR por su valor</span>
+  <span class="op">4.</span> ft_lstiter(tokens, trim_quotes)       <span class="cm">// Elimina comillas del contenido</span>
+  <span class="op">5.</span> init_cmd(&mini)                       <span class="cm">// Tokens → t_cmd (parser)</span>
+  <span class="op">6.</span> find_full_path(mini)                  <span class="cm">// Busca /usr/bin/ls etc.</span>
+  <span class="op">7.</span> executor_dispatch(mini)              <span class="cm">// ¡A ejecutar!</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 3: TOKENIZER -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="tokenizer">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="t-orange">Tokenizer — De String a Tokens</h2>
+  </div>
+
+  <p>El tokenizer transforma el string crudo en una <strong>lista enlazada de <code>t_token</code></strong>. Hay 3 funciones principales:</p>
+
+  <div class="grid-2">
+    <div class="card card-accent-orange">
+      <h3><code>smart_split()</code></h3>
+      <p>Divide el input en un array de strings, respetando comillas y operadores (<code>|</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code>).</p>
+    </div>
+    <div class="card card-accent-orange">
+      <h3><code>add_token_back()</code></h3>
+      <p>Por cada string del array, crea un nodo <code>t_token</code> con su tipo y lo añade al final de la lista.</p>
+    </div>
+  </div>
+
+  <p><strong>Tipos de token</strong>:</p>
+  <table>
+    <thead>
+      <tr><th>Tipo</th><th>Valor</th><th>String</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>WORD</code></td><td>0</td><td><code>ls</code>, <code>-la</code>, <code>foo</code></td><td>Palabra o argumento normal</td></tr>
+      <tr><td><code>PIPE</code></td><td>1</td><td><code>|</code></td><td>Separador de comandos en pipeline</td></tr>
+      <tr><td><code>REDIR_IN</code></td><td>2</td><td><code>&lt;</code></td><td>Redirección de entrada</td></tr>
+      <tr><td><code>REDIR_OUT</code></td><td>3</td><td><code>&gt;</code></td><td>Redirección de salida (truncate)</td></tr>
+      <tr><td><code>HEREDOC</code></td><td>4</td><td><code>&lt;&lt;</code></td><td>Heredoc</td></tr>
+      <tr><td><code>APPEND</code></td><td>5</td><td><code>&gt;&gt;</code></td><td>Redirección de salida (append)</td></tr>
+      <tr><td><code>ENV_VAR</code></td><td>6</td><td><code>$HOME</code></td><td>Variable de entorno (tras expansión)</td></tr>
+      <tr><td><code>EXIT_STATUS</code></td><td>7</td><td><code>$?</code></td><td>Exit status del último comando</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p><code>smart_split</code> usa <code>word_count()</code> primero para saber cuánta memoria alocar, y luego <code>fill_mem()</code> para rellenar el array. Los operadores (<code>|</code>, <code>&lt;</code>, <code>&gt;</code>) siempre se separan como tokens propios aunque no tengan espacios.</p>
+  </div>
+
+  <p>Ejemplo: <code>echo $HOME | grep /usr</code></p>
+
+  <div class="code-block">
+<span class="cm">// Lista resultante de tokens:</span>
+[WORD:"echo"] → [ENV_VAR:"$HOME"] → [PIPE:"|"] → [WORD:"grep"] → [WORD:"/usr"] → NULL
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 4: PARSER -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="parser">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="t-green">Parser — De Tokens a Comandos</h2>
+  </div>
+
+  <p>El parser (<code>init_cmd()</code>) recorre la lista de tokens y la convierte en una lista enlazada de <code>t_cmd</code>. Cada <code>t_cmd</code> representa un comando separado por <code>|</code>.</p>
+
+  <div class="code-block">
+<span class="cm">// Estructura t_cmd:</span>
+<span class="kw">typedef struct</span> s_cmd {
+  <span class="kw">char</span>   **args;       <span class="cm">// Array de argumentos: ["ls", "-la", NULL]</span>
+  <span class="kw">char</span>    *cmd_path;   <span class="cm">// Path completo: "/bin/ls"</span>
+  <span class="kw">char</span>    *infile;     <span class="cm">// Fichero de entrada (< file)</span>
+  <span class="kw">char</span>    *outfile;    <span class="cm">// Fichero de salida (> file)</span>
+  <span class="kw">int</span>      fd_in;      <span class="cm">// FD de entrada (0=stdin, o FD heredoc)</span>
+  <span class="kw">int</span>      fd_out;     <span class="cm">// FD de salida (1=stdout, o FD archivo)</span>
+  <span class="kw">int</span>      append;     <span class="cm">// 1 si >> (append), 0 si ></span>
+  <span class="kw">pid_t</span>    pid;        <span class="cm">// PID del proceso hijo</span>
+  <span class="kw">struct</span>  s_cmd *next; <span class="cm">// Siguiente comando en pipeline</span>
+} t_cmd;
+  </div>
+
+  <p>La función <code>handler_redirects()</code> procesa cada token del comando actual:</p>
+
+  <div class="flow">
+    <div class="flow-item">
+      <span class="flow-badge badge-green">TOKEN</span>
+      <span>¿Tipo del token actual?</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-orange">REDIR</span>
+      <span>tipo 2–5 → <code>set_redirects()</code>: abre FDs / heredoc</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-cyan">WORD</span>
+      <span>tipo 0,6,7 → <code>cmd->args[i++] = strdup(content)</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-purple">PIPE</span>
+      <span>tipo 1 → fin del cmd actual, crear nuevo <code>t_cmd</code></span>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <p><strong>Importante:</strong> cuando hay un <code>&lt;&lt;</code> (heredoc), el parser llama a <code>handle_heredoc()</code> en ese mismo momento (durante el parsing, antes de ejecutar). Crea un archivo temporal, lee líneas hasta el delimitador, y guarda el FD del archivo en <code>cmd->fd_in</code>.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 5: EXPANDER -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="expander">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="t-purple">Expander — Variables de Entorno</h2>
+  </div>
+
+  <p>El expander sustituye <code>$VARIABLE</code> y <code>$?</code> por sus valores reales. Se ejecuta <strong>antes del parser</strong>, directamente sobre los tokens.</p>
+
+  <div class="code-block">
+<span class="fn">expander</span>(mini)
+  <span class="op">└─</span> Para cada token con expand==1:
+      <span class="op">1.</span> get_after_dollar(content)   <span class="cm">// Encuentra posición del $</span>
+      <span class="op">2.</span> get_var_name(str)           <span class="cm">// Extrae nombre: "HOME", "?"</span>
+      <span class="op">3.</span> get_env_content(name, mini) <span class="cm">// Busca en lista t_env</span>
+      <span class="op">4.</span> replace_string(...)         <span class="cm">// Construye nuevo string</span>
+      <span class="op">5.</span> Repite hasta no haber más $ en el token
+      <span class="op">6.</span> Si content == "" → eliminar token de la lista
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-accent-purple">
+      <h3>¿Cuándo NO expande?</h3>
+      <p>Si el <code>$</code> está dentro de <strong>comillas simples</strong> (<code>''</code>), la función <code>expand_checker()</code> no pone <code>expand=1</code>. Las comillas dobles sí permiten expansión.</p>
+    </div>
+    <div class="card card-accent-purple">
+      <h3>Heredoc sin expansión</h3>
+      <p><code>heredoc_bf_dollar()</code> detecta si un token es el <strong>delimitador</strong> de un heredoc (<code>&lt;&lt;</code>) y fuerza <code>expand=0</code> en él, comportamiento correcto de bash.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 6: EXECUTOR -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="executor">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="t-orange">Executor — El Corazón del Shell</h2>
+  </div>
+
+  <p>El executor recibe la lista de <code>t_cmd</code> ya procesada y la ejecuta. El punto de entrada es <code>executor_dispatch()</code>:</p>
+
+  <div class="code-block">
+<span class="fn">executor_dispatch</span>(mini)
+  <span class="op">├─</span> <span class="kw">if</span> (cmd->next == NULL)
+  <span class="op">│    └─</span> <span class="fn">handle_single_cmd</span>()   <span class="cm">// Un solo comando</span>
+  <span class="op">└─</span> <span class="kw">else</span>
+       <span class="op">└─</span> <span class="fn">handle_pipeline_loop</span>() <span class="cm">// Varios comandos con pipes</span>
+  </div>
+
+  <hr>
+
+  <h3>Caso 1: Comando Único — <code>handle_single_cmd()</code></h3>
+
+  <p>Un comando único puede ser un <strong>builtin padre</strong> (cd, export, unset, exit) o un <strong>proceso externo</strong>.</p>
+
+  <div class="flow">
+    <div class="flow-item">
+      <span class="flow-badge badge-orange">DISPATCH</span>
+      <span><code>handle_single_cmd(mini, cmd)</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-yellow">CHECK</span>
+      <span>¿Es builtin Y es parent_builtin? (cd/export/unset/exit)</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-purple">SÍ → PARENT</span>
+      <span><code>execute_builtin_in_parent()</code> — sin fork, proceso padre</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-green">NO → fork()</span>
+      <span>Crear proceso hijo → <code>single_cmd_child_process()</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-cyan">PADRE</span>
+      <span><code>single_cmd_parent_wait()</code> → <code>waitpid()</code></span>
+    </div>
+  </div>
+
+  <div class="callout callout-danger">
+    <span class="callout-icon">🚨</span>
+    <p><strong>¿Por qué cd, export, unset y exit NO se forkean?</strong> Porque necesitan modificar el estado del <strong>proceso padre</strong>. Si haces <code>cd /tmp</code> en un hijo, el padre no cambia de directorio. Lo mismo con las variables de entorno y el exit.</p>
+  </div>
+
+  <div class="process-split">
+    <div class="process-box parent-box">
+      <div class="process-box-title">🔵 Proceso PADRE — builtins en padre</div>
+      <ul class="process-list">
+        <li>backup_std_fds() — guarda stdin/stdout</li>
+        <li>setup_redirections(cmd) — aplica FDs</li>
+        <li>execute_builtin_func() — ejecuta builtin</li>
+        <li>restore_std_fds() — restaura stdin/stdout</li>
+        <li>mini->exit_status = resultado</li>
+      </ul>
+    </div>
+    <div class="process-box child-box">
+      <div class="process-box-title">🟢 Proceso HIJO — fork()</div>
+      <ul class="process-list">
+        <li>set_signals_default() — restaura señales</li>
+        <li>setup_redirections(cmd) — aplica FDs</li>
+        <li>¿builtin? → execute_builtin_func() + exit</li>
+        <li>¿externo? → execute_system_binary()</li>
+        <li>execve(path, args, env) — reemplaza proceso</li>
+        <li>Si falla → exit(126 o 127)</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>La llamada <code>execve()</code> — El Momento Clave</h3>
+
+  <div class="code-block">
+<span class="cm">// execute_system_binary() — en el proceso HIJO</span>
+env = <span class="fn">env_to_array</span>(mini->env)    <span class="cm">// t_env* → char** para execve</span>
+<span class="fn">execve</span>(cmd->cmd_path, cmd->args, env)
+<span class="cm">// Si llegamos aquí, execve FALLÓ</span>
+<span class="fn">perror</span>(cmd->args[<span class="num">0</span>])
+<span class="fn">exit</span>(<span class="num">126</span>)                        <span class="cm">// Permission denied / not executable</span>
+
+<span class="cm">// Nota: si cmd_path es NULL (comando no encontrado):</span>
+<span class="fn">ft_fprintf</span>(<span class="num">2</span>, ERR_CMD_NOT_FOUND, cmd->args[<span class="num">0</span>])
+<span class="fn">exit</span>(<span class="num">127</span>)                        <span class="cm">// Command not found</span>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p><strong>execve reemplaza el proceso completamente.</strong> El código del hijo después de execve nunca se ejecuta (salvo si falla). La memoria, código y todo del hijo es sustituido por el programa nuevo.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 7: PIPELINES -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="pipeline">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="t-green">Pipelines — <code>handle_pipeline_loop()</code></h2>
+  </div>
+
+  <p>Este es el mecanismo más complejo. Cuando hay <strong>N comandos</strong> separados por <code>|</code>, el shell necesita <strong>N-1 pipes</strong> y <strong>N procesos hijos</strong>.</p>
+
+  <p>La función <code>handle_pipeline_loop()</code> itera sobre la lista de comandos:</p>
+
+  <div class="code-block">
+<span class="fn">handle_pipeline_loop</span>(mini)
+  prev_pipe = <span class="op">-1</span>       <span class="cm">// Al principio no hay pipe anterior</span>
+  current_cmd = mini->cmds
+
+  <span class="kw">while</span> (current_cmd != NULL):
+    <span class="op">1.</span> <span class="fn">init_pipe</span>()          <span class="cm">// Si hay cmd siguiente: pipe(pipe_fd)</span>
+    <span class="op">2.</span> <span class="fn">spawn_process</span>()      <span class="cm">// fork() → hijo o padre</span>
+    
+    <span class="kw">if</span> (hijo / pid == 0):
+      <span class="op">3a.</span> <span class="fn">pipe_child_process</span>()   <span class="cm">// Conectar FDs + ejecutar</span>
+    <span class="kw">else</span> (padre / pid > 0):
+      <span class="op">3b.</span> <span class="fn">pipe_parent_process</span>()  <span class="cm">// Cerrar extremos usados</span>
+      current_cmd = current_cmd->next
+  
+  <span class="op">4.</span> <span class="fn">wait_all_children</span>()   <span class="cm">// Esperar a TODOS los hijos</span>
+  </div>
+
+  <hr>
+
+  <h3>Ejemplo Visual: 4 Comandos con 3 Pipes</h3>
+  <p>Entrada: <code>cmd1 | cmd2 | cmd3 | cmd4</code></p>
+
+  <div class="big-pipe">
+    <div class="big-pipe-label">ITERACIÓN 1: cmd1 → pipe_fd1[0,1]</div>
+    <div class="bp-row">
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c1">PADRE</div>
+        <div class="bp-pid">proceso shell</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">fork() →</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c2">HIJO 1 (cmd1)</div>
+        <div class="bp-pid">pid1</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">stdout → pipe1[1]</span>
+          <span class="bp-fd-read">stdin = normal</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c3">pipe1[0] esperando</div>
+        <div class="bp-pid">para cmd2</div>
+      </div>
+    </div>
+
+    <div class="big-pipe-label" style="margin-top:1rem">ITERACIÓN 2: cmd2 → usa pipe1[0] como stdin, crea pipe_fd2[0,1]</div>
+    <div class="bp-row">
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c1">PADRE</div>
+        <div class="bp-pid">cierra pipe1[1]</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">fork() →</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c2">HIJO 2 (cmd2)</div>
+        <div class="bp-pid">pid2</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">stdout → pipe2[1]</span>
+          <span class="bp-fd-read">stdin ← pipe1[0]</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c3">pipe2[0] esperando</div>
+        <div class="bp-pid">para cmd3</div>
+      </div>
+    </div>
+
+    <div class="big-pipe-label" style="margin-top:1rem">ITERACIÓN 3: cmd3 → usa pipe2[0], crea pipe_fd3[0,1]</div>
+    <div class="bp-row">
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c1">PADRE</div>
+        <div class="bp-pid">cierra pipe2[1]</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">fork() →</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c2">HIJO 3 (cmd3)</div>
+        <div class="bp-pid">pid3</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">stdout → pipe3[1]</span>
+          <span class="bp-fd-read">stdin ← pipe2[0]</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c3">pipe3[0] esperando</div>
+        <div class="bp-pid">para cmd4</div>
+      </div>
+    </div>
+
+    <div class="big-pipe-label" style="margin-top:1rem">ITERACIÓN 4: cmd4 (ÚLTIMO) → usa pipe3[0], NO crea pipe nuevo</div>
+    <div class="bp-row">
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c1">PADRE</div>
+        <div class="bp-pid">cierra pipe3[1]</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">fork() →</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c4">HIJO 4 (cmd4)</div>
+        <div class="bp-pid">pid4</div>
+      </div>
+      <div class="bp-pipe">
+        <div class="bp-pipe-line"></div>
+        <div class="bp-fd-pair">
+          <span class="bp-fd-write">stdout = TERMINAL</span>
+          <span class="bp-fd-read">stdin ← pipe3[0]</span>
+        </div>
+      </div>
+      <div class="bp-cmd">
+        <div class="bp-cmd-box c4">→ output al usuario</div>
+        <div class="bp-pid">resultado final</div>
+      </div>
+    </div>
+
+    <div class="bp-desc">
+      <div class="bp-legend">
+        <div class="bp-legend-dot" style="background:#c678dd"></div>
+        PADRE: shell principal
+      </div>
+      <div class="bp-legend">
+        <div class="bp-legend-dot" style="background:#a8ff78"></div>
+        HIJO: proceso nuevo (fork)
+      </div>
+      <div class="bp-legend">
+        <div class="bp-legend-dot" style="background:#ff6b35"></div>
+        pipe[0]=lectura / pipe[1]=escritura
+      </div>
+      <div class="bp-legend">
+        <div class="bp-legend-dot" style="background:#e5c07b"></div>
+        ÚLTIMO hijo: stdout=terminal
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-danger">
+    <span class="callout-icon">🚨</span>
+    <p><strong>Regla crítica de pipes:</strong> Si el proceso padre no cierra <code>pipe[1]</code> (el extremo de escritura) después de hacer fork, el proceso hijo lector <strong>nunca recibirá EOF</strong> y quedará bloqueado esperando datos. Siempre hay que cerrar todos los extremos que no se usen.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 8: FDs Y PROCESOS -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="fd">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="t-cyan">File Descriptors y Procesos Hijo/Padre</h2>
+  </div>
+
+  <h3>¿Qué es un File Descriptor (FD)?</h3>
+  <p>Un FD es un número entero que el kernel asigna a cada archivo/pipe/socket abierto. Cada proceso tiene su propia tabla de FDs:</p>
+
+  <div class="fd-visual">
+    <div class="fd-row">
+      <span class="fd-num">0</span>
+      <span class="fd-arrow">→</span>
+      <span class="fd-desc">STDIN_FILENO — entrada estándar</span>
+      <span class="fd-note">por defecto: teclado</span>
+    </div>
+    <div class="fd-row">
+      <span class="fd-num">1</span>
+      <span class="fd-arrow">→</span>
+      <span class="fd-desc">STDOUT_FILENO — salida estándar</span>
+      <span class="fd-note">por defecto: terminal</span>
+    </div>
+    <div class="fd-row">
+      <span class="fd-num">2</span>
+      <span class="fd-arrow">→</span>
+      <span class="fd-desc">STDERR_FILENO — errores</span>
+      <span class="fd-note">por defecto: terminal</span>
+    </div>
+    <div class="fd-row">
+      <span class="fd-num">3+</span>
+      <span class="fd-arrow">→</span>
+      <span class="fd-desc">FDs de archivos, pipes, heredocs...</span>
+      <span class="fd-note">abiertos por el programa</span>
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>dup2() — La Función Mágica</h3>
+  <p><code>dup2(oldfd, newfd)</code> hace que <code>newfd</code> apunte al mismo archivo que <code>oldfd</code>. Si <code>newfd</code> ya estaba abierto, lo cierra primero. Así se redirigen stdin/stdout:</p>
+
+  <div class="code-block">
+<span class="cm">// Redirigir stdout al extremo de escritura de un pipe:</span>
+<span class="fn">dup2</span>(pipe_fd[<span class="num">1</span>], STDOUT_FILENO)  <span class="cm">// FD 1 ahora → pipe[1]</span>
+<span class="fn">close</span>(pipe_fd[<span class="num">1</span>])               <span class="cm">// Cerramos el duplicado extra</span>
+<span class="cm">// Ahora cualquier printf() o write(1,...) va al pipe</span>
+
+<span class="cm">// Redirigir stdin al extremo de lectura del pipe anterior:</span>
+<span class="fn">dup2</span>(prev_pipe, STDIN_FILENO)   <span class="cm">// FD 0 ahora → pipe anterior[0]</span>
+<span class="fn">close</span>(prev_pipe)                <span class="cm">// Cerramos el duplicado extra</span>
+<span class="cm">// Ahora cualquier read(0,...) lee del pipe</span>
+  </div>
+
+  <hr>
+
+  <h3>Ciclo de vida de FDs en <code>pipe_child_process()</code></h3>
+
+  <div class="code-block">
+<span class="fn">pipe_child_process</span>(mini, cmd, prev_pipe, pipe_fd)
+
+  <span class="cm">// 1. Restaurar señales a default (el hijo no ignora nada)</span>
+  <span class="fn">set_signals_default</span>()
+
+  <span class="cm">// 2. Conectar stdin al pipe anterior (si existe)</span>
+  <span class="kw">if</span> (prev_pipe != -<span class="num">1</span>):
+    <span class="fn">dup2</span>(prev_pipe, STDIN_FILENO)
+    <span class="fn">close</span>(prev_pipe)
+
+  <span class="cm">// 3. Conectar stdout al pipe siguiente (si no es el último)</span>
+  <span class="kw">if</span> (cmd->next):
+    <span class="fn">close</span>(pipe_fd[<span class="num">0</span>])          <span class="cm">// El hijo no lee de este pipe</span>
+    <span class="fn">dup2</span>(pipe_fd[<span class="num">1</span>], STDOUT_FILENO)
+    <span class="fn">close</span>(pipe_fd[<span class="num">1</span>])
+
+  <span class="cm">// 4. Ejecutar el comando (aplica redirections, luego exec)</span>
+  <span class="fn">execute_command_node</span>(mini, cmd)
+  <span class="cm">// ↑ Esta función llama execve → el hijo es reemplazado</span>
+  </div>
+
+  <hr>
+
+  <h3>Ciclo de vida de FDs en <code>pipe_parent_process()</code></h3>
+
+  <div class="code-block">
+<span class="fn">pipe_parent_process</span>(cmd, &prev_pipe, pipe_fd)
+
+  <span class="cm">// Cerrar el extremo del pipe ANTERIOR que ya no necesitamos</span>
+  <span class="kw">if</span> (*prev_pipe != -<span class="num">1</span>):
+    <span class="fn">close</span>(*prev_pipe)   <span class="cm">// El hijo ya lo tiene, nosotros no lo usamos</span>
+
+  <span class="cm">// Si hay siguiente comando: guardar el extremo de lectura</span>
+  <span class="kw">if</span> (cmd->next):
+    <span class="fn">close</span>(pipe_fd[<span class="num">1</span>])         <span class="cm">// El hijo escribe aquí, nosotros cerramos</span>
+    *prev_pipe = pipe_fd[<span class="num">0</span>]   <span class="cm">// Guardar lectura para el siguiente hijo</span>
+  </div>
+
+  <div class="callout callout-success">
+    <span class="callout-icon">✅</span>
+    <p><strong>La variable <code>prev_pipe</code></strong> es el hilo conductor: empieza en -1 y en cada iteración se actualiza con el <code>pipe_fd[0]</code> del pipe recién creado, para que el siguiente hijo lo use como stdin.</p>
+  </div>
+
+  <hr>
+
+  <h3>¿Qué pasa con los FDs de redirecciones?</h3>
+  <p>La función <code>setup_redirections()</code> se ejecuta dentro de cada hijo:</p>
+
+  <div class="grid-2">
+    <div class="card card-accent-cyan">
+      <h3>Entrada (<code>fd_in</code> o <code>infile</code>)</h3>
+      <p>Si <code>fd_in &gt; 0</code> (heredoc): <code>dup2(fd_in, 0)</code>.</p>
+      <p>Si <code>infile</code> existe: abre el archivo con <code>O_RDONLY</code> y hace <code>dup2</code>.</p>
+      <p>La redirección de pipe ya se hizo antes en <code>pipe_child_process</code>.</p>
+    </div>
+    <div class="card card-accent-orange">
+      <h3>Salida (<code>fd_out</code> o <code>outfile</code>)</h3>
+      <p>Si <code>fd_out &gt; 1</code>: <code>dup2(fd_out, 1)</code>.</p>
+      <p>Si <code>outfile</code> existe: abre con <code>O_WRONLY|O_CREAT|O_TRUNC</code> (o <code>O_APPEND</code>) y hace <code>dup2</code>.</p>
+    </div>
+  </div>
+
+  <p><strong>Prioridad de redirections:</strong> Las redirections explícitas (<code>&gt; file</code>) sobreescriben las de la pipe. Si tienes <code>cmd1 | cmd2 &gt; file</code>, cmd2 recibe datos de la pipe en stdin, pero escribe en el archivo en vez de en la siguiente pipe.</p>
+
+  <hr>
+
+  <h3>wait_all_children() — Recoger el Exit Status</h3>
+
+  <div class="code-block">
+<span class="fn">wait_all_children</span>(mini)
+  <span class="fn">set_signals_ignore</span>()          <span class="cm">// Padre ignora señales mientras espera</span>
+  
+  <span class="kw">for</span> each cmd in mini->cmds:
+    <span class="fn">waitpid</span>(cmd->pid, &status, <span class="num">0</span>)  <span class="cm">// Bloqueante: espera a que termine</span>
+  
+  <span class="cm">// Analizar el status del ÚLTIMO proceso</span>
+  <span class="kw">if</span> WIFEXITED(status):
+    exit_status = WEXITSTATUS(status)  <span class="cm">// Terminó normalmente: exit(N)</span>
+  <span class="kw">else if</span> WIFSIGNALED(status):
+    g_signal = <span class="num">128</span> + WTERMSIG(status) <span class="cm">// Murió por señal: 128+N</span>
+    <span class="kw">if</span> SIGINT: write("\n")
+    <span class="kw">if</span> SIGQUIT: write("Quit (core dumped)")
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>En bash, el exit status de un pipeline es el del <strong>último comando</strong>. Por eso solo se guarda el status del último <code>waitpid</code>. Los anteriores se esperan pero su status se descarta.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 9: SEÑALES -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="signals">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="t-cyan">Señales — Manejo de Ctrl+C y Ctrl+\</h2>
+  </div>
+
+  <p>Las señales son notificaciones asíncronas enviadas a procesos. En minishell hay <strong>5 estados distintos</strong> con diferentes configuraciones:</p>
+
+  <div class="signal-grid">
+    <div class="signal-card">
+      <div class="signal-card-title">INTERACTIVE</div>
+      <p><strong>Ctrl+C</strong> → handler_sigint_interactive: nueva línea + reprint prompt</p>
+      <p><strong>Ctrl+\</strong> → SIG_IGN (ignorado)</p>
+      <p><em>Estado: esperando input del usuario</em></p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-card-title">CHILD</div>
+      <p><strong>Ctrl+C</strong> → handler_signals_child: escribe "\n"</p>
+      <p><strong>Ctrl+\</strong> → SIG_IGN</p>
+      <p><em>Estado: padre esperando a hijo único</em></p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-card-title">DEFAULT</div>
+      <p><strong>Ctrl+C</strong> → SIG_DFL (comportamiento default)</p>
+      <p><strong>Ctrl+\</strong> → SIG_DFL</p>
+      <p><em>Estado: dentro del proceso hijo (antes de exec)</em></p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-card-title">HEREDOC</div>
+      <p><strong>Ctrl+C</strong> → handler_sigint_heredoc: cierra stdin</p>
+      <p><strong>Ctrl+\</strong> → SIG_IGN</p>
+      <p><em>Estado: leyendo heredoc</em></p>
+    </div>
+    <div class="signal-card">
+      <div class="signal-card-title">IGNORE</div>
+      <p><strong>Ctrl+C</strong> → SIG_IGN</p>
+      <p><strong>Ctrl+\</strong> → SIG_IGN</p>
+      <p><em>Estado: padre esperando a todos los hijos del pipeline</em></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>La Variable Global <code>g_signal</code></h3>
+
+  <div class="code-block">
+<span class="kw">int</span> g_signal;  <span class="cm">// Variable global — única permitida en minishell</span>
+
+<span class="cm">// Se setea en los handlers:</span>
+<span class="fn">handler_sigint_interactive</span>(<span class="kw">int</span> signum):
+  g_signal = signum    <span class="cm">// signum = SIGINT = 2</span>
+  write(<span class="num">1</span>, "\n", <span class="num">1</span>)
+  rl_on_new_line()
+  rl_replace_line(<span class="str">""</span>, <span class="num">0</span>)
+  rl_redisplay()       <span class="cm">// Redibuja el prompt vacío</span>
+
+<span class="cm">// Se usa para detectar interrupción:</span>
+<span class="kw">if</span> (g_signal != <span class="num">0</span>):
+  mini->exit_status = <span class="num">130</span>  <span class="cm">// 128 + 2 (SIGINT)</span>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <p>Los signal handlers son funciones muy restringidas — solo pueden llamar a funciones <strong>async-signal-safe</strong>. Por eso solo hacen <code>write()</code> y modifican la variable global. El procesamiento real ocurre en el hilo principal al revisar <code>g_signal</code>.</p>
+  </div>
+
+  <hr>
+
+  <h3>Flujo de Señales en Heredoc</h3>
+
+  <div class="flow">
+    <div class="flow-item">
+      <span class="flow-badge badge-cyan">USER</span>
+      <span>Pulsa Ctrl+C durante heredoc</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-orange">HANDLER</span>
+      <span><code>handler_sigint_heredoc</code>: g_signal=2, cierra STDIN</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-yellow">READ</span>
+      <span><code>readline()</code> devuelve NULL (stdin cerrado)</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-red">CHECK</span>
+      <span><code>hd_read_loop</code>: g_signal != 0 → <code>hd_signal_cleanup()</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-green">CLEANUP</span>
+      <span>Cierra FD, unlink temp, restaura stdin desde backup, return -1</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-cyan">RESTORE</span>
+      <span>Vuelve al prompt interactivo normal</span>
+    </div>
+  </div>
+
+  <p>Por eso existe <code>mini->stdin_backup = dup(STDIN_FILENO)</code> antes del heredoc — para poder restaurar stdin después de que el handler lo cierre.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECCIÓN 10: BUILTINS -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="builtins">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2 class="t-yellow">Builtins — Comandos Internos</h2>
+  </div>
+
+  <p>Los builtins son comandos implementados directamente en el shell. No son procesos externos.</p>
+
+  <table>
+    <thead>
+      <tr><th>Builtin</th><th>¿En padre?</th><th>¿Por qué?</th><th>Exit codes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>cd</code></td>
+        <td style="color:var(--accent3)">Sí</td>
+        <td>Cambia el directorio del proceso padre (chdir)</td>
+        <td>0 éxito / 1 error</td>
+      </tr>
+      <tr>
+        <td><code>export</code></td>
+        <td style="color:var(--accent3)">Sí</td>
+        <td>Modifica el entorno del proceso padre</td>
+        <td>0 éxito / 1 inválido</td>
+      </tr>
+      <tr>
+        <td><code>unset</code></td>
+        <td style="color:var(--accent3)">Sí</td>
+        <td>Elimina variables del entorno del padre</td>
+        <td>0 siempre</td>
+      </tr>
+      <tr>
+        <td><code>exit</code></td>
+        <td style="color:var(--accent3)">Sí</td>
+        <td>Termina el shell padre</td>
+        <td>N o 0 o 2</td>
+      </tr>
+      <tr>
+        <td><code>echo</code></td>
+        <td style="color:var(--accent2)">No</td>
+        <td>Solo escribe en stdout, no afecta estado</td>
+        <td>0 siempre</td>
+      </tr>
+      <tr>
+        <td><code>pwd</code></td>
+        <td style="color:var(--accent2)">No</td>
+        <td>Solo lee CWD, no modifica estado</td>
+        <td>0 / 1 error</td>
+      </tr>
+      <tr>
+        <td><code>env</code></td>
+        <td style="color:var(--accent2)">No</td>
+        <td>Solo imprime, no modifica estado</td>
+        <td>0 / 127</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h3>Detalles de <code>ft_echo</code></h3>
+  <div class="card card-accent-yellow">
+    <p><code>echo [-n] [args...]</code> — La flag <code>-n</code> suprime el salto de línea final. La función <code>check_flag()</code> detecta <code>-n</code>, <code>-nn</code>, <code>-nnn</code>, etc. (solo n's). <code>without_n()</code> imprime sin newline, <code>with_n()</code> imprime con newline.</p>
+  </div>
+
+  <h3>Detalles de <code>ft_exit</code></h3>
+  <div class="card card-accent-yellow">
+    <p><code>exit [N]</code> — Si N es numérico (<code>is_numeric_av()</code>), sale con código <code>N % 256</code>. Si hay más de un argumento numérico, error "too many arguments". Si el argumento no es numérico, sale con código 2.</p>
+  </div>
+
+  <h3>Detalles de <code>ft_cd</code></h3>
+  <div class="card card-accent-yellow">
+    <p><code>cd [path]</code> — Sin argumentos: va a <code>$HOME</code>. Con path: <code>chdir(path)</code>. Después actualiza <code>$PWD</code> con getcwd y guarda el anterior en <code>$OLDPWD</code>. Usa <code>create_new_env()</code> para actualizar las variables en la lista <code>t_env</code>.</p>
+  </div>
+
+  <h3>Detalles de <code>ft_export</code></h3>
+  <div class="card card-accent-yellow">
+    <p><code>export [VAR=value]</code> — Sin args: imprime todas las variables ordenadas alfabéticamente (<code>order_env()</code> con bubble sort). Con args: valida que el nombre sea alfanumérico+underscore (<code>is_valid()</code>), luego llama a <code>create_new_env()</code> que actualiza si existe o añade si no.</p>
+  </div>
+
+  <hr>
+
+  <h3>Diagrama: Builtins en Padre vs Hijo</h3>
+
+  <div class="flow">
+    <div class="flow-item">
+      <span class="flow-badge badge-orange">CALL</span>
+      <span><code>handle_single_cmd(mini, cmd)</code></span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-yellow">CHECK1</span>
+      <span><code>is_builtin(args[0])</code> && <code>is_parent_builtin(args[0])</code>?</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-purple">PADRE</span>
+      <span>backup_fds → setup_redirections → execute_builtin_func → restore_fds</span>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-item">
+      <span class="flow-badge badge-green">HIJO (fork)</span>
+      <span>set_signals_default → setup_redirections → execute_builtin_func → exit(code)</span>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">💡</span>
+    <p>Cuando un builtin se ejecuta en un <strong>pipeline</strong> (ej: <code>echo hola | cat</code>), siempre se ejecuta en el hijo porque todos los procesos de un pipeline se forkean. Solo cuando es el <strong>único comando</strong> y es parent_builtin se ejecuta en el padre directamente.</p>
+  </div>
+</section>
+
+<footer>
+  MINISHELL · Guía técnica generada para 42 Málaga · <code>ssoto-su</code>
+</footer>
+
+</body>
+</html>
