@@ -76,18 +76,18 @@ char *get_next_line(int fd)
 	{
 		if (!str_append_str(&ret, b))
 			return (NULL);
-	read_ret = read(fd, b, BUFFER_SIZE);
-	if (read_ret == -1)
-		return (NULL);
-	b[read_ret] = 0;
-	if (read_ret == 0)  // añadir la condicion de fin de lectura,
-	{
-		if (*ret)		 //si hay algo que devolver para el momento de final de lectura lo devolvemos
-			return(ret);
-		free(ret);		//si no lo hay liberamos y retornamos NULL
-		return(NULL);
-	}
-	tmp = ft_strchr(b, '\n');		//integramos la busqueda de \n dentro del bucle
+		read_ret = read(fd, b, BUFFER_SIZE);
+		if (read_ret == -1)
+			return (NULL);
+		b[read_ret] = 0;
+		if (read_ret == 0)  // añadir la condicion de fin de lectura,
+		{
+			if (*ret)		 //si hay algo que devolver para el momento de final de lectura lo devolvemos
+				return(ret);
+			free(ret);		//si no lo hay liberamos y retornamos NULL
+			return(NULL);
+		}
+		tmp = ft_strchr(b, '\n');		//integramos la busqueda de \n dentro del bucle
 	}
 	if (!str_append_mem(&ret, b, tmp - b + 1))
 	{

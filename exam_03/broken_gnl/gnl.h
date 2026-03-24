@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 09:48:31 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/22 13:27:04 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/03/24 19:01:35 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 3
 #endif
 
 char	*get_next_line(int fd);

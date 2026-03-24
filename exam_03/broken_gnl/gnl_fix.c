@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/18 23:16:50 by carmegon          #+#    #+#             */
-/*   Updated: 2026/01/30 12:32:59 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:34:07 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ size_t	ft_strlen(char *s)
 	?Existe el puntero?? (es NULL o no?) -> !s
 	?Tiene contenido -> !*s
 */
-	if (!s)
-		return (0);
-
-	while (*s)
+	while (s && *s)
 	{
 		s++;
 		res++;
