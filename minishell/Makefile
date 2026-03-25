@@ -25,30 +25,45 @@ SRC = \
 	$(SRC_DIR)/minishell.c \
 	$(SRC_DIR)/utils/free.c \
 	$(SRC_DIR)/utils/token_utils.c \
+	$(SRC_DIR)/utils/trim_quotes.c \
 	$(SRC_DIR)/lexer/tokenizer.c \
 	$(SRC_DIR)/lexer/smart_split.c \
+	$(SRC_DIR)/lexer/split_utils_wc.c \
 	$(SRC_DIR)/lexer/expander.c \
 	$(SRC_DIR)/lexer/expander_utils.c \
+	$(SRC_DIR)/lexer/expander_checker.c \
 	$(SRC_DIR)/parser/parser.c \
 	$(SRC_DIR)/parser/parser_utils.c \
 	$(SRC_DIR)/builtins/ft_pwd.c \
 	$(SRC_DIR)/builtins/ft_env.c \
 	$(SRC_DIR)/builtins/ft_echo.c \
 	$(SRC_DIR)/builtins/ft_export.c \
+	$(SRC_DIR)/builtins/exit_utils/utils_exit.c \
+	$(SRC_DIR)/builtins/utils_export/new_or_update_nodes.c \
+	$(SRC_DIR)/builtins/utils_export/utils_export.c \
+	$(SRC_DIR)/builtins/utils_export/order_nodes.c \
+	$(SRC_DIR)/builtins/utils_cd/utils_cd.c \
 	$(SRC_DIR)/builtins/ft_unset.c \
 	$(SRC_DIR)/builtins/ft_cd.c \
+	$(SRC_DIR)/builtins/ft_exit.c \
 	$(SRC_DIR)/parser/pre_pars.c \
 	$(SRC_DIR)/parser/pre_pars_utils.c\
+	$(SRC_DIR)/parser/pre_pars_utils_2.c\
 	$(SRC_DIR)/parser/envp.c\
 	$(SRC_DIR)/parser/envp_utils.c\
+	$(SRC_DIR)/parser/heredoc.c\
 	$(SRC_DIR)/executor/path.c\
 	$(SRC_DIR)/executor/executor_main.c\
 	$(SRC_DIR)/executor/handle_execution.c\
 	$(SRC_DIR)/executor/handle_redirections.c\
+	$(SRC_DIR)/executor/handle_redirections_utils.c\
 	$(SRC_DIR)/executor/handle_single.c\
 	$(SRC_DIR)/executor/handle_pipeline.c\
 	$(SRC_DIR)/executor/executor_builtins.c\
-				
+	$(SRC_DIR)/signal/signal.c\
+	$(SRC_DIR)/signal/signal_utils.c\
+	$(SRC_DIR)/signal/signal_heredoc.c\
+
 
 
 TOTAL_FILES := $(words $(SRC))

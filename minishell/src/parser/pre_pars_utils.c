@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pre_pars_utils.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ssoto-su <ssoto-su@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 20:28:18 by ssoto-su          #+#    #+#             */
-/*   Updated: 2026/02/04 19:46:27 by ssoto-su         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 int	is_space(char c)
@@ -20,17 +8,18 @@ int	is_space(char c)
 int	check_pipe(char *str)
 {
 	int	i;
+
 	i = 0;
 	while (str[i] && is_space(str[i]))
 		i++;
 	if (ft_strncmp(&str[i], "||", 2) == 0)
 	{
-		printf("Error: Syntax error near unexpected token '||'\n");
+		ft_fprintf(2, ERR_SYNTERR_TWO_PIPE);
 		return (0);
 	}
 	else if (str[i] == '|')
 	{
-		printf("Error: Syntax error near unexpected token '|'\n");
+		ft_fprintf(2, ERR_SYNTERR_ONE_PIPE);
 		return (0);
 	}
 	return (1);
@@ -43,14 +32,16 @@ int	check_pending_pipe(char *str)
 	i = ft_strlen(str);
 	while (i > 0 && is_space(str[i - 1]))
 		i--;
+	if (i == 0)
+		return (1);
 	if (str[i - 1] == '|')
 	{
 		if (str[i - 2] == '|')
 		{
-			printf("Error: Syntax error near unexpected token '||'\n");
+			ft_fprintf(2, ERR_SYNTERR_TWO_PIPE);
 			return (0);
 		}
-		printf("Error: Syntax error near unexpected token '|'\n");
+		ft_fprintf(2, ERR_SYNTERR_ONE_PIPE);
 		return (0);
 	}
 	return (1);
@@ -63,7 +54,6 @@ int	check_quotes(char *str)
 
 	quotes = 0;
 	i = 0;
-
 	while (str[i])
 	{
 		if ((str[i] == '"' || str[i] == '\'') && quotes == 0)
@@ -74,7 +64,7 @@ int	check_quotes(char *str)
 	}
 	if (quotes != 0)
 	{
-		printf("Error: Unclosed quotes\n");
+		ft_fprintf(2, ERR_UNCL_QUOTE);
 		return (0);
 	}
 	return (1);
@@ -97,7 +87,7 @@ int	check_forbidden(char *str)
 		{
 			if (str[i] == '\\' || str[i] == ';')
 			{
-				printf("Error: Forbidden character found\n");
+				ft_fprintf(2, ERR_FORBIDDEN_CHAR);
 				return (0);
 			}
 		}

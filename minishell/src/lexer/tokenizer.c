@@ -1,17 +1,12 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ssoto-su <ssoto-su@student.42malaga.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 15:55:36 by carmegon          #+#    #+#             */
-/*   Updated: 2026/02/23 15:52:29 by ssoto-su         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
+/**
+ * @brief Determines the token type from a raw string by comparing it against
+ *		known operator strings.
+ * @param line The raw token string.
+ * @return Token type integer: 0=WORD, 1=PIPE, 2=REDIR_IN, 3=REDIR_OUT,
+ *		4=HEREDOC, 5=APPEND.
+ */
 static int	get_type(char *line)
 {
 	if (ft_strncmp(line, "|", 2) == 0)
@@ -44,7 +39,7 @@ t_token	*create_token(char *str, int type)
 
 void	add_token_back(t_token **head, char *token)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	if (!head || !*head)
 	{
@@ -61,11 +56,13 @@ void	input_to_token(char *input, t_token **tokens, t_mini *mini)
 {
 	char	**temp_split;
 	int		i;
-	/* creo que debemos crear la estructura t_mini aqui y asignar la estructura
-	t_token al puntero de la estrutura t_mini. */
+
 	add_history(input);
-	if (!pre_pars(input))
+	if (pre_pars(input) == 0)
+	{
+		mini->exit_status = 2;
 		return ;
+	}
 	temp_split = smart_split(input);
 	i = 0;
 	while (temp_split && temp_split[i])
@@ -74,14 +71,22 @@ void	input_to_token(char *input, t_token **tokens, t_mini *mini)
 		i++;
 	}
 	free(temp_split);
-	ft_lstiter(*tokens, expand_checker);
-	ft_lstiter(*tokens, heredoc_bf_dollar);
 	mini->tokens = (*tokens);
+}
+
+void	process_and_execute(t_mini *mini)
+{
+	ft_lstiter(mini->tokens, expand_checker);
+	ft_lstiter(mini->tokens, heredoc_bf_dollar);
 	expander(mini);
-	ft_lstiter(*tokens, trim_quotes);
+	ft_lstiter(mini->tokens, trim_quotes);
 	init_cmd(&mini);
+	if (g_signal != 0)
+	{
+		mini->exit_status = 130;
+		g_signal = 0;
+		return ;
+	}
 	find_full_path(mini);
-	//print_cmds(mini->cmds);
 	executor_dispatch(mini);
-	//print_env(mini->env);
 }

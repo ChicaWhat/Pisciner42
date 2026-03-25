@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssoto-su <ssoto-su@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 11:36:34 by carmegon          #+#    #+#             */
-/*   Updated: 2026/02/19 16:59:41 by ssoto-su         ###   ########.fr       */
+/*   Updated: 2026/03/20 00:49:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ void	*free_token(char *str, char **env)
 void	free_struct_token(t_token **token)
 {
 	t_token	*temp;
-	
+
 	if (!token || !*token)
 		return ;
-	
 	while ((*token) != NULL)
 	{
 		temp = (*token)->next;
@@ -51,10 +50,9 @@ void	free_struct_token(t_token **token)
 void	free_env(t_env **envp)
 {
 	t_env	*temp;
-	
+
 	if (!envp || !*envp)
 		return ;
-	
 	while ((*envp) != NULL)
 	{
 		temp = (*envp)->next;
@@ -87,13 +85,13 @@ void	free_cmd(t_cmd **cmd)
 		free((*cmd));
 		(*cmd) = tmp;
 	}
+	*cmd = NULL;
 }
 
 void	free_struct_mini(t_mini *mini)
 {
 	if (!mini)
 		return ;
-
 	free_iteration_data(mini);
 	if (mini->env)
 		free_env(&mini->env);
@@ -101,6 +99,7 @@ void	free_struct_mini(t_mini *mini)
 	{
 		free_token(mini->input, mini->env_array);
 		mini->input = NULL;
+		mini->env_array = NULL;
 		mini->env = NULL;
 	}
 }

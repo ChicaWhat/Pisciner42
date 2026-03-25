@@ -1,4 +1,3 @@
-
 #include "../../includes/minishell.h"
 
 int	init_pipe(t_mini *mini, t_cmd *cmd, int prev_pipe, int *pipe_fd)
@@ -35,12 +34,13 @@ int	spawn_process(t_cmd *cmd, int prev_pipe, int *pipe_fd)
 	return (0);
 }
 
-void	pipe_child_process(t_mini *mini, t_cmd *cmd, int prev_pipe, int *pipe_fd)
+void	pipe_child_process(t_mini *mini, t_cmd *cmd, int prv_pipe, int *pipe_fd)
 {
-	if (prev_pipe != -1)
+	set_signals_default();
+	if (prv_pipe != -1)
 	{
-		dup2(prev_pipe, STDIN_FILENO);
-		close(prev_pipe);
+		dup2(prv_pipe, STDIN_FILENO);
+		close(prv_pipe);
 	}
 	if (cmd->next)
 	{
@@ -64,8 +64,9 @@ void	pipe_parent_process(t_cmd *cmd, int *prev_pipe, int *pipe_fd)
 
 void	wait_all_children(t_mini *mini)
 {
-	t_cmd *current_cmd;
+	t_cmd	*current_cmd;
 
+	set_signals_ignore();
 	current_cmd = mini->cmds;
 	while (current_cmd)
 	{
@@ -75,5 +76,13 @@ void	wait_all_children(t_mini *mini)
 	if (WIFEXITED(mini->exit_status))
 		mini->exit_status = WEXITSTATUS(mini->exit_status);
 	else if (WIFSIGNALED(mini->exit_status))
-		mini->exit_status = 128 + WTERMSIG(mini->exit_status);
+	{
+		g_signal = 128 + WTERMSIG(mini->exit_status);
+		if (WTERMSIG(mini->exit_status) == SIGINT)
+			write(1, "\n", 1);
+		else if (WTERMSIG(mini->exit_status) == SIGQUIT)
+			write(2, "Quit (core dumped)\n", 19);
+		mini->exit_status = g_signal;
+	}
+	set_signals_interactive();
 }

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pre_pars.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ssoto-su <ssoto-su@student.42malaga.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/12 18:08:15 by carmegon          #+#    #+#             */
-/*   Updated: 2026/02/04 19:46:32 by ssoto-su         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 void	update_quote_status(char c, char *quotes)
@@ -27,6 +15,13 @@ static int	invalid_neighbor(char c)
 	return (0);
 }
 
+/**
+ * @brief Checks that every redirection operator (<, >, <<, >>) is followed
+ *		by a valid filename token (not another operator, pipe or NUL).
+ * @param str The raw input string.
+ * @return 1 if all redirections are valid, 0 if a syntax error is found
+ *		(also prints an error message to stderr).
+ */
 static int	check_redirect(char *str)
 {
 	int		i;
@@ -47,7 +42,7 @@ static int	check_redirect(char *str)
 				j++;
 			if (invalid_neighbor(str[j]))
 			{
-				printf("Error: Syntax error near unexpected token\n");
+				ft_fprintf(2, ERR_SYNTERR_1D, str[i]);
 				return (0);
 			}
 		}
@@ -56,6 +51,12 @@ static int	check_redirect(char *str)
 	return (1);
 }
 
+/**
+ * @brief Checks for invalid double operators: || and &&.
+ * @param str The raw input string.
+ * @return 1 if no invalid doubles are found, 0 otherwise
+ *		(also prints an error message to stderr).
+ */
 static int	check_invalid_double(char *str)
 {
 	int		i;
@@ -68,14 +69,14 @@ static int	check_invalid_double(char *str)
 		update_quote_status(str[i], &quotes);
 		if (quotes == 0)
 		{
-			if (str[i] == '|' && str[i + 1] == '|')
+			if (str[i] == '|')
 			{
-				printf("Error: Syntax error near unexpected token `||'\n");
-				return (0);
+				if (!check_double_pipes(str, i))
+					return (0);
 			}
 			if (str[i] == '&' && str[i + 1] == '&')
 			{
-				printf("Error: Syntax error near unexpected token `&&'\n");
+				ft_fprintf(2, ERR_SYNTERR_REDIR, "&&");
 				return (0);
 			}
 		}
@@ -96,9 +97,9 @@ int	pre_pars(char *input)
 		return (0);
 	if (!check_redirect(input))
 		return (0);
-	if (!check_invalid_double(input))
-		return (0);
 	if (!check_forbidden(input))
+		return (0);
+	if (!check_invalid_double(input))
 		return (0);
 	return (1);
 }

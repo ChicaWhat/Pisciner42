@@ -1,51 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ssoto-su <ssoto-su@student.42malaga.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/20 20:12:38 by ssoto-su          #+#    #+#             */
-/*   Updated: 2026/01/28 18:16:21 by ssoto-su         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
-static char	*get_var_name(char *str)
-{
-	int		i;
-
-	if (str[0] == '?')
-		return (ft_strdup("?"));
-	else
-	{
-		i = 0;
-		while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-			i++;
-		return (ft_substr(str, 0, i));
-	}
-}
-
-static char	*get_env_content(char *var_name, t_mini *mini)
-{
-	int		len_name;
-	t_env	*temp;
-
-	temp = mini->env;
-	if (ft_strncmp(var_name, "?", 2) == 0)
-		return (ft_itoa(mini->exit_status));
-	len_name = ft_strlen(var_name);
-	while (temp)
-	{
-		if ((ft_strncmp(temp->key, var_name, len_name) == 0)
-			&& (len_name == (int)ft_strlen(temp->key)))
-			return (ft_strdup(temp->value));
-		temp = temp->next;
-	}
-	return (ft_strdup(""));
-}
-
+/**
+ * @brief Builds a new string by replacing a substring inside str with replace.
+ * @param str Original string.
+ * @param replace Replacement string to insert.
+ * @param start Index in str where the replacement begins (points to the '$').
+ * @param len_remove Number of characters to remove from str 
+ * (variable name + '$').
+ * @return Heap-allocated new string with the substitution applied,
+ *		or NULL on malloc failure.
+ */
 static char	*replace_string(char *str, char *replace, int start, int len_remove)
 {
 	int		len_total;
@@ -61,6 +25,14 @@ static char	*replace_string(char *str, char *replace, int start, int len_remove)
 	return (new_str);
 }
 
+/**
+ * @brief Resolves and substitutes a single $VAR or $? occurrence in a token.
+ *		Frees the old token content and replaces it with the expanded string.
+ * @param token Pointer to the token whose content contains the variable.
+ * @param dollar_pos Index of the character right after '$' in token->content.
+ * @param mini Pointer to the main shell structure, used to look up env values.
+ * @return void
+ */
 static void	perform_expansion(t_token *token, int dollar_pos, t_mini *mini)
 {
 	char	*var_name;
@@ -87,24 +59,68 @@ static void	perform_expansion(t_token *token, int dollar_pos, t_mini *mini)
 	free(env_value);
 }
 
+/**
+ * @brief Expands all $VAR occurrences inside a single token, looping until
+ *		no more '$' characters are found in the content.
+ * @param tmp Pointer to the token to expand.
+ * @param mini Pointer to the main shell structure.
+ * @return void
+ */
+static void	expand_one_token(t_token *tmp, t_mini *mini)
+{
+	int	dollar_pos;
+
+	dollar_pos = get_after_dollar(tmp->content);
+	while (dollar_pos != 0)
+	{
+		perform_expansion(tmp, dollar_pos, mini);
+		tmp->expand = 0;
+		dollar_pos = get_after_dollar(tmp->content);
+	}
+}
+
+/**
+ * @brief Removes a token from the linked list and frees its memory.
+ *		Used when a variable expands to an empty string.
+ * @param mini Pointer to the main shell structure 
+ * (updates mini->tokens if needed).
+ * @param prev Pointer to the token before curr, or NULL if curr is the head.
+ * @param curr Pointer to the token to remove.
+ * @return Pointer to the token that follows the removed one.
+ */
+static t_token	*remove_empty_token(t_mini *mini, t_token *prev, t_token *curr)
+{
+	t_token	*next;
+
+	next = curr->next;
+	if (prev)
+		prev->next = next;
+	else
+		mini->tokens = next;
+	free(curr->content);
+	free(curr);
+	return (next);
+}
+
 void	expander(t_mini *mini)
 {
-	int		dollar_pos;
 	t_token	*tmp;
+	t_token	*prev;
 
 	tmp = mini->tokens;
+	prev = NULL;
 	while (tmp)
 	{
 		if (tmp->expand == 1)
 		{
-			dollar_pos = get_after_dollar(tmp->content);
-			while (dollar_pos != 0)
+			expand_one_token(tmp, mini);
+			if (tmp->content[0] == '\0')
 			{
-				perform_expansion(tmp, dollar_pos, mini);
-				tmp->expand = 0;
-				dollar_pos = get_after_dollar(tmp->content);
+				tmp = remove_empty_token(mini, prev, tmp);
+				continue ;
 			}
 		}
+		prev = tmp;
 		tmp = tmp->next;
 	}
 }

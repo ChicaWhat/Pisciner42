@@ -1,4 +1,3 @@
-
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
@@ -27,7 +26,7 @@ typedef struct s_env
 	char			*key;
 	char			*value;
 	struct s_env	*next;
-} t_env;
+}	t_env;
 
 typedef struct s_cmd
 {
@@ -53,6 +52,7 @@ typedef struct s_mini
 	t_token	*tokens;
 	t_cmd	*cmds;
 	// ---STATUS---
+	int		is_interactive;
 	int		exit_status; // Símbolo especial $?
 	// ---CONTROL---
 	int		stdin_backup;

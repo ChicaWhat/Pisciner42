@@ -1,14 +1,15 @@
 #include "../../includes/minishell.h"
 
-int	more_than_2_av(char **av)
+int	try_getcwd(t_mini *mini, char *path)
 {
-	int	i;
-	if (!av || !*av)
-		return (0);
-	i = 0;
-	while (av[i])
-		i++;
-	return (i);
+	if (path)
+		create_new_env(mini, ft_strdup("PWD"), ft_strdup(path));
+	else
+	{
+		ft_fprintf(2, ERR_CD_RETDIR);
+		return (1);
+	}
+	return (0);
 }
 
 int	change_directory(t_mini *mini, char **av)
@@ -17,94 +18,72 @@ int	change_directory(t_mini *mini, char **av)
 
 	if (chdir(av[0]) == -1)
 	{
-		perror("cd");
+		chdir_fail(av);
 		return (1);
 	}
 	else
 	{
 		new_pwd = getcwd(NULL, 0);
-		if (new_pwd)
-		{
-			create_new_env(mini, ft_strdup("PWD"), ft_strdup(new_pwd));
-			free(new_pwd);
-		}
-		else
-		{
-			perror("cd");
-			return (1);
-		}
+		try_getcwd(mini, new_pwd);
 	}
+	free(new_pwd);
 	return (0);
-}
-
-char	*update_home_directory(t_mini *mini)
-{
-	char	*home;
-	
-	home = get_env_val(strdup("HOME"), mini);
-	if (chdir(home) == -1)
-		return (NULL);
-	else
-	{
-		if (home)
-			create_new_env(mini, ft_strdup("HOME"), ft_strdup(home));
-		else
-		{
-			perror("cd");
-			return (NULL);
-		}
-	}
-	home = get_env_val(strdup("HOME"), mini);
-	return (home);
 }
 
 int	go_home(t_mini *mini)
 {
 	char	*home;
 
-	home = update_home_directory(mini);
+	home = get_env_val("HOME", mini);
 	if (!home)
-		return (1);
-	else
 	{
-		create_new_env(mini, ft_strdup("PWD"), ft_strdup(home));
-		free(home);
+		ft_fprintf(2, ERR_CD_NO_HOME);
+		return (1);
 	}
+	if (chdir(home) == -1)
+	{
+		ft_fprintf(2, ERR_CD_NO_FIL_OR_DIR, home);
+		free(home);
+		return (1);
+	}
+	try_getcwd(mini, home);
 	return (0);
 }
 
-int	old_pwd(t_mini *mini)
+static int	how_many_av(t_mini *mini, char **av)
 {
-	char	*old_pwd;
+	int	status;
 
-	old_pwd = getcwd(NULL, 0);
-	if (old_pwd)
-	{
-		create_new_env(mini, ft_strdup("OLDPWD"), ft_strdup(old_pwd));
-		free(old_pwd);
-	}
+	status = -1;
+	if (count_av(av) == 1)
+		status = go_home(mini);
+	else if (count_av(av) == 2)
+		status = change_directory(mini, &av[1]);
 	else
 	{
-		perror("cd");
-		return (1);
+		ft_fprintf(2, ERR_CD_TOO_MANY);
+		status = 1;
 	}
-	return (0);
+	return (status);
 }
 
 int	ft_cd(t_mini *mini, char **av)
 {
-	if (!av || !*av)
-	return (0);
+	char	*path;
+	int		status;
 
-	old_pwd(mini);
-	if (more_than_2_av(av) == 1)
-		go_home(mini);
-	else if (more_than_2_av(av) == 2)
-		change_directory(mini, &av[1]);
-	else
+	if (!av || !*av)
+		return (0);
+
+	path = getcwd(NULL, 0);
+	status = how_many_av(mini, av);
+	if (status == 1)
 	{
-		perror("cd");
+		free(path);
 		return (1);
 	}
+	else if (status == 0 && path)
+		create_new_env(mini, ft_strdup("OLDPWD"), ft_strdup(path));
+	free(path);
 	return (0);
 }
