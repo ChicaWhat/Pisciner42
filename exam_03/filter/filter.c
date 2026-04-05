@@ -20,7 +20,7 @@ int main(int ac, char **av)
 {
 		int i = 0;
 		char *buf = (char *)malloc(9999 * sizeof(char));
-		ssize_t byte;
+		int byte;
 		int j = 0;
 
 		if (!buf)

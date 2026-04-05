@@ -33,7 +33,10 @@ void	print_sol(int *board, int size)
 	}
 	fprintf(stdout, "\n");
 }
-
+/* 
+	? x = row
+	? y = col
+*/
 int	is_valid(int *board, int x, int y)
 {
 	int	i;
@@ -43,7 +46,7 @@ int	is_valid(int *board, int x, int y)
 	{
 		if (y == board[i])
 			return (0);
-		else if ((abs(i - x) == (abs(board[i] - y))))
+		else if ((ft_abs(i - x) == (ft_abs(board[i] - y))))
 			return (0);
 		i++;
 	}

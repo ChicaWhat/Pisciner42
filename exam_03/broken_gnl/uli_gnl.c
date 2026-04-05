@@ -1,6 +1,6 @@
 #include "gnl.h"
-//CAMBIAR LOS SIZE_T POR INTS PARA EVITAR OVERFLOWS CON NUMEROS NEGATIVOS
-//:%s/size_t/int
+//CAMBIAR LOS int POR INTS PARA EVITAR OVERFLOWS CON NUMEROS NEGATIVOS
+//:%s/int/int
 
 char *ft_strchr(char *s, int c)
 {
@@ -97,3 +97,4 @@ char *get_next_line(int fd)
 	ft_memmove(b, tmp + 1, ft_strlen(tmp + 1)); // una ultima llamada a memmove sumando a tmp + 1 para updatear sin añadir el salto de lina
 	return ret;
 }
+

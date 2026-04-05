@@ -15,7 +15,7 @@
 char	*ft_strchr(char *s, int c)
 {
 	int	i = 0;
-	while (s[i] != c)
+	while (s[i] && s[i] != c)
 		i++;
 	if (s[i] == c)
 		return (s + i);
@@ -25,15 +25,19 @@ char	*ft_strchr(char *s, int c)
 
 void	*ft_memcpy(void *dest, const void *src, int n)
 {
-	while (--n > 0)
-		((char *)dest)[n - 1] = ((char *)src)[n - 1];
+	int i = 0;
+	while (i < n)
+	{
+		((char *)dest)[i] = ((char *)src)[i];
+		i++;
+	}
 	return (dest);
 }
 
 int	ft_strlen(char *s)
 {
 	int	res = 0;
-	while (*s)
+	while (s && *s)
 	{
 		s++;
 		res++;
@@ -47,7 +51,8 @@ int	str_append_mem(char **s1, char *s2, int size2)
 	char	*tmp = malloc(size2 + size1 + 1);
 	if (!tmp)
 		return (0);
-	ft_memcpy(tmp, *s1, size1);
+	if (*s1)
+		ft_memcpy(tmp, *s1, size1);
 	ft_memcpy(tmp + size1, s2, size2);
 	tmp[size1 + size2] = '\0';
 	free(*s1);
@@ -62,15 +67,17 @@ int	str_append_str(char **s1, char *s2)
 
 void	*ft_memmove(void *dest, const void *src, int n)
 {
-	if (dest > src)
-		return (ft_memmove(dest, src, n));
+	if (dest < src)
+		return (ft_memcpy(dest, src, n));
 	else if (dest == src)
 		return (dest);
-	int	i = ft_strlen((char *)src) - 1;
-	while (i >= 0)
+	else
 	{
-		((char *)dest)[i] = ((char *)src)[i];
-		i--;
+		while (n > 0) //! CUIDADO AQUÍ: es un > porque estamos comprobando la longitud aquí y COPIANDO por posición. Por eso, dentro del bucle tengo un [n - 1]
+		{
+			((char *)dest)[n - 1] = ((char *)src)[n - 1];
+			n--;
+		}
 	}
 	return (dest);
 }
@@ -88,11 +95,34 @@ char	*get_next_line(int fd)
 		if (read_ret == -1)
 			return (NULL);
 		b[read_ret] = 0;
+		if (read_ret == 0)
+		{
+			if (*ret)
+				return (ret);
+			free(ret);
+			return (NULL);
+		}
+		tmp = ft_strchr(b, '\n');
 	}
 	if (!str_append_mem(&ret, b, tmp - b + 1))
 	{
 		free(ret);
 		return (NULL);
 	}
+	ft_memmove(b, tmp + 1, ft_strlen(tmp + 1) + 1);
 	return (ret);
+}
+
+int	main(void)
+{
+	int fd = open("text.txt", O_RDONLY);
+	char *line = get_next_line(fd);
+	while (line)
+	{
+		printf("%s", line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	return (0);
 }

@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-//:%s/size_t/int
+//:%s/int/int
 
 char	*ft_strchr(char *s, int c)
 {
@@ -28,10 +28,10 @@ char	*ft_strchr(char *s, int c)
 		return (NULL);
 }
 //! FALLO 2. Cambiamos el metodo de copiar.
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, int n)
 {
     // Aqui recreamos lo que hace la funcion de mempcy: copiar de izquierda a derecha.
-	size_t i = 0;
+	int i = 0;
 	while (i < n)
 	{
 		((char *)dest)[i] = ((char *)src)[i];
@@ -41,9 +41,9 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 }
 
 //! FALLO 3. Debo de proteger la funcion de punteros NULL. Por eso, me falta una comprobacion antes de entrar en el while. 
-size_t	ft_strlen(char *s)
+int	ft_strlen(char *s)
 {
-	size_t	res = 0;
+	int	res = 0;
 /* 
 	?Existe el puntero?? (es NULL o no?) -> !s
 	?Tiene contenido -> !*s
@@ -57,9 +57,9 @@ size_t	ft_strlen(char *s)
 }
 // !FALLO 3. Si *s1 tiene contenido, entremos en esa primera llamada al memcpy.
 // !Si no, pasamos directamente a la segunda llamada.
-int	str_append_mem(char **s1, char *s2, size_t size2)
+int	str_append_mem(char **s1, char *s2, int size2)
 {
-	size_t	size1 = ft_strlen(*s1);
+	int	size1 = ft_strlen(*s1);
 	char	*tmp = malloc(size2 + size1 + 1);
 	if (!tmp)
 		return (0);
@@ -77,7 +77,7 @@ int	str_append_str(char **s1, char *s2)
 	return (str_append_mem(s1, s2, ft_strlen(s2)));
 }
 //! FALLO 4. Cambiamos las condiciones para recrear el comportamiento de la funcion de memmove y quitamos la llamada a la funcion strlen.
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, int n)
 {
 	if (dest < src)
 		return (ft_memcpy(dest, src, n));
@@ -128,7 +128,7 @@ char	*get_next_line(int fd)
 	return (ret);
 }
 
-int	main(void)
+/* int	main(void)
 {
 	int fd;
 	char *line;
@@ -140,39 +140,4 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}
-
-
-
-/* char	*get_next_line(int fd)
-{
-	static char	b[BUFFER_SIZE + 1] = "";
-	char	*ret = NULL;
-	char	*tmp;
-	int read_ret;
-	while (1)
-	{
-		tmp = ft_strchr(b, '\n');
-		if (tmp)
-			break ;
-		if (!str_append_str(&ret, b))
-			return (NULL);
-		read_ret = read(fd, b, BUFFER_SIZE);
-		if (read_ret == -1)
-			return (NULL);
-		b[read_ret] = 0;
-		if (read_ret == 0)
-		{
-			ft_memmove(b, ret, ft_strlen(ret));
-			free(ret);
-			return (*b)? b : NULL;
-		}
-	}
-	if (!str_append_mem(&ret, b, tmp - b + 1))
-	{
-		free(ret);
-		return (NULL);
-	}
-	ft_memmove(b, tmp + 1, ft_strlen(tmp + 1) + 1);
-	return (ret);
 } */

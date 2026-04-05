@@ -5,7 +5,7 @@
 int	ft_abs(int n)
 {
 	if (n < 0)
-			return (-n);
+		return (-n);
 	return (n);
 }
 
@@ -15,53 +15,53 @@ void	print_sol(int *board, int size)
 
 	while (i < size)
 	{
-			printf("%d", board[i]);
-			if (i < (size - 1))
-					printf(" ");
-			i++;
+		printf("%d", board[i]);
+		if (i < (size - 1))
+			printf(" ");
+		i++;
 	}
 	printf("\n");
 }
 
-int	is_valid(int *board, int x, int y)
+int	is_valid(int *board, int y, int x)
 {
-	int i = 0;
-	while (i < x)
+	int prev_y = 0;
+	while (prev_y < y)
 	{
-			if (y == board[i])
-					return (0);
-			else if ((ft_abs(i - x)) == (ft_abs(board[i] - y)))
-					return (0);
-			i++;
+		if (x == board[prev_y])
+			return (0);
+		else if ((ft_abs(prev_y - y)) == (ft_abs(board[prev_y] - x)))
+			return (0);
+		prev_y++;
 	}
 	return (1);
 }
 
-void	n_queens(int *board, int x, int size)
+void	n_queens(int *board, int y, int size)
 {
-		int i = 0;
-		if (x == size)
+	int x = 0;
+	if (y == size)
+	{
+		print_sol(board, size);
+		return ;
+	}
+	while (x < size)
+	{
+		if (is_valid(board, y, x))
 		{
-				print_sol(board, size);
-				return ;
+			board[y] = x;
+			n_queens(board, y + 1, size);
 		}
-		while (i < size)
-		{
-				if (is_valid(board, x, i))
-				{
-						board[x] = i;
-						n_queens(board, x + 1, size);
-				}
-				i++;
-		}
+		x++;
+	}
 }
 
 int	main(int ac, char **av)
 {
-		if (ac != 2)
-				return (1);
-		int size = atoi(av[1]);
-		int board[size];
-		n_queens(board, 0, size);
-		return (0);
+	if (ac != 2)
+		return (1);
+	int size = atoi(av[1]);
+	int board[size];
+	n_queens(board, 0, size);
+	return (0);
 }
