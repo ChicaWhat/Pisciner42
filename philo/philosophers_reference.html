@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philosophers — Guía de Referencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #e8c547;
+    --accent2: #7b5ea7;
+    --accent3: #3ecfb2;
+    --text: #e8e8f0;
+    --muted: #8888aa;
+    --danger: #e05c5c;
+    --code-bg: #0d0d15;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(123,94,167,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 200px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(232,197,71,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: inline-block;
+    border: 1px solid rgba(232,197,71,0.3);
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 560px;
+    font-weight: 400;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+  .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    min-width: 40px;
+  }
+  .section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .section-header h2 span { color: var(--accent3); }
+
+  /* CONCEPT CARDS */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 768px) { .concept-grid { grid-template-columns: 1fr; } }
+
+  .concept-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .concept-card:hover { border-color: var(--accent2); }
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent3));
+  }
+  .concept-card h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
+  .concept-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-family: 'Syne', sans-serif;
+    font-weight: 400;
+  }
+  .concept-card p strong { color: var(--text); }
+
+  /* ANALOGY BOX */
+  .analogy {
+    background: rgba(62,207,178,0.06);
+    border: 1px solid rgba(62,207,178,0.2);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .analogy-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .analogy p {
+    font-size: 0.88rem !important;
+    color: var(--text) !important;
+  }
+
+  /* WARNING / INFO BOX */
+  .warn-box {
+    background: rgba(224,92,92,0.08);
+    border: 1px solid rgba(224,92,92,0.25);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+  .warn-box strong { color: var(--danger); }
+
+  /* FUNCTION CARDS */
+  .func-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .func-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .func-card:hover { border-color: var(--accent); }
+
+  .func-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .func-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .badge-mem { background: rgba(232,197,71,0.15); color: var(--accent); border: 1px solid rgba(232,197,71,0.3); }
+  .badge-time { background: rgba(62,207,178,0.15); color: var(--accent3); border: 1px solid rgba(62,207,178,0.3); }
+  .badge-thread { background: rgba(123,94,167,0.2); color: #b899e8; border: 1px solid rgba(123,94,167,0.4); }
+  .badge-mutex { background: rgba(224,92,92,0.15); color: #e89999; border: 1px solid rgba(224,92,92,0.3); }
+  .badge-io { background: rgba(100,149,237,0.15); color: #99b4e8; border: 1px solid rgba(100,149,237,0.3); }
+
+  .func-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    flex: 1;
+  }
+  .func-arrow {
+    color: var(--muted);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+  }
+  .func-card.open .func-arrow { transform: rotate(90deg); }
+
+  .func-body {
+    padding: 24px;
+    display: none;
+  }
+  .func-card.open .func-body { display: block; }
+
+  .func-signature {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    color: var(--accent3);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .func-signature .ret { color: var(--accent); }
+  .func-signature .param { color: #b899e8; }
+
+  .func-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+  .func-desc strong { color: var(--text); }
+
+  .func-example-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .code-block {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    color: #c8c8e8;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .c-kw { color: #e8c547; }
+  .c-fn { color: #7bc8e8; }
+  .c-str { color: #b8e87b; }
+  .c-cmt { color: #556; font-style: italic; }
+  .c-num { color: #e87b7b; }
+  .c-type { color: #b899e8; }
+
+  /* ROADMAP */
+  .roadmap { display: grid; gap: 0; }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    min-height: 80px;
+  }
+  @media (max-width: 768px) { .phase { grid-template-columns: 1fr; } }
+
+  .phase-label {
+    padding: 24px 24px 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    position: relative;
+    border-right: 2px solid var(--border);
+  }
+  .phase-label::after {
+    content: '';
+    position: absolute;
+    right: -7px; top: 28px;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(232,197,71,0.5);
+  }
+  .phase-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .phase-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .phase-content {
+    padding: 24px 0 24px 32px;
+  }
+  .phase-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .tasks { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .tasks li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .tasks li::before {
+    content: '→';
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .tasks li strong { color: var(--text); font-weight: 600; }
+  .tasks li code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8em;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--accent3);
+  }
+
+  .subtasks {
+    list-style: none;
+    margin-top: 8px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .subtasks li {
+    font-size: 0.82rem;
+    color: #666688;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .subtasks li::before {
+    content: '·';
+    color: var(--accent3);
+    flex-shrink: 0;
+  }
+  .subtasks li code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8em;
+    background: rgba(255,255,255,0.04);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #99b4e8;
+  }
+
+  /* TABLE */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .ref-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ref-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+  .ref-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .ref-table td:first-child {
+    font-family: 'Space Mono', monospace;
+    color: var(--accent3);
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .ref-table td:nth-child(2) { color: var(--text); }
+  .ref-table td:nth-child(3) { color: var(--muted); font-size: 0.82rem; }
+
+  /* FOOTER */
+  .footer {
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+  .tag-yellow { background: rgba(232,197,71,0.12); color: var(--accent); border: 1px solid rgba(232,197,71,0.2); }
+  .tag-purple { background: rgba(123,94,167,0.12); color: #b899e8; border: 1px solid rgba(123,94,167,0.2); }
+  .tag-teal { background: rgba(62,207,178,0.1); color: var(--accent3); border: 1px solid rgba(62,207,178,0.2); }
+  .tag-red { background: rgba(224,92,92,0.1); color: #e89999; border: 1px solid rgba(224,92,92,0.2); }
+
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .phase-group-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(123,94,167,0.2);
+  }
+
+  .open-all-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+  .open-all-btn:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-tag">42 School — Philosophers</span>
+  <h1>Hilos, Mutex<br>&amp; <span>Concurrencia</span></h1>
+  <p>Guía de referencia completa: conceptos clave, funciones autorizadas y roadmap del proyecto.</p>
+  <div class="tag-row">
+    <span class="tag tag-yellow">pthreads</span>
+    <span class="tag tag-purple">mutex</span>
+    <span class="tag tag-teal">concurrencia</span>
+    <span class="tag tag-red">data race</span>
+    <span class="tag tag-yellow">C</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===================== SECCIÓN 1: CONCEPTOS ===================== -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Conceptos <span>Fundamentales</span></h2>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h3>🧵 ¿Qué es un Hilo (Thread)?</h3>
+        <p>Un <strong>hilo</strong> es la unidad mínima de ejecución dentro de un proceso. Varios hilos pueden vivir dentro del mismo proceso y <strong>comparten la misma memoria</strong> (heap, variables globales, descriptores de archivo), pero cada uno tiene su propia pila (stack) y su propio contador de programa.</p>
+        <p style="margin-top:10px;">Crear un hilo es más barato que crear un proceso (fork), y la comunicación entre hilos es directa porque comparten memoria.</p>
+        <div class="analogy">
+          <div class="analogy-label">Analogía</div>
+          <p>Una cocina con varios cocineros. El local (proceso) es el mismo, la nevera y los utensilios (memoria) son compartidos, pero cada cocinero (hilo) trabaja en paralelo en su propia tarea.</p>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <h3>🔄 ¿Qué es la Concurrencia?</h3>
+        <p>La <strong>concurrencia</strong> es la capacidad de que varias tareas progresen <strong>al mismo tiempo o aparentándolo</strong>. En un sistema con un solo núcleo, los hilos se turnan muy rápido (interleaving). En varios núcleos, pueden correr realmente en paralelo (paralelismo).</p>
+        <p style="margin-top:10px;">En Philosophers, todos los filósofos "viven" al mismo tiempo porque cada uno es un hilo independiente.</p>
+        <div class="analogy">
+          <div class="analogy-label">Analogía</div>
+          <p>Varios navegadores abiertos en tu ordenador: aunque solo tengas un procesador, todos "avanzan" porque el SO les va dando turnos de CPU muy rápidamente.</p>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <h3>🔒 ¿Qué es un Mutex?</h3>
+        <p>Un <strong>mutex</strong> (Mutual Exclusion) es un mecanismo de sincronización que garantiza que solo <strong>un hilo a la vez</strong> pueda acceder a una sección crítica o recurso compartido. Si el mutex está bloqueado, el hilo que intenta bloquearlo de nuevo espera.</p>
+        <p style="margin-top:10px;">En Philosophers, cada tenedor es un mutex: solo un filósofo puede cogerlo a la vez.</p>
+        <div class="analogy">
+          <div class="analogy-label">Analogía</div>
+          <p>El baño de una oficina con llave. Solo entra una persona. Las demás esperan fuera. Cuando sale, la siguiente puede entrar y girar el pestillo.</p>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <h3>⚠️ ¿Qué es un Data Race?</h3>
+        <p>Un <strong>data race</strong> ocurre cuando dos hilos acceden a la misma memoria al mismo tiempo y al menos uno de ellos la <strong>modifica</strong>, sin ninguna sincronización. El resultado es indeterminado y puede cambiar en cada ejecución.</p>
+        <p style="margin-top:10px;">Tu programa <strong>no debe tener ningún data race</strong>. Protege siempre el acceso a datos compartidos con mutex.</p>
+        <div class="analogy">
+          <div class="analogy-label">Analogía</div>
+          <p>Dos personas editando el mismo documento Word sin Google Docs: si las dos guardan a la vez, los cambios de una machacan los de la otra. Resultado impredecible.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h3>💀 Deadlock</h3>
+        <p>Un <strong>deadlock</strong> es cuando dos o más hilos se bloquean mutuamente esperando recursos que el otro tiene. Ninguno avanza: están atascados para siempre.</p>
+        <p style="margin-top:10px;"><strong>Ejemplo en Philosophers:</strong> Filósofo 1 coge tenedor izquierdo, Filósofo 2 coge tenedor derecho. Ambos esperan al otro. Nadie come. Todos mueren.</p>
+        <div class="analogy">
+          <div class="analogy-label">Analogía</div>
+          <p>Dos coches en una calle estrecha frente a frente. Ninguno puede avanzar porque el otro bloquea el paso. Deadlock vehicular.</p>
+        </div>
+      </div>
+
+      <div class="concept-card">
+        <h3>⏱️ Timestamp en milisegundos</h3>
+        <p>El proyecto requiere imprimir marcas de tiempo en milisegundos desde el inicio. <code style="font-family:'Space Mono',monospace;font-size:0.85em;color:var(--accent3);">gettimeofday()</code> devuelve segundos y microsegundos. Necesitas convertir: <strong>ms = segundos × 1000 + microsegundos / 1000</strong>.</p>
+        <p style="margin-top:10px;">Guarda el tiempo de inicio al arrancar y en cada log resta el tiempo actual menos el de inicio.</p>
+        <div class="analogy">
+          <div class="analogy-label">Analogía</div>
+          <p>Un cronómetro de atletismo: no te dice la hora del día, sino cuántos milisegundos han pasado desde que sonó el pistoleto de salida.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <strong>⚠ Regla de oro:</strong> Todo dato compartido entre hilos que pueda ser modificado DEBE estar protegido por un mutex. Si no lo proteges, tienes un data race y el proyecto falla.
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 2: FUNCIONES ===================== -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Funciones <span>Autorizadas</span></h2>
+    </div>
+
+    <button class="open-all-btn" onclick="toggleAll()">EXPANDIR TODAS</button>
+
+    <div class="func-grid">
+
+      <!-- memset -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mem">Memoria</span>
+          <span class="func-name">memset</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">void *</span><span class="c-fn">memset</span>(<span class="param">void *s</span>, <span class="param">int c</span>, <span class="param">size_t n</span>)</div>
+          <p class="func-desc">Rellena los primeros <strong>n bytes</strong> de la memoria apuntada por <strong>s</strong> con el valor <strong>c</strong> (convertido a unsigned char). Se usa para inicializar bloques de memoria a cero u otro valor.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-type">t_philo</span> *philo = <span class="c-fn">malloc</span>(<span class="c-kw">sizeof</span>(<span class="c-type">t_philo</span>));
+<span class="c-fn">memset</span>(philo, <span class="c-num">0</span>, <span class="c-kw">sizeof</span>(<span class="c-type">t_philo</span>)); <span class="c-cmt">// Inicializa todo a cero</span>
+<span class="c-cmt">// Equivalente a: philo->id = 0; philo->meals = 0; ...</span></div>
+        </div>
+      </div>
+
+      <!-- printf -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-io">I/O</span>
+          <span class="func-name">printf</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">printf</span>(<span class="param">const char *format</span>, <span class="param">...</span>)</div>
+          <p class="func-desc">Imprime texto formateado en stdout. En Philosophers debes imprimir los estados con el formato exacto: <strong>timestamp_ms X acción</strong>. <strong>⚠ Importante:</strong> el printf debe estar protegido con un mutex para que los mensajes no se mezclen entre hilos.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-fn">pthread_mutex_lock</span>(&data->print_mutex);
+<span class="c-fn">printf</span>(<span class="c-str">"%lld %d is eating\n"</span>, get_timestamp(), philo->id);
+<span class="c-fn">pthread_mutex_unlock</span>(&data->print_mutex);</div>
+        </div>
+      </div>
+
+      <!-- malloc -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mem">Memoria</span>
+          <span class="func-name">malloc</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">void *</span><span class="c-fn">malloc</span>(<span class="param">size_t size</span>)</div>
+          <p class="func-desc">Reserva <strong>size</strong> bytes en el heap y devuelve un puntero. Devuelve NULL si falla. Toda la memoria reservada debe liberarse con <strong>free()</strong> antes de que el programa termine. No se permiten memory leaks.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-type">t_philo</span> *philos = <span class="c-fn">malloc</span>(<span class="c-kw">sizeof</span>(<span class="c-type">t_philo</span>) * n_philos);
+<span class="c-kw">if</span> (!philos)
+    <span class="c-kw">return</span> (<span class="c-fn">handle_error</span>(<span class="c-str">"malloc failed"</span>));</div>
+        </div>
+      </div>
+
+      <!-- free -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mem">Memoria</span>
+          <span class="func-name">free</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">void</span> <span class="c-fn">free</span>(<span class="param">void *ptr</span>)</div>
+          <p class="func-desc">Libera la memoria previamente reservada con malloc. Si ptr es NULL, no hace nada. Debes liberar <strong>todo</strong> lo que reservas: array de filósofos, array de mutex de tenedores, etc.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-fn">free</span>(data->philos);     <span class="c-cmt">// Array de filósofos</span>
+<span class="c-fn">free</span>(data->forks);      <span class="c-cmt">// Array de mutexes de tenedores</span>
+data->philos = <span class="c-num">NULL</span>;   <span class="c-cmt">// Buena práctica: anular el puntero</span></div>
+        </div>
+      </div>
+
+      <!-- write -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-io">I/O</span>
+          <span class="func-name">write</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">ssize_t</span> <span class="c-fn">write</span>(<span class="param">int fd</span>, <span class="param">const void *buf</span>, <span class="param">size_t count</span>)</div>
+          <p class="func-desc">Escribe <strong>count</strong> bytes del buffer en el descriptor de archivo <strong>fd</strong>. Más bajo nivel que printf. Útil para mensajes de error: <code style="font-family:'Space Mono',monospace;font-size:0.82em;color:var(--accent3);">write(2, "Error\n", 6)</code> escribe en stderr. En Philosophers generalmente usarás printf para los logs.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-fn">write</span>(<span class="c-num">2</span>, <span class="c-str">"Error: invalid arguments\n"</span>, <span class="c-num">25</span>);
+<span class="c-cmt">// fd=2 es stderr. fd=1 es stdout.</span></div>
+        </div>
+      </div>
+
+      <!-- usleep -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-time">Tiempo</span>
+          <span class="func-name">usleep</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">usleep</span>(<span class="param">useconds_t usec</span>)</div>
+          <p class="func-desc">Suspende el hilo durante <strong>usec microsegundos</strong> (1ms = 1000 µs). <strong>⚠ Problema importante:</strong> usleep no es preciso, puede dormir más tiempo del pedido. Para time_to_die muy ajustado, no hagas <code style="font-family:'Space Mono',monospace;color:var(--accent3);font-size:0.82em;">usleep(time_to_eat * 1000)</code> directamente; usa un bucle que compruebe el tiempo real.</p>
+          <div class="func-example-label">Ejemplo en Philosophers — usleep preciso</div>
+          <div class="code-block"><span class="c-kw">void</span> <span class="c-fn">precise_sleep</span>(<span class="c-type">long</span> ms, <span class="c-type">t_data</span> *data)
+{
+    <span class="c-type">long</span> start = <span class="c-fn">get_time</span>();
+    <span class="c-kw">while</span> (<span class="c-fn">get_time</span>() - start < ms)
+    {
+        <span class="c-kw">if</span> (<span class="c-fn">is_dead</span>(data))  <span class="c-cmt">// alguien murió → parar</span>
+            <span class="c-kw">break</span>;
+        <span class="c-fn">usleep</span>(<span class="c-num">500</span>);  <span class="c-cmt">// dormir en trozos de 0.5ms</span>
+    }
+}</div>
+        </div>
+      </div>
+
+      <!-- gettimeofday -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-time">Tiempo</span>
+          <span class="func-name">gettimeofday</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">gettimeofday</span>(<span class="param">struct timeval *tv</span>, <span class="param">struct timezone *tz</span>)</div>
+          <p class="func-desc">Obtiene el tiempo actual con precisión de microsegundos. La struct timeval contiene <strong>tv_sec</strong> (segundos) y <strong>tv_usec</strong> (microsegundos). Pasa NULL al segundo argumento. Es la función base para todo el timing del proyecto.</p>
+          <div class="func-example-label">Ejemplo en Philosophers — función get_time</div>
+          <div class="code-block"><span class="c-type">long</span> <span class="c-fn">get_time</span>(<span class="c-kw">void</span>)
+{
+    <span class="c-kw">struct</span> <span class="c-type">timeval</span> tv;
+    <span class="c-fn">gettimeofday</span>(&tv, <span class="c-num">NULL</span>);
+    <span class="c-kw">return</span> (tv.tv_sec * <span class="c-num">1000</span> + tv.tv_usec / <span class="c-num">1000</span>);
+    <span class="c-cmt">// Devuelve milisegundos desde epoch UNIX</span>
+}
+
+<span class="c-cmt">// Para el timestamp del log:</span>
+<span class="c-type">long</span> timestamp = <span class="c-fn">get_time</span>() - data->start_time;</div>
+        </div>
+      </div>
+
+      <!-- pthread_create -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-thread">Thread</span>
+          <span class="func-name">pthread_create</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_create</span>(<span class="param">pthread_t *thread</span>, <span class="param">const pthread_attr_t *attr</span>, <span class="param">void *(*routine)(void *)</span>, <span class="param">void *arg</span>)</div>
+          <p class="func-desc">Crea un nuevo hilo que ejecuta la función <strong>routine</strong> con el argumento <strong>arg</strong>. Devuelve 0 en éxito. El identificador del hilo se guarda en <strong>thread</strong>. Pasa NULL a attr para atributos por defecto. En Philosophers creas un hilo por filósofo.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-kw">int</span> i = <span class="c-num">0</span>;
+<span class="c-kw">while</span> (i < data->n_philos)
+{
+    <span class="c-kw">if</span> (<span class="c-fn">pthread_create</span>(&philos[i].thread, <span class="c-num">NULL</span>,
+            philosopher_routine, &philos[i]) != <span class="c-num">0</span>)
+        <span class="c-kw">return</span> (<span class="c-fn">handle_error</span>(<span class="c-str">"pthread_create failed"</span>));
+    i++;
+}
+<span class="c-cmt">// philosopher_routine es la función de vida del filósofo</span></div>
+        </div>
+      </div>
+
+      <!-- pthread_detach -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-thread">Thread</span>
+          <span class="func-name">pthread_detach</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_detach</span>(<span class="param">pthread_t thread</span>)</div>
+          <p class="func-desc">Marca un hilo como "detached": cuando termina, sus recursos se liberan automáticamente sin necesidad de hacer join. <strong>No puedes hacer join a un hilo detached.</strong> En Philosophers generalmente usarás <strong>pthread_join</strong> en vez de detach para esperar a que todos los filósofos terminen.</p>
+          <div class="func-example-label">Cuándo usarlo</div>
+          <div class="code-block"><span class="c-cmt">// Opción A: detach (no puedes esperar su fin explícitamente)</span>
+<span class="c-fn">pthread_detach</span>(philo->thread);
+
+<span class="c-cmt">// Opción B (más común en Philosophers): join</span>
+<span class="c-fn">pthread_join</span>(philo->thread, <span class="c-num">NULL</span>);
+<span class="c-cmt">// → espera a que el hilo termine</span></div>
+        </div>
+      </div>
+
+      <!-- pthread_join -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-thread">Thread</span>
+          <span class="func-name">pthread_join</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_join</span>(<span class="param">pthread_t thread</span>, <span class="param">void **retval</span>)</div>
+          <p class="func-desc">Espera (bloquea) hasta que el hilo especificado termine. Si retval no es NULL, guarda el valor de retorno del hilo. En Philosophers lo usas al final para esperar a todos los filósofos antes de limpiar y salir. Evita que el main acabe antes que los hilos.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-cmt">// Esperar a que todos los filósofos terminen</span>
+i = <span class="c-num">0</span>;
+<span class="c-kw">while</span> (i < data->n_philos)
+{
+    <span class="c-fn">pthread_join</span>(philos[i].thread, <span class="c-num">NULL</span>);
+    i++;
+}
+<span class="c-cmt">// A partir de aquí podemos liberar memoria</span></div>
+        </div>
+      </div>
+
+      <!-- pthread_mutex_init -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mutex">Mutex</span>
+          <span class="func-name">pthread_mutex_init</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_mutex_init</span>(<span class="param">pthread_mutex_t *mutex</span>, <span class="param">const pthread_mutexattr_t *attr</span>)</div>
+          <p class="func-desc">Inicializa un mutex. Debe llamarse <strong>antes de usar</strong> el mutex. Pasa NULL al segundo argumento para atributos por defecto. En Philosophers inicializas un mutex por tenedor (forks) y al menos uno para el print y otro para controlar la muerte.</p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-cmt">// Inicializar mutex de cada tenedor</span>
+i = <span class="c-num">0</span>;
+<span class="c-kw">while</span> (i < data->n_philos)
+{
+    <span class="c-kw">if</span> (<span class="c-fn">pthread_mutex_init</span>(&data->forks[i], <span class="c-num">NULL</span>) != <span class="c-num">0</span>)
+        <span class="c-kw">return</span> (<span class="c-fn">handle_error</span>(<span class="c-str">"mutex_init failed"</span>));
+    i++;
+}
+<span class="c-fn">pthread_mutex_init</span>(&data->print_mutex, <span class="c-num">NULL</span>);
+<span class="c-fn">pthread_mutex_init</span>(&data->death_mutex, <span class="c-num">NULL</span>);</div>
+        </div>
+      </div>
+
+      <!-- pthread_mutex_destroy -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mutex">Mutex</span>
+          <span class="func-name">pthread_mutex_destroy</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_mutex_destroy</span>(<span class="param">pthread_mutex_t *mutex</span>)</div>
+          <p class="func-desc">Libera los recursos asociados a un mutex. Debe llamarse cuando ya no se necesita el mutex, normalmente durante la limpieza final. <strong>No destruyas un mutex mientras esté bloqueado o haya hilos esperándolo.</strong></p>
+          <div class="func-example-label">Ejemplo en Philosophers</div>
+          <div class="code-block"><span class="c-kw">void</span> <span class="c-fn">cleanup</span>(<span class="c-type">t_data</span> *data)
+{
+    <span class="c-kw">int</span> i = <span class="c-num">0</span>;
+    <span class="c-kw">while</span> (i < data->n_philos)
+        <span class="c-fn">pthread_mutex_destroy</span>(&data->forks[i++]);
+    <span class="c-fn">pthread_mutex_destroy</span>(&data->print_mutex);
+    <span class="c-fn">pthread_mutex_destroy</span>(&data->death_mutex);
+    <span class="c-fn">free</span>(data->forks);
+    <span class="c-fn">free</span>(data->philos);
+}</div>
+        </div>
+      </div>
+
+      <!-- pthread_mutex_lock -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mutex">Mutex</span>
+          <span class="func-name">pthread_mutex_lock</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_mutex_lock</span>(<span class="param">pthread_mutex_t *mutex</span>)</div>
+          <p class="func-desc">Bloquea el mutex. Si ya está bloqueado por otro hilo, <strong>espera</strong> hasta que se libere. Marca el inicio de la sección crítica. Todo lo que pongas entre lock y unlock solo lo ejecuta un hilo a la vez. <strong>⚠ Nunca hagas lock dos veces seguidas del mismo mutex desde el mismo hilo</strong> → deadlock.</p>
+          <div class="func-example-label">Ejemplo en Philosophers — coger un tenedor</div>
+          <div class="code-block"><span class="c-cmt">// Coger tenedor izquierdo</span>
+<span class="c-fn">pthread_mutex_lock</span>(&data->forks[philo->left_fork]);
+<span class="c-fn">print_status</span>(philo, <span class="c-str">"has taken a fork"</span>);
+
+<span class="c-cmt">// Coger tenedor derecho</span>
+<span class="c-fn">pthread_mutex_lock</span>(&data->forks[philo->right_fork]);
+<span class="c-fn">print_status</span>(philo, <span class="c-str">"has taken a fork"</span>);
+
+<span class="c-cmt">// Ahora puede comer (tiene ambos tenedores)</span></div>
+        </div>
+      </div>
+
+      <!-- pthread_mutex_unlock -->
+      <div class="func-card">
+        <div class="func-header" onclick="toggle(this)">
+          <span class="func-badge badge-mutex">Mutex</span>
+          <span class="func-name">pthread_mutex_unlock</span>
+          <span class="func-arrow">▶</span>
+        </div>
+        <div class="func-body">
+          <div class="func-signature"><span class="ret">int</span> <span class="c-fn">pthread_mutex_unlock</span>(<span class="param">pthread_mutex_t *mutex</span>)</div>
+          <p class="func-desc">Desbloquea el mutex, permitiendo que otro hilo en espera lo bloquee. Marca el fin de la sección crítica. <strong>Siempre desbloquea en el mismo hilo que lo bloqueó.</strong> Empareja siempre cada lock con su unlock.</p>
+          <div class="func-example-label">Ejemplo en Philosophers — soltar tenedores</div>
+          <div class="code-block"><span class="c-cmt">// Terminar de comer → soltar tenedores</span>
+<span class="c-fn">pthread_mutex_unlock</span>(&data->forks[philo->left_fork]);
+<span class="c-fn">pthread_mutex_unlock</span>(&data->forks[philo->right_fork]);
+<span class="c-fn">print_status</span>(philo, <span class="c-str">"is sleeping"</span>);
+<span class="c-fn">precise_sleep</span>(data->time_to_sleep, data);</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabla resumen -->
+    <div style="margin-top:40px;">
+      <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">RESUMEN RÁPIDO</div>
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Función</th>
+            <th>Para qué sirve</th>
+            <th>Cuándo usarla en Philosophers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>memset</td><td>Inicializar memoria a un valor</td><td>Inicializar structs de filósofos</td></tr>
+          <tr><td>printf</td><td>Imprimir texto formateado</td><td>Logs de estado (protegido con mutex)</td></tr>
+          <tr><td>malloc</td><td>Reservar memoria en heap</td><td>Arrays de filósofos y tenedores</td></tr>
+          <tr><td>free</td><td>Liberar memoria heap</td><td>Limpieza al terminar</td></tr>
+          <tr><td>write</td><td>Escribir en file descriptor</td><td>Mensajes de error (stderr)</td></tr>
+          <tr><td>usleep</td><td>Dormir N microsegundos</td><td>Simular comer/dormir (con loop preciso)</td></tr>
+          <tr><td>gettimeofday</td><td>Tiempo actual en µs</td><td>Calcular timestamps y detectar muerte</td></tr>
+          <tr><td>pthread_create</td><td>Crear un hilo</td><td>Un hilo por filósofo</td></tr>
+          <tr><td>pthread_detach</td><td>Liberar hilo al terminar</td><td>Alternativa a join (menos común aquí)</td></tr>
+          <tr><td>pthread_join</td><td>Esperar fin de un hilo</td><td>Main espera a todos los filósofos</td></tr>
+          <tr><td>pthread_mutex_init</td><td>Inicializar mutex</td><td>Init tenedores, print_mutex, death_mutex</td></tr>
+          <tr><td>pthread_mutex_destroy</td><td>Destruir mutex</td><td>Limpieza final</td></tr>
+          <tr><td>pthread_mutex_lock</td><td>Bloquear (entrar sección crítica)</td><td>Coger tenedor, leer/escribir datos compartidos</td></tr>
+          <tr><td>pthread_mutex_unlock</td><td>Desbloquear (salir sección crítica)</td><td>Soltar tenedor, liberar datos compartidos</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 3: ROADMAP ===================== -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Roadmap del <span>Proyecto</span></h2>
+    </div>
+
+    <div class="roadmap">
+
+      <div style="padding:0 0 40px 0; border-bottom:1px solid rgba(255,255,255,0.04); margin-bottom:40px;">
+        <div class="phase-group-label">FASE 1 — FUNDAMENTOS</div>
+
+        <div class="phase">
+          <div class="phase-label">
+            <span class="phase-num">Paso 1</span>
+            <span class="phase-title">Parsing</span>
+          </div>
+          <div class="phase-content">
+            <h4>Leer y validar los argumentos de entrada</h4>
+            <ul class="tasks">
+              <li><strong>Verificar número de argumentos:</strong> deben ser 4 o 5 (con el nombre del programa son 5 o 6 en argv).
+                <ul class="subtasks">
+                  <li>Si argc es distinto de 5 o 6 → imprimir error y salir</li>
+                </ul>
+              </li>
+              <li><strong>Convertir strings a enteros:</strong> implementa tu propio <code>ft_atoi</code> o usa atoi, verificando que todos los chars sean dígitos.
+                <ul class="subtasks">
+                  <li>Rechaza números negativos o cero para <code>n_philos</code>, <code>time_to_die</code>, etc.</li>
+                  <li>Rechaza cualquier argumento que no sea puramente numérico</li>
+                </ul>
+              </li>
+              <li><strong>Validar rangos:</strong> n_philos ≥ 1, todos los tiempos > 0, número de comidas (si existe) > 0.</li>
+              <li><strong>Struct de datos global (t_data):</strong> diseña una struct que guarde todos los parámetros.
+                <ul class="subtasks">
+                  <li>n_philos, time_to_die, time_to_eat, time_to_sleep, must_eat_count</li>
+                  <li>start_time, flag de muerte, arrays de filósofos y mutexes</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase" style="margin-top:32px;">
+          <div class="phase-label">
+            <span class="phase-num">Paso 2</span>
+            <span class="phase-title">Estructuras</span>
+          </div>
+          <div class="phase-content">
+            <h4>Diseñar las structs del proyecto</h4>
+            <ul class="tasks">
+              <li><strong>t_data (datos globales compartidos):</strong>
+                <ul class="subtasks">
+                  <li>Parámetros del programa</li>
+                  <li>Puntero al array de filósofos</li>
+                  <li>Puntero al array de mutexes de tenedores</li>
+                  <li>Mutex para el print (<code>print_mutex</code>)</li>
+                  <li>Mutex para el flag de muerte (<code>death_mutex</code>)</li>
+                  <li>Flag <code>someone_died</code> (int, protegido por mutex)</li>
+                  <li><code>start_time</code> en ms</li>
+                </ul>
+              </li>
+              <li><strong>t_philo (datos de cada filósofo):</strong>
+                <ul class="subtasks">
+                  <li>ID (número del filósofo)</li>
+                  <li>Índices de tenedor izquierdo y derecho</li>
+                  <li>Timestamp de la última vez que comió</li>
+                  <li>Número de comidas realizadas</li>
+                  <li>El hilo (<code>pthread_t</code>)</li>
+                  <li>Puntero a t_data (para acceder a los datos compartidos)</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 0 40px 0; border-bottom:1px solid rgba(255,255,255,0.04); margin-bottom:40px;">
+        <div class="phase-group-label">FASE 2 — INICIALIZACIÓN</div>
+
+        <div class="phase">
+          <div class="phase-label">
+            <span class="phase-num">Paso 3</span>
+            <span class="phase-title">Init Mutex</span>
+          </div>
+          <div class="phase-content">
+            <h4>Inicializar todos los mutexes</h4>
+            <ul class="tasks">
+              <li><strong>Reservar array de mutexes para tenedores:</strong> <code>malloc(sizeof(pthread_mutex_t) * n_philos)</code>
+                <ul class="subtasks">
+                  <li>Inicializar cada uno con <code>pthread_mutex_init</code></li>
+                  <li>Si alguno falla: destruir los ya creados y liberar</li>
+                </ul>
+              </li>
+              <li><strong>Inicializar mutex de print:</strong> protegerá el printf para que los logs no se mezclen.</li>
+              <li><strong>Inicializar mutex de muerte:</strong> protegerá la lectura/escritura del flag <code>someone_died</code>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase" style="margin-top:32px;">
+          <div class="phase-label">
+            <span class="phase-num">Paso 4</span>
+            <span class="phase-title">Init Filósofos</span>
+          </div>
+          <div class="phase-content">
+            <h4>Inicializar el array de filósofos</h4>
+            <ul class="tasks">
+              <li><strong>Reservar array:</strong> <code>malloc(sizeof(t_philo) * n_philos)</code></li>
+              <li><strong>Asignar valores a cada filósofo:</strong>
+                <ul class="subtasks">
+                  <li>id = i + 1 (del 1 al N)</li>
+                  <li>left_fork = i, right_fork = (i + 1) % n_philos</li>
+                  <li>last_meal_time = start_time (acaba de "comer" al nacer)</li>
+                  <li>meals_eaten = 0</li>
+                  <li>puntero a data</li>
+                </ul>
+              </li>
+              <li><strong>Caso especial: 1 solo filósofo.</strong> Solo tiene un tenedor → nunca puede comer → muere. Maneja este caso especialmente en su rutina.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 0 40px 0; border-bottom:1px solid rgba(255,255,255,0.04); margin-bottom:40px;">
+        <div class="phase-group-label">FASE 3 — EL CORAZÓN DEL PROYECTO</div>
+
+        <div class="phase">
+          <div class="phase-label">
+            <span class="phase-num">Paso 5</span>
+            <span class="phase-title">Rutina Filósofo</span>
+          </div>
+          <div class="phase-content">
+            <h4>La función que ejecuta cada hilo</h4>
+            <ul class="tasks">
+              <li><strong>Estructura del bucle principal:</strong> mientras nadie haya muerto, repetir: comer → dormir → pensar.
+                <ul class="subtasks">
+                  <li>Antes de cada acción: comprobar si alguien murió (<code>is_simulation_over()</code>)</li>
+                  <li>Si la simulación acabó → salir de la rutina</li>
+                </ul>
+              </li>
+              <li><strong>Fase COMER:</strong>
+                <ul class="subtasks">
+                  <li>Lock tenedor izquierdo → print "taken a fork"</li>
+                  <li>Lock tenedor derecho → print "taken a fork"</li>
+                  <li>Actualizar last_meal_time (¡con mutex!)</li>
+                  <li>Print "is eating"</li>
+                  <li>precise_sleep(time_to_eat)</li>
+                  <li>Incrementar meals_eaten</li>
+                  <li>Unlock tenedor derecho, unlock tenedor izquierdo</li>
+                </ul>
+              </li>
+              <li><strong>Fase DORMIR:</strong> print "is sleeping" → precise_sleep(time_to_sleep)</li>
+              <li><strong>Fase PENSAR:</strong> print "is thinking" (sin sleep fijo, o sleep calculado para evitar starvation)</li>
+              <li><strong>Anti-deadlock:</strong> filósofos pares empiezan con un pequeño usleep(1) para desincronizarse, o alternan el orden de coge-tenedores.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase" style="margin-top:32px;">
+          <div class="phase-label">
+            <span class="phase-num">Paso 6</span>
+            <span class="phase-title">Monitor</span>
+          </div>
+          <div class="phase-content">
+            <h4>Hilo o bucle vigilante de la muerte</h4>
+            <ul class="tasks">
+              <li><strong>El monitor comprueba periódicamente</strong> (cada ~1ms) si algún filósofo lleva más de <code>time_to_die</code> ms sin comer.
+                <ul class="subtasks">
+                  <li>Iterar por todos los filósofos</li>
+                  <li>Leer last_meal_time con mutex</li>
+                  <li>Si <code>now - last_meal_time > time_to_die</code> → ese filósofo muere</li>
+                </ul>
+              </li>
+              <li><strong>Cuando detecta muerte:</strong>
+                <ul class="subtasks">
+                  <li>Bloquear death_mutex y poner <code>someone_died = 1</code></li>
+                  <li>Imprimir "X died" (con print_mutex)</li>
+                  <li>Terminar el monitor</li>
+                </ul>
+              </li>
+              <li><strong>Comprobar condición de victoria:</strong> si must_eat_count está definido y todos los filósofos alcanzaron ese número → poner <code>someone_died = 1</code> (stop sin muerte).</li>
+              <li><strong>Opciones de implementación:</strong>
+                <ul class="subtasks">
+                  <li>Opción A: hilo separado solo para monitorizar</li>
+                  <li>Opción B: el main monitoriza en un bucle tras crear todos los hilos</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase" style="margin-top:32px;">
+          <div class="phase-label">
+            <span class="phase-num">Paso 7</span>
+            <span class="phase-title">Lanzar Hilos</span>
+          </div>
+          <div class="phase-content">
+            <h4>Crear todos los hilos y arrancar la simulación</h4>
+            <ul class="tasks">
+              <li><strong>Guardar start_time</strong> antes de crear ningún hilo.</li>
+              <li><strong>Loop pthread_create</strong> para cada filósofo.</li>
+              <li><strong>Desincronización:</strong> para evitar deadlock, los filósofos con id par pueden hacer <code>usleep(1000)</code> al inicio de su rutina.</li>
+              <li><strong>Lanzar el monitor</strong> (hilo separado o bucle en main).</li>
+              <li><strong>Loop pthread_join</strong> para esperar a todos.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 0 40px 0; border-bottom:1px solid rgba(255,255,255,0.04); margin-bottom:40px;">
+        <div class="phase-group-label">FASE 4 — CIERRE Y CALIDAD</div>
+
+        <div class="phase">
+          <div class="phase-label">
+            <span class="phase-num">Paso 8</span>
+            <span class="phase-title">Limpieza</span>
+          </div>
+          <div class="phase-content">
+            <h4>Liberar todos los recursos</h4>
+            <ul class="tasks">
+              <li><strong>Destruir todos los mutexes</strong> (tenedores, print, death) con <code>pthread_mutex_destroy</code>.</li>
+              <li><strong>Liberar toda la memoria</strong> reservada con malloc: array de filósofos, array de forks.</li>
+              <li><strong>Verificar con valgrind</strong> que no hay leaks: <code>valgrind --leak-check=full ./philo ...</code></li>
+              <li><strong>Verificar data races</strong> con: <code>valgrind --tool=helgrind ./philo ...</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase" style="margin-top:32px;">
+          <div class="phase-label">
+            <span class="phase-num">Paso 9</span>
+            <span class="phase-title">Makefile</span>
+          </div>
+          <div class="phase-content">
+            <h4>Crear el Makefile correcto</h4>
+            <ul class="tasks">
+              <li>Reglas obligatorias: <code>$(NAME)</code>, <code>all</code>, <code>clean</code>, <code>fclean</code>, <code>re</code></li>
+              <li>Flags de compilación: <code>-Wall -Werror -Wextra</code></li>
+              <li>Linker flag para pthreads: añadir <code>-lpthread</code> al compilar</li>
+              <li>No debe hacer relink si los archivos no han cambiado</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="phase" style="margin-top:32px;">
+          <div class="phase-label">
+            <span class="phase-num">Paso 10</span>
+            <span class="phase-title">Testing</span>
+          </div>
+          <div class="phase-content">
+            <h4>Casos de prueba esenciales</h4>
+            <ul class="tasks">
+              <li><code>./philo 1 800 200 200</code> → el filósofo debe morir (solo tiene un tenedor)</li>
+              <li><code>./philo 5 800 200 200</code> → nadie debe morir nunca</li>
+              <li><code>./philo 5 800 200 200 7</code> → para cuando cada uno come 7 veces</li>
+              <li><code>./philo 4 410 200 200</code> → nadie debe morir</li>
+              <li><code>./philo 4 310 200 100</code> → un filósofo debe morir</li>
+              <li><code>./philo 2 800 200 200</code> → caso con solo 2 filósofos, comen alternando</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="phase-group-label">BONUS — SOLO SI LA PARTE OBLIGATORIA ES PERFECTA</div>
+        <div class="phase">
+          <div class="phase-label">
+            <span class="phase-num">Bonus</span>
+            <span class="phase-title">Semáforos</span>
+          </div>
+          <div class="phase-content">
+            <h4>philo_bonus: procesos + semáforos en vez de hilos + mutex</h4>
+            <ul class="tasks">
+              <li>Cada filósofo es un <strong>proceso</strong> creado con <code>fork()</code>, no un hilo.</li>
+              <li>Los tenedores se representan con un <strong>semáforo</strong> (<code>sem_open</code>) de valor N_philos.</li>
+              <li>El proceso main <strong>no es filósofo</strong>: solo crea hijos y espera.</li>
+              <li>Nuevas funciones: <code>fork</code>, <code>kill</code>, <code>exit</code>, <code>waitpid</code>, <code>sem_open</code>, <code>sem_close</code>, <code>sem_post</code>, <code>sem_wait</code>, <code>sem_unlink</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>Philosophers — 42 School Reference Guide</span>
+  <span>C · pthreads · mutex · concurrencia</span>
+</div>
+
+<script>
+  function toggle(header) {
+    const card = header.parentElement;
+    card.classList.toggle('open');
+  }
+  let allOpen = false;
+  function toggleAll() {
+    allOpen = !allOpen;
+    document.querySelectorAll('.func-card').forEach(c => {
+      if (allOpen) c.classList.add('open');
+      else c.classList.remove('open');
+    });
+    document.querySelector('.open-all-btn').textContent = allOpen ? 'COLAPSAR TODAS' : 'EXPANDIR TODAS';
+  }
+</script>
+</body>
+</html>
