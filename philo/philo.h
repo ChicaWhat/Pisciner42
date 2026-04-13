@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/13 17:45:50 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/13 20:11:02 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,7 @@
 #include <limits.h>
 #include <pthread.h>
 
-typedef struct s_philo
-{
-	int				id; // identificador de cada philo
-	int				meals_eaten; // contador de comidas realizadas para cuando tenga av[5]
-	long			last_meal_time; // momento exacto en el que comienza la últitma comida
-	pthread_mutex_t	*left_fork; // puntero al mutex del tenedor izquierda
-	pthread_mutex_t	*right_fork; // puntero al mutex del tenedor derecho
-	t_data			*table; // puntero a la struct t_data
-}	t_philo;
-
+typedef struct s_philo t_philo;
 
 typedef struct s_data
 {
@@ -44,6 +35,16 @@ typedef struct s_data
 	pthread_mutex_t	*forks; // tenedores en la mesa
 	t_philo			*philos; // array que apunta a la struct de los philos
 }	t_data;
+
+typedef struct s_philo
+{
+	int				id; // identificador de cada philo
+	int				meals_eaten; // contador de comidas realizadas para cuando tenga av[5]
+	long			last_meal_time; // momento exacto en el que comienza la últitma comida
+	pthread_mutex_t	*left_fork; // puntero al mutex del tenedor izquierda
+	pthread_mutex_t	*right_fork; // puntero al mutex del tenedor derecho
+	t_data			*table; // puntero a la struct t_data
+}	t_philo;
 
 int	is_digit(int c);
 int	is_av_valid(char **av);
