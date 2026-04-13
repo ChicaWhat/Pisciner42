@@ -6,14 +6,11 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/08 22:35:45 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/13 14:38:57 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-
-
 
 
 int main(int ac, char **av)
