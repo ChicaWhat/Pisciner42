@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/15 22:43:15 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/15 23:01:27 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 t_data	*init_data_struct(int ac, char **av)
 {
 	t_data	*table;
-
 
 	table = malloc(sizeof(t_data));
 	if (!table)
@@ -44,6 +43,7 @@ int	init_mutex(t_data *table)
 {
 	int	i;
 	
+	//! CREAR FUNCION QUE DESTRUYE LOS MUTEX INIT Y FUNCION DE LIBERACION
 	i = 0;
 	if (pthread_mutex_init(&table->mutex_dead, NULL) != 0)
 		return (1);
