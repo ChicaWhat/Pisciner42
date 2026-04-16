@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/13 20:11:02 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/16 16:56:31 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_data
 	int				target_meals; //! av[5] (opcional)
 	long			start_time; // Hora a la que empieza todo
 	int				dead_flag; // (0)->vivo (1)->muerto
-	pthread_mutex_t	mutex_dead; // candado que protege a dead_flag
+	pthread_mutex_t	*mutex_dead; // candado que protege a dead_flag
 	pthread_mutex_t	*forks; // tenedores en la mesa
 	t_philo			*philos; // array que apunta a la struct de los philos
 }	t_data;

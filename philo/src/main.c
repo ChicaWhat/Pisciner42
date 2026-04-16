@@ -6,11 +6,43 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/15 23:01:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/16 17:02:10 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+
+void	ft_cleanup(t_data *table, int forks_inited, int error_code)
+{
+	while (forks_inited >= 0)
+	{
+		pthread_mutex_destroy(&table->forks[forks_inited]);
+		forks_inited--;
+	}
+	if (error_code != 0)
+		pthread_mutex_destroy(&table->mutex_dead);
+	free(table->forks);
+	free(table->mutex_dead);
+	free(table->philos);
+	free(table);
+}
+
+int	init_data2(t_data *table)
+{
+	int		*forks_inited;
+	int		*dead_inited;
+
+	forks_inited = 0;
+	dead_inited = 0;
+	table->start_time = 0;
+	table->dead_flag = 0;
+	if (init_mutex(table, &forks_inited, &dead_inited));
+	{
+		ft_cleanup(table, forks_inited, dead_inited);
+		return (1);
+	}
+	return (0);
+}
 
 t_data	*init_data_struct(int ac, char **av)
 {
@@ -21,6 +53,7 @@ t_data	*init_data_struct(int ac, char **av)
 		return (NULL);
 	table->forks = NULL;
 	table->philos = NULL;
+	table->mutex_dead = NULL;
 	table->n_philos = ft_atoi(av[1]);
 	table->time_to_die = ft_atoi(av[2]);
 	table->time_to_eat = ft_atoi(av[3]);
@@ -29,30 +62,27 @@ t_data	*init_data_struct(int ac, char **av)
 		table->target_meals = ft_atoi(av[5]);
 	else
 		table->target_meals = -1;
-	table->start_time = 0;
-	table->dead_flag = 0;
-	if (init_mutex(table))
-	{
-		free(table);
-		return (NULL);
-	}
+	init_data2(&table);
 	return (table);
 }
 
-int	init_mutex(t_data *table)
+int	init_mutex(t_data *table, int *forks_inited, int *dead_inited)
 {
 	int	i;
-	
-	//! CREAR FUNCION QUE DESTRUYE LOS MUTEX INIT Y FUNCION DE LIBERACION
+
 	i = 0;
-	if (pthread_mutex_init(&table->mutex_dead, NULL) != 0)
+	table->mutex_dead = malloc(sizeof (pthread_mutex_t));
+	if (!table->mutex_dead)
+		return (1);
+	if (dead_inited = pthread_mutex_init(table->mutex_dead, NULL) != 0)
 		return (1);
 	table->forks = malloc(table->n_philos * sizeof(pthread_mutex_t));
 	if (!table->forks)
 		return (1);
 	while (i < table->n_philos)
 	{
-		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
+		forks_inited = i;
+		if (pthread_mutex_init(&table->forks[i], NULL) != 0);
 			return (1);
 		i++;
 	}
@@ -95,14 +125,5 @@ int main(int ac, char **av)
 	printf("%d\n", table->time_to_die);
 	printf("%d\n", table->time_to_eat);
 	printf("%d\n", table->time_to_sleep);
-/* 	while (av[i])
-	{
-		if (ft_atoi(av[i]) == -1)
-		{
-			printf("wrong number\n");
-			return (0);
-		}
-		i++;
-	} */
 	return (0);
 }
