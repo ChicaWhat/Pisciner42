@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/16 18:16:46 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:31:13 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_data
 	int				dead_flag; // (0)->vivo (1)->muerto
 	pthread_mutex_t	*mutex_dead; // candado que protege a dead_flag
 	pthread_mutex_t	*forks; // tenedores en la mesa
+	pthread_mutex_t	print_mutex; // mutex para printear
 	t_philo			*philos; // array que apunta a la struct de los philos
 }	t_data;
 
@@ -49,7 +50,7 @@ typedef struct s_philo
 void	ft_cleanup(t_data *table, int forks_inited, int error_code);
 int		init_data2(t_data *table);
 t_data	*init_data_struct(int ac, char **av);
-int		init_mutex(t_data *table, int *forks_inited, int dead_inited);
+int		init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i);
 void	init_one_philo(t_philo *philo, t_data *table, int i);
 void	init_philos(t_data *table);
 void	printf_each_philo(t_data *table);

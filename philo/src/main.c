@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/16 18:18:48 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:42:47 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 void	ft_cleanup(t_data *table, int forks_inited, int error_code)
 {
+	if (error_code == 1)
+		pthread_mutex_destroy(table->mutex_dead);
+	if (error_code == 2)
+	{
+		pthread_mutex_destroy(table->mutex_dead);
+		pthread_mutex_destroy(&table->print_mutex);
+	}
 	while (forks_inited >= 0)
 	{
 		pthread_mutex_destroy(&table->forks[forks_inited]);
 		forks_inited--;
 	}
-	if (error_code != 0)
-		pthread_mutex_destroy(table->mutex_dead);
 	free(table->forks);
 	free(table->mutex_dead);
 	free(table->philos);
@@ -33,10 +38,10 @@ int	init_data2(t_data *table)
 	int		dead_inited;
 
 	forks_inited = 0;
-	dead_inited = 0;
+	dead_inited = init_mutex(table, &forks_inited, &dead_inited, 0);
 	table->start_time = 0;
 	table->dead_flag = 0;
-	if (init_mutex(table, &forks_inited, dead_inited))
+	if (dead_inited != 0)
 	{
 		ft_cleanup(table, forks_inited, dead_inited);
 		return (1);
@@ -67,30 +72,30 @@ t_data	*init_data_struct(int ac, char **av)
 	return (table);
 }
 
-int	init_mutex(t_data *table, int *forks_inited, int dead_inited)
+int	init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i)
 {
-	int	i;
-
-	i = 0;
 	table->mutex_dead = malloc(sizeof (pthread_mutex_t));
 	if (!table->mutex_dead)
 		return (1);
-	dead_inited = pthread_mutex_init(table->mutex_dead, NULL);
-	if (dead_inited != 0)
+	*dead_inited = pthread_mutex_init(table->mutex_dead, NULL);
+	if (*dead_inited != 0)
 		return (1);
+	*dead_inited = pthread_mutex_init(&table->print_mutex, NULL);
+	if (*dead_inited != 0)
+		return (2);
 	table->forks = malloc(table->n_philos * sizeof(pthread_mutex_t));
 	if (!table->forks)
-		return (1);
+		return (2);
 	while (i < table->n_philos)
 	{
-		forks_inited = &i;
+		*forks_inited = i;
 		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
-			return (1);
+			return (2);
 		i++;
 	}
 	table->philos = malloc(table->n_philos * sizeof(t_philo));
 	if (!table->philos)
-		return (1);
+		return (2);
 	return (0);
 }
 
