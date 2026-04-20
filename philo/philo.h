@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/17 21:31:13 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/20 11:59:22 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef struct s_philo t_philo;
 
@@ -54,6 +55,7 @@ int		init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i);
 void	init_one_philo(t_philo *philo, t_data *table, int i);
 void	init_philos(t_data *table);
 void	printf_each_philo(t_data *table);
+long	ft_gettimeofday(void);
 
 int	is_digit(int c);
 int	is_av_valid(char **av);

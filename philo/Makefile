@@ -13,6 +13,8 @@ OBJ_DIR = obj
 SRC_FILES = main.c \
 			parser.c \
 			utils.c \
+			clean.c \
+			init.c \
 			
 
 # Rutas completas a los archivos fuente
