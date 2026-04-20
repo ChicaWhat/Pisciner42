@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/20 11:59:22 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/20 17:53:57 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_philo
 	int				id; // identificador de cada philo
 	int				meals_eaten; // contador de comidas realizadas para cuando tenga av[5]
 	long			last_meal_time; // momento exacto en el que comienza la últitma comida
+	pthread_t		thread; // variable con la que poder inicializar los hilos de cada philo
 	pthread_mutex_t	*left_fork; // puntero al mutex del tenedor izquierda
 	pthread_mutex_t	*right_fork; // puntero al mutex del tenedor derecho
 	t_data			*table; // puntero a la struct t_data
@@ -56,6 +57,9 @@ void	init_one_philo(t_philo *philo, t_data *table, int i);
 void	init_philos(t_data *table);
 void	printf_each_philo(t_data *table);
 long	ft_gettimeofday(void);
+long	ft_now(t_data *table);
+void	*philo_routine(void *argv);
+void	ft_philo_thread(t_philo *philo);
 
 int	is_digit(int c);
 int	is_av_valid(char **av);

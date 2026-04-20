@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 11:19:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/20 11:20:13 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/20 15:54:12 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	init_data2(t_data *table)
 
 	forks_inited = 0;
 	dead_inited = init_mutex(table, &forks_inited, &dead_inited, 0);
-	table->start_time = 0;
+	table->start_time = ft_gettimeofday();
 	table->dead_flag = 0;
 	if (dead_inited != 0)
 	{
@@ -83,7 +83,7 @@ void	init_one_philo(t_philo *philo, t_data *table, int i)
 {
 	philo->id = i + 1;
 	philo->meals_eaten = 0;
-	philo->last_meal_time = table->start_time;
+	philo->last_meal_time = 0;
 	philo->left_fork = &table->forks[i];
 	philo->right_fork = &table->forks[(i + 1) % table->n_philos];
 	philo->table = table;
