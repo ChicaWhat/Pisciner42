@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/23 18:35:51 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/23 20:18:14 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,27 @@ long	ft_now(t_data *table)
 
 	now = ft_gettimeofday() - table->start_time;
 	return (now);
+}
+
+void	smart_usleep(t_data *table, int time_to_wait)
+{
+	long	start;
+	long	actual_time;
+
+	start = ft_gettimeofday();
+	actual_time = ft_gettimeofday();
+	while ((actual_time - start) < time_to_wait)
+	{
+		actual_time = ft_gettimeofday();
+		pthread_mutex_lock(table->mutex_dead);
+		if (table->mutex_dead == 1)
+		{
+			pthread_mutex_unlock(table->mutex_dead);
+			break ;
+		}
+		pthread_mutex_unlock(table->mutex_dead);
+		usleep(500);
+	}
 }
 
 void	*philo_routine(void *argv)

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/20 17:53:57 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/23 20:18:32 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ long	ft_gettimeofday(void);
 long	ft_now(t_data *table);
 void	*philo_routine(void *argv);
 void	ft_philo_thread(t_philo *philo);
+void	join_the_threads(t_data *table, int threads_init);
+void	smart_usleep(t_data *table, int time_to_wait);
 
 int	is_digit(int c);
 int	is_av_valid(char **av);
