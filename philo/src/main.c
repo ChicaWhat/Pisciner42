@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/20 18:43:13 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/23 18:35:51 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,22 @@ long	ft_now(t_data *table)
 void	*philo_routine(void *argv)
 {
 	t_philo	*philo;
-	int		i;
 	
 	philo = (t_philo *)argv;
-	i = 0;
-	while (i < philo->table->n_philos)
-	{
-		printf("%d\n", philo->table->n_philos);
-		printf("Soy Philo: [%d] y estoy vivo\n", philo[i].id);
-		i++;
-	}
+	pthread_mutex_lock(&philo->table->print_mutex);
+	printf("Soy Philo: [%d] y estoy vivo\n", philo->id);
+	pthread_mutex_unlock(&philo->table->print_mutex);
 	return (NULL);
+}
+
+void	join_the_threads(t_data *table, int threads_init)
+{
+	while (threads_init - 1 >= 0)
+	{
+		pthread_join(table->philos[threads_init - 1].thread, NULL);
+		printf("Unificando hilo [%d]\n", threads_init);
+		threads_init--;
+	}
 }
 
 void	ft_philo_thread(t_philo *philo)
@@ -51,10 +56,15 @@ void	ft_philo_thread(t_philo *philo)
 	i = 0;
 	while (i < philo->table->n_philos)
 	{
-		pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]);
+		if (pthread_create(&philo[i].thread, NULL, 
+			philo_routine, &philo[i]) != 0)
+		{
+			join_the_threads(philo->table, i);
+			return ;
+		}
 		i++;
 	}
-	//! Aqui me falta el pthread_join
+	join_the_threads(philo->table, i);
 }
 
 /* long	ft_last_meal(t_data *table)
@@ -91,7 +101,7 @@ int main(int ac, char **av)
 	init_philos(table);
 	ft_philo_thread(table->philos);
 	//printf_each_philo(table);
-	free(table);
+	ft_cleanup(table, 0, 0);
 	return (0);
 }
 
