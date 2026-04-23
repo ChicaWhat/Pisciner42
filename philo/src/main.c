@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/23 20:18:14 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/23 20:25:51 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	smart_usleep(t_data *table, int time_to_wait)
 	{
 		actual_time = ft_gettimeofday();
 		pthread_mutex_lock(table->mutex_dead);
-		if (table->mutex_dead == 1)
+		if (table->dead_flag == 1)
 		{
 			pthread_mutex_unlock(table->mutex_dead);
 			break ;
