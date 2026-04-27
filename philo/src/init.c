@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 11:19:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/20 15:54:12 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/27 15:08:31 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ t_data	*init_data_struct(int ac, char **av)
 	return (table);
 }
 
+
 int	init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i)
 {
 	table->mutex_dead = malloc(sizeof (pthread_mutex_t));
@@ -79,6 +80,7 @@ int	init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i)
 	return (0);
 }
 
+//* GESTIONAR EL ERROR DE LA CREACION DEL MUTEX MEAL_MUTEX
 void	init_one_philo(t_philo *philo, t_data *table, int i)
 {
 	philo->id = i + 1;
@@ -87,6 +89,8 @@ void	init_one_philo(t_philo *philo, t_data *table, int i)
 	philo->left_fork = &table->forks[i];
 	philo->right_fork = &table->forks[(i + 1) % table->n_philos];
 	philo->table = table;
+	if (pthread_mutex_init(&philo->meal_mutex, NULL) != 0)
+		pthread_mutex_destroy(&philo->meal_mutex);
 }
 
 void	init_philos(t_data *table)

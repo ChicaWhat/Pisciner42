@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/23 20:18:32 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/27 14:25:49 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_philo
 	int				meals_eaten; // contador de comidas realizadas para cuando tenga av[5]
 	long			last_meal_time; // momento exacto en el que comienza la últitma comida
 	pthread_t		thread; // variable con la que poder inicializar los hilos de cada philo
+	pthread_mutex_t	meal_mutex; // mutex para cuando este comiendo cada filosofo
 	pthread_mutex_t	*left_fork; // puntero al mutex del tenedor izquierda
 	pthread_mutex_t	*right_fork; // puntero al mutex del tenedor derecho
 	t_data			*table; // puntero a la struct t_data

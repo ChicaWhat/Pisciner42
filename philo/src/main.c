@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/23 20:25:51 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/27 16:57:49 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,27 @@ void	*philo_routine(void *argv)
 	t_philo	*philo;
 	
 	philo = (t_philo *)argv;
-	pthread_mutex_lock(&philo->table->print_mutex);
+/* 	pthread_mutex_lock(&philo->table->print_mutex);
 	printf("Soy Philo: [%d] y estoy vivo\n", philo->id);
-	pthread_mutex_unlock(&philo->table->print_mutex);
+	pthread_mutex_unlock(&philo->table->print_mutex); */
+	if (philo->id % 2 == 0)
+	{
+		smart_usleep(&philo->table, philo->table->time_to_die / 2);
+		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(&philo->table->print_mutex);
+		printf("%ld philo [%d] has taken the right fork\n", ft_gettimeofday(), 
+		philo->id);
+		pthread_mutex_unlock(&philo->table->print_mutex);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_lock(&philo->table->print_mutex);
+		printf("%ld philo [%d] has taken the left fork\n", ft_gettimeofday(), 
+		philo->id);
+		pthread_mutex_unlock(&philo->table->print_mutex);
+		pthread_mutex_lock(philo->right_fork);
+	}
 	return (NULL);
 }
 
