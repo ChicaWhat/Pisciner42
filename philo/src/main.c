@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/27 16:57:49 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/27 18:53:56 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,32 +49,60 @@ void	smart_usleep(t_data *table, int time_to_wait)
 	}
 }
 
+void	ft_print_mutex(t_philo *philo, char *message)
+{
+	pthread_mutex_lock(&philo->table->print_mutex);
+	printf("%04ld Philo %d %s\n", ft_now(philo->table), philo->id, message);
+	pthread_mutex_unlock(&philo->table->print_mutex);
+}
+
+void	ft_odd_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal_mutex);
+	pthread_mutex_lock(philo->left_fork);
+	ft_print_mutex(philo, "has taken the left fork");
+	pthread_mutex_lock(philo->right_fork);
+	ft_print_mutex(philo, "has taken the right fork");
+	ft_print_mutex(philo, "is eating");
+	philo->last_meal_time = ft_now(philo->table);
+	smart_usleep(philo->table, philo->table->time_to_eat);
+	pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
+}
+
+void	ft_pair_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal_mutex);
+	pthread_mutex_lock(philo->right_fork);
+	ft_print_mutex(philo, "has taken the right fork");
+	pthread_mutex_lock(philo->left_fork);
+	ft_print_mutex(philo, "has taken the left fork");
+	ft_print_mutex(philo, "is eating");
+	philo->last_meal_time = ft_now(philo->table);
+	smart_usleep(philo->table, philo->table->time_to_eat);
+	pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+}
+
+/* 
+* CAMBIAR NOMBRE DE LA FUNCION PHILO_ROUTINE Y PONERLE PHILO_EATING
+! CREAR BUCLE INFINITO PARA LA RUTINA
+? CREAR LA FUNCION PARA CAMBIAR LA FLAG DE DEAD_FLAG
+*/
 void	*philo_routine(void *argv)
 {
 	t_philo	*philo;
 	
 	philo = (t_philo *)argv;
-/* 	pthread_mutex_lock(&philo->table->print_mutex);
-	printf("Soy Philo: [%d] y estoy vivo\n", philo->id);
-	pthread_mutex_unlock(&philo->table->print_mutex); */
 	if (philo->id % 2 == 0)
 	{
-		smart_usleep(&philo->table, philo->table->time_to_die / 2);
-		pthread_mutex_lock(philo->right_fork);
-		pthread_mutex_lock(&philo->table->print_mutex);
-		printf("%ld philo [%d] has taken the right fork\n", ft_gettimeofday(), 
-		philo->id);
-		pthread_mutex_unlock(&philo->table->print_mutex);
+		smart_usleep(philo->table, philo->table->time_to_eat / 2);
+		ft_pair_philo(philo);
+		return (NULL);
 	}
-	else
-	{
-		pthread_mutex_lock(philo->left_fork);
-		pthread_mutex_lock(&philo->table->print_mutex);
-		printf("%ld philo [%d] has taken the left fork\n", ft_gettimeofday(), 
-		philo->id);
-		pthread_mutex_unlock(&philo->table->print_mutex);
-		pthread_mutex_lock(philo->right_fork);
-	}
+	ft_odd_philo(philo);
 	return (NULL);
 }
 
@@ -105,29 +133,6 @@ void	ft_philo_thread(t_philo *philo)
 	}
 	join_the_threads(philo->table, i);
 }
-
-/* long	ft_last_meal(t_data *table)
-{
-	long	time_without_eat;
-	time_without_eat = ft_now(table) - table->philos->last_meal_time;
-	return (time_without_eat);
-}
-
-void	assign_last_meal(t_philo *philos)
-{
-	int	i;
-
-	i = 0;
-	while (i < philos->table->n_philos)
-	{
-		philos[i].last_meal_time = ft_last_meal(philos->table);
-		if (philos[i].last_meal_time >= philos->table->time_to_die)
-		{
-			printf("Estoy muerto\n");
-		}
-		i++;
-	}
-} */
 
 int main(int ac, char **av)
 {
