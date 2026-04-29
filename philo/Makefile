@@ -3,7 +3,7 @@ NAME = philo
 
 # Compilador y flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=address
 
 # Directorios
 SRC_DIR = src

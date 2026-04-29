@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/27 18:53:56 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/29 18:53:59 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,22 @@ long	ft_now(t_data *table)
 
 	now = ft_gettimeofday() - table->start_time;
 	return (now);
+}
+
+int	set_dead(t_philo *philo)
+{
+	long	now;
+
+	now = ft_now(philo->table);
+	pthread_mutex_lock(philo->table->mutex_dead);
+	if ((now - philo->last_meal_time) > philo->table->time_to_die)
+	{
+		philo->table->dead_flag = 1;
+		pthread_mutex_unlock(philo->table->mutex_dead);
+		return (1);
+	}
+	pthread_mutex_unlock(philo->table->mutex_dead);
+	return (0);
 }
 
 void	smart_usleep(t_data *table, int time_to_wait)
@@ -60,12 +76,12 @@ void	ft_odd_philo(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->meal_mutex);
 	pthread_mutex_lock(philo->left_fork);
-	ft_print_mutex(philo, "has taken the left fork");
 	pthread_mutex_lock(philo->right_fork);
-	ft_print_mutex(philo, "has taken the right fork");
+	ft_print_mutex(philo, "has taken a fork");
 	ft_print_mutex(philo, "is eating");
 	philo->last_meal_time = ft_now(philo->table);
 	smart_usleep(philo->table, philo->table->time_to_eat);
+	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
@@ -75,12 +91,12 @@ void	ft_pair_philo(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->meal_mutex);
 	pthread_mutex_lock(philo->right_fork);
-	ft_print_mutex(philo, "has taken the right fork");
 	pthread_mutex_lock(philo->left_fork);
-	ft_print_mutex(philo, "has taken the left fork");
+	ft_print_mutex(philo, "has taken a fork");
 	ft_print_mutex(philo, "is eating");
 	philo->last_meal_time = ft_now(philo->table);
 	smart_usleep(philo->table, philo->table->time_to_eat);
+	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -88,21 +104,20 @@ void	ft_pair_philo(t_philo *philo)
 
 /* 
 * CAMBIAR NOMBRE DE LA FUNCION PHILO_ROUTINE Y PONERLE PHILO_EATING
-! CREAR BUCLE INFINITO PARA LA RUTINA
-? CREAR LA FUNCION PARA CAMBIAR LA FLAG DE DEAD_FLAG
 */
-void	*philo_routine(void *argv)
+void	*philo_eating(t_philo *philo)
 {
-	t_philo	*philo;
-	
-	philo = (t_philo *)argv;
 	if (philo->id % 2 == 0)
 	{
 		smart_usleep(philo->table, philo->table->time_to_eat / 2);
 		ft_pair_philo(philo);
+		if (set_dead(philo))
+			ft_print_mutex(philo, "died");
 		return (NULL);
 	}
 	ft_odd_philo(philo);
+	if (set_dead(philo))
+		ft_print_mutex(philo, "died");
 	return (NULL);
 }
 
@@ -116,6 +131,14 @@ void	join_the_threads(t_data *table, int threads_init)
 	}
 }
 
+int		routine(void *argv)
+{
+	t_philo	*philo;
+	
+	philo = (t_philo *)argv;
+	ft_philo_thread(philo);
+}
+
 void	ft_philo_thread(t_philo *philo)
 {
 	int	i;
@@ -124,14 +147,41 @@ void	ft_philo_thread(t_philo *philo)
 	while (i < philo->table->n_philos)
 	{
 		if (pthread_create(&philo[i].thread, NULL, 
-			philo_routine, &philo[i]) != 0)
+			routine, &philo[i]) != 0)
 		{
 			join_the_threads(philo->table, i);
 			return ;
 		}
 		i++;
 	}
-	join_the_threads(philo->table, i);
+}
+
+int	two_options(t_data *table)
+{
+	if (table->target_meals == -1)
+		infinite_loop(table);
+	else
+		loop_with_end(table);
+	return (0);
+}
+
+int	loop_with_end(t_data *table)
+{
+	while (table->philos->meals_eaten <= table->target_meals)
+	{
+		ft_philo_thread(table->philos);
+	}
+	return (0);
+}
+
+void	infinite_loop(t_data *table)
+{
+	while (1)
+	{
+		ft_philo_thread(table->philos);
+		if (table->dead_flag == 1)
+			break ;
+	}
 }
 
 int main(int ac, char **av)
@@ -143,8 +193,8 @@ int main(int ac, char **av)
 	if (!table)
 		return (1);
 	init_philos(table);
-	ft_philo_thread(table->philos);
-	//printf_each_philo(table);
+	two_options(table);
+	join_the_threads(table, 0);
 	ft_cleanup(table, 0, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 22:33:48 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/08 22:37:02 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/29 18:14:29 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,24 @@ int	ft_atoi(char *s)
 		i++;
 	}
 	return ((int)result);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	len_s;
+
+	len_s = ft_strlen(s);
+	write(fd, s, len_s);
 }
