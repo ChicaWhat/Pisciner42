@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/29 18:53:59 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/04/29 23:23:17 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,21 @@ void	smart_usleep(t_data *table, int time_to_wait)
 	long	start;
 	long	actual_time;
 
-	start = ft_gettimeofday();
-	actual_time = ft_gettimeofday();
+	start = ft_now(table);
+	actual_time = ft_now(table);
+	printf("llego1\n");
 	while ((actual_time - start) < time_to_wait)
 	{
-		actual_time = ft_gettimeofday();
+		actual_time = ft_now(table);
 		pthread_mutex_lock(table->mutex_dead);
+		//printf("llego2\n");
 		if (table->dead_flag == 1)
 		{
 			pthread_mutex_unlock(table->mutex_dead);
 			break ;
 		}
 		pthread_mutex_unlock(table->mutex_dead);
+		//printf("llego3\n");
 		usleep(500);
 	}
 }
@@ -69,6 +72,15 @@ void	ft_print_mutex(t_philo *philo, char *message)
 {
 	pthread_mutex_lock(&philo->table->print_mutex);
 	printf("%04ld Philo %d %s\n", ft_now(philo->table), philo->id, message);
+	pthread_mutex_unlock(&philo->table->print_mutex);
+}
+
+void	print_dead(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->print_mutex);
+	printf("%04ld Philo %d ", ft_now(philo->table), philo->id);
+	ft_putstr_fd("died", 2);
+	printf("\n");
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 
@@ -105,20 +117,31 @@ void	ft_pair_philo(t_philo *philo)
 /* 
 * CAMBIAR NOMBRE DE LA FUNCION PHILO_ROUTINE Y PONERLE PHILO_EATING
 */
-void	*philo_eating(t_philo *philo)
+int	philo_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
+		printf("dentro de los pares\n");
 		smart_usleep(philo->table, philo->table->time_to_eat / 2);
+		printf("despues del smart_usleep\n");
 		ft_pair_philo(philo);
-		if (set_dead(philo))
-			ft_print_mutex(philo, "died");
-		return (NULL);
+		printf("despues de ft_pair_philo\n");
+		if (set_dead(philo) == 1)
+		{
+			print_dead(philo);
+			return (1);
+		}
 	}
-	ft_odd_philo(philo);
-	if (set_dead(philo))
-		ft_print_mutex(philo, "died");
-	return (NULL);
+	else
+	{
+		ft_odd_philo(philo);
+		if (set_dead(philo) == 1)
+		{
+			print_dead(philo);
+			return (1);
+		}
+	}
+	return (0);
 }
 
 void	join_the_threads(t_data *table, int threads_init)
@@ -131,12 +154,24 @@ void	join_the_threads(t_data *table, int threads_init)
 	}
 }
 
-int		routine(void *argv)
+void	*routine(void *argv)
 {
 	t_philo	*philo;
 	
 	philo = (t_philo *)argv;
-	ft_philo_thread(philo);
+	//ft_philo_thread(philo);
+	while (1)
+	{
+		if (philo_eating(philo) == 1)
+		{
+			printf("llego1\n");
+			break ;
+		}
+		//printf_each_philo(philo->table);
+	}
+	printf("llegoX\n");
+	join_the_threads(philo->table, philo->table->n_philos);
+	return (NULL);
 }
 
 void	ft_philo_thread(t_philo *philo)
@@ -156,25 +191,26 @@ void	ft_philo_thread(t_philo *philo)
 	}
 }
 
-int	two_options(t_data *table)
+/* int	two_options(t_data *table)
 {
 	if (table->target_meals == -1)
 		infinite_loop(table);
 	else
 		loop_with_end(table);
 	return (0);
-}
+} */
 
-int	loop_with_end(t_data *table)
+/* int	loop_with_end(t_data *table)
 {
+	ft_philo_thread(table->philos);
 	while (table->philos->meals_eaten <= table->target_meals)
 	{
 		ft_philo_thread(table->philos);
 	}
 	return (0);
-}
+} */
 
-void	infinite_loop(t_data *table)
+/* void	infinite_loop(t_data *table)
 {
 	while (1)
 	{
@@ -182,7 +218,7 @@ void	infinite_loop(t_data *table)
 		if (table->dead_flag == 1)
 			break ;
 	}
-}
+} */
 
 int main(int ac, char **av)
 {
@@ -193,8 +229,8 @@ int main(int ac, char **av)
 	if (!table)
 		return (1);
 	init_philos(table);
-	two_options(table);
-	join_the_threads(table, 0);
+	ft_philo_thread(table->philos);
+	join_the_threads(table, table->n_philos);
 	ft_cleanup(table, 0, 0);
 	return (0);
 }
