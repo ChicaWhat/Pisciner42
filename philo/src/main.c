@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/07 11:50:11 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/07 12:22:54 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,13 @@ void	ft_philo_thread(t_philo *philo)
 			break ;
 	}
 } */
+
+/* 
+! HACER YA EL PHILO_THINKING Y EL PHILO_SLEEPING
+* Crear el hilo del monitor y que comience a comprobar si mueren o no
+? Comenzar a ver los data race y deadlocks
+TODO: Mejorar la funcion de los print y poner colores para cada print.
+*/
 
 int main(int ac, char **av)
 {
