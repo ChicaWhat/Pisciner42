@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/07 12:22:54 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/07 12:39:48 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	smart_usleep(t_data *table, int time_to_wait)
 		pthread_mutex_unlock(table->mutex_dead);
 		usleep(500);
 	}
+	//Me falta aqui la comprobacion de que, si no entra en el bucle significa que
+	//la dead_flag tendra que cambiar a 1, no???
 }
 
 void	ft_print_mutex(t_philo *philo, char *message)
