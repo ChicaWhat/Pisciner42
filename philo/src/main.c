@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/29 23:23:17 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:50:11 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ int	set_dead(t_philo *philo)
 	long	now;
 
 	now = ft_now(philo->table);
-	pthread_mutex_lock(philo->table->mutex_dead);
+	pthread_mutex_lock(&philo->meal_mutex);
 	if ((now - philo->last_meal_time) > philo->table->time_to_die)
 	{
+		pthread_mutex_lock(philo->table->mutex_dead);
 		philo->table->dead_flag = 1;
 		pthread_mutex_unlock(philo->table->mutex_dead);
+		pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(philo->table->mutex_dead);
+	pthread_mutex_unlock(&philo->meal_mutex);
 	return (0);
 }
 
@@ -51,19 +53,16 @@ void	smart_usleep(t_data *table, int time_to_wait)
 
 	start = ft_now(table);
 	actual_time = ft_now(table);
-	printf("llego1\n");
 	while ((actual_time - start) < time_to_wait)
 	{
 		actual_time = ft_now(table);
 		pthread_mutex_lock(table->mutex_dead);
-		//printf("llego2\n");
 		if (table->dead_flag == 1)
 		{
 			pthread_mutex_unlock(table->mutex_dead);
 			break ;
 		}
 		pthread_mutex_unlock(table->mutex_dead);
-		//printf("llego3\n");
 		usleep(500);
 	}
 }
@@ -86,14 +85,15 @@ void	print_dead(t_philo *philo)
 
 void	ft_odd_philo(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->meal_mutex);
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
 	ft_print_mutex(philo, "has taken a fork");
 	ft_print_mutex(philo, "is eating");
+	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
 	smart_usleep(philo->table, philo->table->time_to_eat);
 	philo->meals_eaten++;
+	printf("veces comidas de este philo [%d] : %d\n", philo->id ,philo->meals_eaten);
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
@@ -101,31 +101,29 @@ void	ft_odd_philo(t_philo *philo)
 
 void	ft_pair_philo(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->meal_mutex);
+	//pthread_mutex_lock(&philo->meal_mutex);
+	//smart_usleep(philo->table, philo->table->time_to_eat / 2);
 	pthread_mutex_lock(philo->right_fork);
+	smart_usleep(philo->table, philo->table->time_to_eat / 2);
 	pthread_mutex_lock(philo->left_fork);
 	ft_print_mutex(philo, "has taken a fork");
 	ft_print_mutex(philo, "is eating");
+	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
 	smart_usleep(philo->table, philo->table->time_to_eat);
 	philo->meals_eaten++;
+	printf("veces comidas de este philo [%d] : %d\n", philo->id ,philo->meals_eaten);
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-/* 
-* CAMBIAR NOMBRE DE LA FUNCION PHILO_ROUTINE Y PONERLE PHILO_EATING
-*/
 int	philo_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		printf("dentro de los pares\n");
-		smart_usleep(philo->table, philo->table->time_to_eat / 2);
-		printf("despues del smart_usleep\n");
+		//smart_usleep(philo->table, philo->table->time_to_eat / 2);
 		ft_pair_philo(philo);
-		printf("despues de ft_pair_philo\n");
 		if (set_dead(philo) == 1)
 		{
 			print_dead(philo);
@@ -159,7 +157,6 @@ void	*routine(void *argv)
 	t_philo	*philo;
 	
 	philo = (t_philo *)argv;
-	//ft_philo_thread(philo);
 	while (1)
 	{
 		if (philo_eating(philo) == 1)
@@ -167,10 +164,8 @@ void	*routine(void *argv)
 			printf("llego1\n");
 			break ;
 		}
-		//printf_each_philo(philo->table);
+		smart_usleep(philo->table, philo->table->time_to_sleep);
 	}
-	printf("llegoX\n");
-	join_the_threads(philo->table, philo->table->n_philos);
 	return (NULL);
 }
 
