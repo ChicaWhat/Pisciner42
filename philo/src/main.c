@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/11 15:43:25 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/11 20:57:23 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,36 +33,38 @@ int	set_dead(t_philo *philo)
 	long	now;
 
 	now = ft_now(philo->table);
-	pthread_mutex_lock(&philo->meal_mutex);
+	//pthread_mutex_lock(&philo->meal_mutex);
 	if ((now - philo->last_meal_time) > philo->table->time_to_die)
 	{
 		pthread_mutex_lock(philo->table->mutex_dead);
 		philo->table->dead_flag = 1;
 		pthread_mutex_unlock(philo->table->mutex_dead);
-		pthread_mutex_unlock(&philo->meal_mutex);
+		printf("Dead flag para el Philo [%d]: %d\n", philo->id, philo->table->dead_flag);
+		//pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->meal_mutex);
+	//pthread_mutex_unlock(&philo->meal_mutex);
 	return (0);
 }
 
-void	smart_usleep(t_data *table, int time_to_wait)
+void	smart_usleep(t_philo *philo, int time_to_wait)
 {
 	long	start;
 	long	actual_time;
 
-	start = ft_now(table);
-	actual_time = ft_now(table);
+	start = ft_now(philo->table);
+	actual_time = ft_now(philo->table);
 	while ((actual_time - start) < time_to_wait)
 	{
-		actual_time = ft_now(table);
-		pthread_mutex_lock(table->mutex_dead);
-		if (table->dead_flag == 1)
+		actual_time = ft_now(philo->table);
+		//pthread_mutex_lock(table->mutex_dead);
+		if (set_dead(philo) == 1)
 		{
-			pthread_mutex_unlock(table->mutex_dead);
+			print_dead(philo);
+			//pthread_mutex_unlock(table->mutex_dead);
 			break ;
 		}
-		pthread_mutex_unlock(table->mutex_dead);
+		//pthread_mutex_unlock(table->mutex_dead);
 		usleep(500);
 	}
 	//! Añadido esta comprobacion. No se si esta bien o no
@@ -103,8 +105,7 @@ void	print_dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->print_mutex);
 	ft_putstr_fd(RED, 2);
-	printf("%04ld Philo %d ", ft_now(philo->table), philo->id);
-	ft_putstr_fd(DIED, 2);
+	printf("%04ld Philo %d %s", ft_now(philo->table), philo->id, DIED);
 	ft_putstr_fd(RST, 2);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
@@ -117,7 +118,7 @@ void	ft_odd_philo(t_philo *philo)
 	ft_print_mutex(philo, 2);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
-	smart_usleep(philo->table, philo->table->time_to_eat);
+	smart_usleep(philo, philo->table->time_to_eat);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->right_fork);
@@ -129,13 +130,13 @@ void	ft_pair_philo(t_philo *philo)
 	//pthread_mutex_lock(&philo->meal_mutex);
 	//smart_usleep(philo->table, philo->table->time_to_eat / 2);
 	pthread_mutex_lock(philo->right_fork);
-	smart_usleep(philo->table, philo->table->time_to_eat / 2);
+	smart_usleep(philo, philo->table->time_to_eat / 2);
 	pthread_mutex_lock(philo->left_fork);
 	ft_print_mutex(philo, 1);
 	ft_print_mutex(philo, 2);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
-	smart_usleep(philo->table, philo->table->time_to_eat);
+	smart_usleep(philo, philo->table->time_to_eat);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->left_fork);
@@ -146,7 +147,6 @@ int	philo_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		//smart_usleep(philo->table, philo->table->time_to_eat / 2);
 		ft_pair_philo(philo);
 		if (set_dead(philo) == 1)
 		{
@@ -169,7 +169,7 @@ int	philo_eating(t_philo *philo)
 int	philo_sleeping(t_philo *philo, int status)
 {
 	ft_print_mutex(philo, status);
-	smart_usleep(philo->table, philo->table->time_to_sleep);
+	smart_usleep(philo, philo->table->time_to_sleep);
 	if (philo->table->dead_flag == 1)
 		return (1);
 	return (0);
@@ -178,7 +178,7 @@ int	philo_sleeping(t_philo *philo, int status)
 int	philo_thinking(t_philo *philo, int status)
 {
 	ft_print_mutex(philo, status);
-	smart_usleep(philo->table, philo->table->time_to_die);
+	smart_usleep(philo, philo->table->time_to_die);
 	if (philo->table->dead_flag == 1)
 		return (1);
 	return (0);
@@ -202,20 +202,11 @@ void	*routine(void *argv)
 	while (1)
 	{
 		if (philo_eating(philo) == 1)
-		{
-			printf("llego1\n");
 			break ;
-		}
 		if (philo_sleeping(philo, 3) == 1)
-		{
-			printf("llego2\n");
 			break ;
-		}
 		if (philo_thinking(philo, 4) == 1)
-		{
-			printf("llego3\n");
 			break ;
-		}
 	}
 	return (NULL);
 }
@@ -267,10 +258,8 @@ void	ft_philo_thread(t_philo *philo)
 } */
 
 /* 
-! HACER YA EL PHILO_THINKING Y EL PHILO_SLEEPING
 * Crear el hilo del monitor y que comience a comprobar si mueren o no
 ? Comenzar a ver los data race y deadlocks
-TODO: Mejorar la funcion de los print y poner colores para cada print.
 */
 
 int main(int ac, char **av)

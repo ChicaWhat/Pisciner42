@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/11 12:08:01 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/11 20:21:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ long	ft_now(t_data *table);
 int		philo_eating(t_philo *philo);
 void	ft_philo_thread(t_philo *philo);
 void	join_the_threads(t_data *table, int threads_init);
-void	smart_usleep(t_data *table, int time_to_wait);
+void	smart_usleep(t_philo *philo, int time_to_wait);
 //int		two_options(t_data *table);
 //int		loop_with_end(t_data *table);
 //void	infinite_loop(t_data *table);
