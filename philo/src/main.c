@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/07 12:39:48 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:43:25 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,47 @@ void	smart_usleep(t_data *table, int time_to_wait)
 		pthread_mutex_unlock(table->mutex_dead);
 		usleep(500);
 	}
-	//Me falta aqui la comprobacion de que, si no entra en el bucle significa que
-	//la dead_flag tendra que cambiar a 1, no???
+	//! Añadido esta comprobacion. No se si esta bien o no
+/* 	pthread_mutex_lock(table->mutex_dead);
+	if (set_dead(table->philos) == 1)
+		print_dead(table->philos);
+	pthread_mutex_unlock(table->mutex_dead); */
 }
 
-void	ft_print_mutex(t_philo *philo, char *message)
+void	ft_print_mutex(t_philo *philo, int status)
 {
 	pthread_mutex_lock(&philo->table->print_mutex);
-	printf("%04ld Philo %d %s\n", ft_now(philo->table), philo->id, message);
+	if (status == 1)
+	{
+		ft_putstr_fd(CYAN, 1);
+		printf("%04ld Philo %d %s", ft_now(philo->table), philo->id, TAKENFRK);
+	}
+	else if (status == 2)
+	{
+		ft_putstr_fd(GREEN, 1);
+		printf("%04ld Philo %d %s", ft_now(philo->table), philo->id, EATING);
+	}
+	else if (status == 3)
+	{
+		ft_putstr_fd(PURPLE, 1);
+		printf("%04ld Philo %d %s", ft_now(philo->table), philo->id, SLEEPING);
+	}
+	else if (status == 4)
+	{
+		ft_putstr_fd(BLUE, 1);
+		printf("%04ld Philo %d %s", ft_now(philo->table), philo->id, THINKING);
+	}
+	ft_putstr_fd(RST, 1);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 
 void	print_dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->print_mutex);
+	ft_putstr_fd(RED, 2);
 	printf("%04ld Philo %d ", ft_now(philo->table), philo->id);
-	ft_putstr_fd("died", 2);
-	printf("\n");
+	ft_putstr_fd(DIED, 2);
+	ft_putstr_fd(RST, 2);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 
@@ -89,13 +113,12 @@ void	ft_odd_philo(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
-	ft_print_mutex(philo, "has taken a fork");
-	ft_print_mutex(philo, "is eating");
+	ft_print_mutex(philo, 1);
+	ft_print_mutex(philo, 2);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
 	smart_usleep(philo->table, philo->table->time_to_eat);
 	philo->meals_eaten++;
-	printf("veces comidas de este philo [%d] : %d\n", philo->id ,philo->meals_eaten);
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
@@ -108,13 +131,12 @@ void	ft_pair_philo(t_philo *philo)
 	pthread_mutex_lock(philo->right_fork);
 	smart_usleep(philo->table, philo->table->time_to_eat / 2);
 	pthread_mutex_lock(philo->left_fork);
-	ft_print_mutex(philo, "has taken a fork");
-	ft_print_mutex(philo, "is eating");
+	ft_print_mutex(philo, 1);
+	ft_print_mutex(philo, 2);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
 	smart_usleep(philo->table, philo->table->time_to_eat);
 	philo->meals_eaten++;
-	printf("veces comidas de este philo [%d] : %d\n", philo->id ,philo->meals_eaten);
 	pthread_mutex_unlock(&philo->meal_mutex);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -144,6 +166,24 @@ int	philo_eating(t_philo *philo)
 	return (0);
 }
 
+int	philo_sleeping(t_philo *philo, int status)
+{
+	ft_print_mutex(philo, status);
+	smart_usleep(philo->table, philo->table->time_to_sleep);
+	if (philo->table->dead_flag == 1)
+		return (1);
+	return (0);
+}
+
+int	philo_thinking(t_philo *philo, int status)
+{
+	ft_print_mutex(philo, status);
+	smart_usleep(philo->table, philo->table->time_to_die);
+	if (philo->table->dead_flag == 1)
+		return (1);
+	return (0);
+}
+
 void	join_the_threads(t_data *table, int threads_init)
 {
 	while (threads_init - 1 >= 0)
@@ -166,7 +206,16 @@ void	*routine(void *argv)
 			printf("llego1\n");
 			break ;
 		}
-		smart_usleep(philo->table, philo->table->time_to_sleep);
+		if (philo_sleeping(philo, 3) == 1)
+		{
+			printf("llego2\n");
+			break ;
+		}
+		if (philo_thinking(philo, 4) == 1)
+		{
+			printf("llego3\n");
+			break ;
+		}
 	}
 	return (NULL);
 }

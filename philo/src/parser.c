@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 22:35:20 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/08 22:36:54 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/11 12:02:45 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,23 @@ int	is_av_valid(char **av)
 
 int	check_av(int ac, char **av)
 {
+	ft_putstr_fd(RED, 2);
 	if (ac == 1)
 	{
-		write(2, "Error: missing arguments\n", 26);
+		ft_putstr_fd(ERR_MISS_ARGV, 2);
+		ft_putstr_fd(RST, 2);
 		return (1);
 	}
 	if (ac < 5 || ac > 6)
 	{
-		write(2, "Error: invalid numbers of arguments\n", 37);
+		ft_putstr_fd(ERR_INVALID_NUM, 2);
+		ft_putstr_fd(RST, 2);
 		return (1);
 	}
 	if (is_av_valid(av))
 	{
-		write(2, "Error: invalid arguments\n", 26);
+		ft_putstr_fd(ERR_INVALID_ARGV, 2);
+		ft_putstr_fd(RST, 2);
 		return (1);
 	}
 	return (0);

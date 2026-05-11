@@ -6,20 +6,40 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/29 22:18:33 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/11 12:08:01 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef	PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <pthread.h>
-#include <sys/time.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <string.h>
+# include <stdlib.h>
+# include <limits.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include "./error.h"
+
+#ifndef RED
+# define RED	"\033[0;31m"
+#endif
+#ifndef BLUE
+# define BLUE	"\033[0;34m"
+#endif
+#ifndef PURPLE
+# define PURPLE	"\033[0;35m"
+#endif
+#ifndef CYAN
+# define CYAN	"\033[0;36m"
+#endif
+#ifndef GREEN
+# define GREEN	"\033[0;32m"
+#endif
+#ifndef RST
+# define RST	"\033[0m"
+#endif
 
 typedef struct s_philo t_philo;
 
@@ -69,7 +89,7 @@ void	smart_usleep(t_data *table, int time_to_wait);
 size_t	ft_strlen(const char *s);
 void	ft_putstr_fd(char *s, int fd);
 void	print_dead(t_philo *philo);
-void	ft_print_mutex(t_philo *philo, char *message);
+void	ft_print_mutex(t_philo *philo, int status);
 
 int	is_digit(int c);
 int	is_av_valid(char **av);
