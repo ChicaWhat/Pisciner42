@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/11 20:57:23 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/12 20:44:16 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ int	set_dead(t_philo *philo)
 	long	now;
 
 	now = ft_now(philo->table);
-	//pthread_mutex_lock(&philo->meal_mutex);
+	pthread_mutex_lock(&philo->meal_mutex);
 	if ((now - philo->last_meal_time) > philo->table->time_to_die)
 	{
 		pthread_mutex_lock(philo->table->mutex_dead);
 		philo->table->dead_flag = 1;
 		pthread_mutex_unlock(philo->table->mutex_dead);
 		printf("Dead flag para el Philo [%d]: %d\n", philo->id, philo->table->dead_flag);
-		//pthread_mutex_unlock(&philo->meal_mutex);
+		pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
-	//pthread_mutex_unlock(&philo->meal_mutex);
+	pthread_mutex_unlock(&philo->meal_mutex);
 	return (0);
 }
 
@@ -57,21 +57,8 @@ void	smart_usleep(t_philo *philo, int time_to_wait)
 	while ((actual_time - start) < time_to_wait)
 	{
 		actual_time = ft_now(philo->table);
-		//pthread_mutex_lock(table->mutex_dead);
-		if (set_dead(philo) == 1)
-		{
-			print_dead(philo);
-			//pthread_mutex_unlock(table->mutex_dead);
-			break ;
-		}
-		//pthread_mutex_unlock(table->mutex_dead);
-		usleep(500);
+		usleep(100);
 	}
-	//! Añadido esta comprobacion. No se si esta bien o no
-/* 	pthread_mutex_lock(table->mutex_dead);
-	if (set_dead(table->philos) == 1)
-		print_dead(table->philos);
-	pthread_mutex_unlock(table->mutex_dead); */
 }
 
 void	ft_print_mutex(t_philo *philo, int status)
@@ -104,9 +91,9 @@ void	ft_print_mutex(t_philo *philo, int status)
 void	print_dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->print_mutex);
-	ft_putstr_fd(RED, 2);
+	ft_putstr_fd(RED, 1);
 	printf("%04ld Philo %d %s", ft_now(philo->table), philo->id, DIED);
-	ft_putstr_fd(RST, 2);
+	ft_putstr_fd(RST, 1);
 	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 
@@ -130,7 +117,7 @@ void	ft_pair_philo(t_philo *philo)
 	//pthread_mutex_lock(&philo->meal_mutex);
 	//smart_usleep(philo->table, philo->table->time_to_eat / 2);
 	pthread_mutex_lock(philo->right_fork);
-	smart_usleep(philo, philo->table->time_to_eat / 2);
+	smart_usleep(philo, 5);
 	pthread_mutex_lock(philo->left_fork);
 	ft_print_mutex(philo, 1);
 	ft_print_mutex(philo, 2);
@@ -147,21 +134,22 @@ int	philo_eating(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
+		//smart_usleep(philo, philo->table->time_to_sleep / 2);
 		ft_pair_philo(philo);
-		if (set_dead(philo) == 1)
+/* 		if (set_dead(philo) == 1)
 		{
 			print_dead(philo);
 			return (1);
-		}
+		} */
 	}
 	else
 	{
 		ft_odd_philo(philo);
-		if (set_dead(philo) == 1)
+/* 		if (set_dead(philo) == 1)
 		{
 			print_dead(philo);
 			return (1);
-		}
+		} */
 	}
 	return (0);
 }
@@ -178,7 +166,7 @@ int	philo_sleeping(t_philo *philo, int status)
 int	philo_thinking(t_philo *philo, int status)
 {
 	ft_print_mutex(philo, status);
-	smart_usleep(philo, philo->table->time_to_die);
+	usleep(5);
 	if (philo->table->dead_flag == 1)
 		return (1);
 	return (0);
@@ -192,8 +180,14 @@ void	join_the_threads(t_data *table, int threads_init)
 		printf("Unificando hilo [%d]\n", threads_init);
 		threads_init--;
 	}
+	pthread_join(table->monitor, NULL);
 }
+/* 
+! CREAR EL LIMITE DE VECES COMIDA EN CASO DE TENER AV[5]
+* COMENZAR CON EL ARREGLO DE LOS INIT_MUTEX Y COMPROBAR DATA RACE Y DEADLOCKS
+? COMPROBAR LEAKS DE MEMORIA
 
+*/
 void	*routine(void *argv)
 {
 	t_philo	*philo;
@@ -207,6 +201,27 @@ void	*routine(void *argv)
 			break ;
 		if (philo_thinking(philo, 4) == 1)
 			break ;
+		usleep(20);
+	}
+	return (NULL);
+}
+
+void	*routine_monitor(void *argv)
+{
+	t_data	*table;
+	int		i;
+
+	table = (t_data *)argv;
+	i = 0;
+	while (1)
+	{
+		if (set_dead(&table->philos[i]) == 1)
+		{
+			print_dead(&table->philos[i]);
+			break ;
+		}
+		i = (i + 1) % table->n_philos;
+		usleep(10);
 	}
 	return (NULL);
 }
@@ -215,6 +230,9 @@ void	ft_philo_thread(t_philo *philo)
 {
 	int	i;
 
+	if (pthread_create(&philo->table->monitor, NULL, routine_monitor, 
+		philo->table) != 0)
+		join_the_threads(philo->table, 0);
 	i = 0;
 	while (i < philo->table->n_philos)
 	{
@@ -256,11 +274,6 @@ void	ft_philo_thread(t_philo *philo)
 			break ;
 	}
 } */
-
-/* 
-* Crear el hilo del monitor y que comience a comprobar si mueren o no
-? Comenzar a ver los data race y deadlocks
-*/
 
 int main(int ac, char **av)
 {

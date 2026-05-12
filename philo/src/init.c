@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 11:19:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/04/27 15:08:31 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/12 20:38:03 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	init_one_philo(t_philo *philo, t_data *table, int i)
 {
 	philo->id = i + 1;
 	philo->meals_eaten = 0;
-	philo->last_meal_time = 0;
+	philo->last_meal_time = ft_now(table);
 	philo->left_fork = &table->forks[i];
 	philo->right_fork = &table->forks[(i + 1) % table->n_philos];
 	philo->table = table;
