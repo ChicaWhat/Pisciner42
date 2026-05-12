@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/12 20:44:16 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/12 20:54:18 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,8 @@ void	join_the_threads(t_data *table, int threads_init)
 ! CREAR EL LIMITE DE VECES COMIDA EN CASO DE TENER AV[5]
 * COMENZAR CON EL ARREGLO DE LOS INIT_MUTEX Y COMPROBAR DATA RACE Y DEADLOCKS
 ? COMPROBAR LEAKS DE MEMORIA
-
+! HACER LA COMPROBACION PARA UN SOLO PHILO
+! CREAR LA CONDICION DE QUE NO PASE DE 200 PHILOS
 */
 void	*routine(void *argv)
 {
