@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 11:19:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/12 20:38:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/20 17:40:51 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,30 @@ int	init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i)
 		return (2);
 	while (i < table->n_philos)
 	{
-		*forks_inited = i;
 		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
 			return (2);
+		*forks_inited = i;
 		i++;
 	}
 	table->philos = malloc(table->n_philos * sizeof(t_philo));
 	if (!table->philos)
 		return (2);
+	return (0);
+}
+
+int	init_mutex2(t_data *table, int *meals_inited)
+{
+	int	i;
+	
+	i = 0;
+	*meals_inited = -1;
+	while (i < table->n_philos)
+	{
+		if (pthread_mutex_init(&table->philos[i].meal_mutex, NULL) != 0)
+			return (1);
+		*meals_inited = i;
+		i++;
+	}
 	return (0);
 }
 
@@ -89,8 +105,6 @@ void	init_one_philo(t_philo *philo, t_data *table, int i)
 	philo->left_fork = &table->forks[i];
 	philo->right_fork = &table->forks[(i + 1) % table->n_philos];
 	philo->table = table;
-	if (pthread_mutex_init(&philo->meal_mutex, NULL) != 0)
-		pthread_mutex_destroy(&philo->meal_mutex);
 }
 
 void	init_philos(t_data *table)

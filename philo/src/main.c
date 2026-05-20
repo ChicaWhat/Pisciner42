@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:33:37 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/20 17:19:03 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,20 @@
 int main(int ac, char **av)
 {
 	t_data	*table;
+	int		meals_inited;
+
 	if (check_av(ac, av))
 		return (1);
 	table = init_data_struct(ac,av);
 	if (!table)
 		return (1);
 	init_philos(table);
+	meals_inited = -1;
+	init_mutex2(table, &meals_inited);
 	ft_philo_thread(table->philos);
 	if (table->n_philos > 1)
 		join_the_threads(table, table->n_philos);
-	ft_cleanup(table, 0, 0);
+	ft_cleanup(table, 0, 2);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:37:07 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/20 17:14:12 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	ft_cleanup(t_data *table, int forks_inited, int error_code);
 int		init_data2(t_data *table);
 t_data	*init_data_struct(int ac, char **av);
 int		init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i);
+int		init_mutex2(t_data *table, int *meals_inited);
 void	init_one_philo(t_philo *philo, t_data *table, int i);
 void	init_philos(t_data *table);
 void	printf_each_philo(t_data *table);

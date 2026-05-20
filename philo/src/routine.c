@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:21:48 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:26:37 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/20 16:49:55 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	*routine_monitor(void *argv)
 		if (all_philos_eaten(table->philos) == 0)
 			break ;
 		i = (i + 1) % table->n_philos;
-		//usleep(5);
+		usleep(500);
 	}
 	return (NULL);
 }
