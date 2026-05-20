@@ -15,6 +15,12 @@ SRC_FILES = main.c \
 			utils.c \
 			clean.c \
 			init.c \
+			print.c \
+			routine.c \
+			states.c \
+			states2.c \
+			threads.c \
+			utils2.c \
 			
 
 # Rutas completas a los archivos fuente

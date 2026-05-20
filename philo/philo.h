@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/13 13:57:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/20 16:37:07 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,21 @@ void	ft_putstr_fd(char *s, int fd);
 void	print_dead(t_philo *philo);
 void	ft_print_mutex(t_philo *philo, int status);
 void	*routine_with_av(void *argv);
+void	*routine_monitor(void *argv);
+void	*routine(void *argv);
+void	*one_philo_routine(void *argv);
+int		all_philos_eaten(t_philo *philo);
+void	ft_odd_philo(t_philo *philo);
+void	ft_pair_philo(t_philo *philo);
+int		philo_eating(t_philo *philo);
+int		philo_sleeping(t_philo *philo, int status);
+int		philo_thinking(t_philo *philo, int status);
+int		set_dead(t_philo *philo);
 
-int	is_digit(int c);
-int	is_av_valid(char **av);
-int	check_av(int ac, char **av);
-int	ft_atoi(char *s);
-int	main(int ac, char **av);
+int		is_digit(int c);
+int		is_av_valid(char **av);
+int		check_av(int ac, char **av);
+int		ft_atoi(char *s);
+int		main(int ac, char **av);
 
 #endif
