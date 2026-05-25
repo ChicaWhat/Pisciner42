@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 22:35:20 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/11 12:02:45 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 17:13:02 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	is_av_valid(char **av)
 		j = 0;
 		while (av[i][j])
 		{
-			if (!is_digit(av[i][j]))
+			if (!is_digit(av[i][j]) || av[1] == 0)
 				return (1);
 			j++;
 		}
@@ -48,7 +48,7 @@ int	check_av(int ac, char **av)
 		ft_putstr_fd(RST, 2);
 		return (1);
 	}
-	if (is_av_valid(av))
+	if (is_av_valid(av) || ft_atoi(av[1]) == 0)
 	{
 		ft_putstr_fd(ERR_INVALID_ARGV, 2);
 		ft_putstr_fd(RST, 2);
