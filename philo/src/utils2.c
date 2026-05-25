@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:27:45 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 10:48:00 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 13:54:44 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ void	smart_usleep(t_philo *philo, int time_to_wait)
 	while ((actual_time - start) < time_to_wait)
 	{
 		actual_time = ft_now(philo->table);
+		pthread_mutex_lock(philo->table->mutex_dead);
+		if (philo->table->dead_flag == 1)
+		{
+			pthread_mutex_unlock(philo->table->mutex_dead);
+			return ;
+		}
+		pthread_mutex_unlock(philo->table->mutex_dead);
 		usleep(20);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:33:23 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:33:41 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 13:53:27 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	all_philos_eaten(t_philo *philo)
 
 	j = 0;
 	all_done = 1;
+	if (philo->table->target_meals == -1)
+		return (1);
 	while (j < philo->table->n_philos)
 	{
 		pthread_mutex_lock(&philo[j].meal_mutex);

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:31:46 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 10:16:32 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 13:18:56 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	ft_odd_philo(t_philo *philo)
 
 void	ft_pair_philo(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right_fork);
 	smart_usleep(philo, 5);
+	pthread_mutex_lock(philo->right_fork);
 	pthread_mutex_lock(philo->left_fork);
 	ft_print_mutex(philo, 1);
 	ft_print_mutex(philo, 2);
