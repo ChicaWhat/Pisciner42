@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:31:46 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 13:18:56 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 18:33:53 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	ft_odd_philo(t_philo *philo)
 	ft_print_mutex(philo, 2);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
-	smart_usleep(philo, philo->table->time_to_eat);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
+	smart_usleep(philo, philo->table->time_to_eat);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 }
@@ -36,9 +36,9 @@ void	ft_pair_philo(t_philo *philo)
 	ft_print_mutex(philo, 2);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
-	smart_usleep(philo, philo->table->time_to_eat);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
+	smart_usleep(philo, philo->table->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }

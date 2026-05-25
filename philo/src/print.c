@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:17:01 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:17:31 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 18:51:15 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,16 @@
 
 void	ft_print_mutex(t_philo *philo, int status)
 {
+	//! Esto esta añadido nuevo
 	pthread_mutex_lock(&philo->table->print_mutex);
+	pthread_mutex_lock(philo->table->mutex_dead);
+    if (philo->table->dead_flag == 1)
+    {
+        pthread_mutex_unlock(philo->table->mutex_dead);
+        pthread_mutex_unlock(&philo->table->print_mutex);
+        return ;
+    }
+    pthread_mutex_unlock(philo->table->mutex_dead);
 	if (status == 1)
 	{
 		ft_putstr_fd(CYAN, 1);

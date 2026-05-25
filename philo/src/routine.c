@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:21:48 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 12:37:30 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 18:33:05 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	*routine_monitor(void *argv)
 		if (all_philos_eaten(table->philos) == 0)
 			break ;
 		i = (i + 1) % table->n_philos;
-		usleep(500);
+		usleep(50);
 	}
 	return (NULL);
 }
@@ -50,6 +50,9 @@ void	*routine_with_av(void *argv)
 	t_philo	*philo;
 
 	philo = (t_philo *)argv;
+// !Estas dos lineas son nuevas
+	if (philo->id % 2 == 0)
+		smart_usleep(philo, 5);
 	while(1)
 	{
 		pthread_mutex_lock(&philo->meal_mutex);
@@ -80,6 +83,9 @@ void	*routine(void *argv)
 		routine_with_av(philo);
 		return (NULL);
 	}
+	// !Estas dos lineas son nuevas
+	if (philo->id % 2 == 0)
+		smart_usleep(philo, 5);
 	while (1)
 	{
 		if (philo_eating(philo) == 1)
