@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:31:46 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 17:02:32 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 10:16:32 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ int	philo_sleeping(t_philo *philo, int status)
 {
 	ft_print_mutex(philo, status);
 	smart_usleep(philo, philo->table->time_to_sleep);
-	pthread_mutex_lock(&philo->table->mutex_dead);
+	pthread_mutex_lock(philo->table->mutex_dead);
 	if (philo->table->dead_flag == 1)
 	{
-		pthread_mutex_unlock(&philo->table->mutex_dead);
+		pthread_mutex_unlock(philo->table->mutex_dead);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->table->mutex_dead);
+	pthread_mutex_unlock(philo->table->mutex_dead);
 	return (0);
 }
 
@@ -83,12 +83,12 @@ int	philo_thinking(t_philo *philo, int status)
 {
 	ft_print_mutex(philo, status);
 	usleep(5);
-	pthread_mutex_lock(&philo->table->mutex_dead);
+	pthread_mutex_lock(philo->table->mutex_dead);
 	if (philo->table->dead_flag == 1)
 	{
-		pthread_mutex_unlock(&philo->table->mutex_dead);
+		pthread_mutex_unlock(philo->table->mutex_dead);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->table->mutex_dead);
+	pthread_mutex_unlock(philo->table->mutex_dead);
 	return (0);
 }

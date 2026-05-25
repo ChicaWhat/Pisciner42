@@ -6,48 +6,41 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 17:19:03 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 11:20:42 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-/* 
-* COMENZAR CON EL ARREGLO DE LOS INIT_MUTEX Y COMPROBAR DATA RACE Y DEADLOCKS
-? COMPROBAR LEAKS DE MEMORIA
-! CREAR LA CONDICION DE QUE NO PASE DE 200 PHILOS
-*/
-
 int main(int ac, char **av)
+{
+	if (check_av(ac, av))
+		return (1);
+	else
+		start_program(ac, av);
+	return (0);
+}
+
+int	start_program(int ac, char **av)
 {
 	t_data	*table;
 	int		meals_inited;
 
-	if (check_av(ac, av))
-		return (1);
 	table = init_data_struct(ac,av);
 	if (!table)
 		return (1);
-	init_philos(table);
 	meals_inited = -1;
-	init_mutex2(table, &meals_inited);
+	if (init_mutex2(table, &meals_inited))
+	{
+		destroy_meal_mutex(table, meals_inited);
+		ft_cleanup(table, 2);
+		return (1);
+	}
+	init_philos(table);
 	ft_philo_thread(table->philos);
 	if (table->n_philos > 1)
 		join_the_threads(table, table->n_philos);
-	ft_cleanup(table, 0, 2);
+	destroy_meal_mutex(table, meals_inited);
+	ft_cleanup(table, 2);
 	return (0);
-}
-
-void	printf_each_philo(t_data *table)
-{
-	int i = 0;
-	while (i < table->n_philos)
-	{
-		printf("-----------------------------------\n");
-		printf("N de philo: %d\n", i);
-		printf("id: %d\n", table->philos[i].id);
-		printf("meals_eaten: %d\n", table->philos[i].meals_eaten);
-		printf("last_meal_time: %ld\n", table->philos[i].last_meal_time);
-		i++;
-	}
 }

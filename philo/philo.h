@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 17:14:12 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 11:43:16 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct s_data
 	int				target_meals; //! av[5] (opcional)
 	long			start_time; // Hora a la que empieza todo
 	int				dead_flag; // (0)->vivo (1)->muerto
+	int				forks_inited;
+	int				monitor_created;
 	pthread_t		monitor;
 	pthread_mutex_t	*mutex_dead; // candado que protege a dead_flag
 	pthread_mutex_t	*forks; // tenedores en la mesa
@@ -71,17 +73,19 @@ typedef struct s_philo
 	t_data			*table; // puntero a la struct t_data
 }	t_philo;
 
-void	ft_cleanup(t_data *table, int forks_inited, int error_code);
+void	ft_cleanup(t_data *table, int error_code);
+void	destroy_meal_mutex(t_data *table, int meals_inited);
+int		start_program(int ac, char **av);
 int		init_data2(t_data *table);
 t_data	*init_data_struct(int ac, char **av);
-int		init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i);
+int		init_mutex(t_data *table, int *dead_inited, int i);
 int		init_mutex2(t_data *table, int *meals_inited);
 void	init_one_philo(t_philo *philo, t_data *table, int i);
 void	init_philos(t_data *table);
-void	printf_each_philo(t_data *table);
 long	ft_gettimeofday(void);
 long	ft_now(t_data *table);
 int		philo_eating(t_philo *philo);
+int		monitor_thread(t_data *table);
 void	ft_philo_thread(t_philo *philo);
 void	join_the_threads(t_data *table, int threads_init);
 void	smart_usleep(t_philo *philo, int time_to_wait);

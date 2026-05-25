@@ -3,7 +3,7 @@ NAME = philo
 
 # Compilador y flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pthread #-fsanitize=address
 
 # Directorios
 SRC_DIR = src
@@ -14,7 +14,8 @@ SRC_FILES = main.c \
 			parser.c \
 			utils.c \
 			clean.c \
-			init.c \
+			init_struct.c \
+			init_philos.c \
 			print.c \
 			routine.c \
 			states.c \

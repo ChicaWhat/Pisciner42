@@ -1,33 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 11:19:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 17:40:51 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 12:23:08 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-int	init_data2(t_data *table)
-{
-	int		forks_inited;
-	int		dead_inited;
-
-	forks_inited = 0;
-	dead_inited = init_mutex(table, &forks_inited, &dead_inited, 0);
-	table->start_time = ft_gettimeofday();
-	table->dead_flag = 0;
-	if (dead_inited != 0)
-	{
-		ft_cleanup(table, forks_inited, dead_inited);
-		return (1);
-	}
-	return (0);
-}
 
 t_data	*init_data_struct(int ac, char **av)
 {
@@ -43,6 +26,8 @@ t_data	*init_data_struct(int ac, char **av)
 	table->time_to_die = ft_atoi(av[2]);
 	table->time_to_eat = ft_atoi(av[3]);
 	table->time_to_sleep = ft_atoi(av[4]);
+	table->forks_inited  = -1;
+	table->monitor_created = 0;
 	if (ac == 6)
 		table->target_meals = ft_atoi(av[5]);
 	else
@@ -52,8 +37,22 @@ t_data	*init_data_struct(int ac, char **av)
 	return (table);
 }
 
+int	init_data2(t_data *table)
+{
+	int		dead_inited;
 
-int	init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i)
+	dead_inited = init_mutex(table, &dead_inited, 0);
+	table->start_time = ft_gettimeofday();
+	table->dead_flag = 0;
+	if (dead_inited != 0)
+	{
+		ft_cleanup(table, dead_inited);
+		return (1);
+	}
+	return (0);
+}
+
+int	init_mutex(t_data *table, int *dead_inited, int i)
 {
 	table->mutex_dead = malloc(sizeof (pthread_mutex_t));
 	if (!table->mutex_dead)
@@ -71,7 +70,7 @@ int	init_mutex(t_data *table, int *forks_inited, int *dead_inited, int i)
 	{
 		if (pthread_mutex_init(&table->forks[i], NULL) != 0)
 			return (2);
-		*forks_inited = i;
+		table->forks_inited = i;
 		i++;
 	}
 	table->philos = malloc(table->n_philos * sizeof(t_philo));
@@ -94,27 +93,4 @@ int	init_mutex2(t_data *table, int *meals_inited)
 		i++;
 	}
 	return (0);
-}
-
-//* GESTIONAR EL ERROR DE LA CREACION DEL MUTEX MEAL_MUTEX
-void	init_one_philo(t_philo *philo, t_data *table, int i)
-{
-	philo->id = i + 1;
-	philo->meals_eaten = 0;
-	philo->last_meal_time = ft_now(table);
-	philo->left_fork = &table->forks[i];
-	philo->right_fork = &table->forks[(i + 1) % table->n_philos];
-	philo->table = table;
-}
-
-void	init_philos(t_data *table)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->n_philos)
-	{
-		init_one_philo(&table->philos[i], table, i);
-		i++;
-	}
 }

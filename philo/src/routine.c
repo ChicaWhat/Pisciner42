@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:21:48 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:49:55 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 12:37:30 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,8 @@ void	*routine_monitor(void *argv)
 void	*routine_with_av(void *argv)
 {
 	t_philo	*philo;
-	//int		i;
 
 	philo = (t_philo *)argv;
-	//i = 0;
 	while(1)
 	{
 		pthread_mutex_lock(&philo->meal_mutex);

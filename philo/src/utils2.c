@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:27:45 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/20 16:28:10 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/25 10:48:00 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	set_dead(t_philo *philo)
 		pthread_mutex_lock(philo->table->mutex_dead);
 		philo->table->dead_flag = 1;
 		pthread_mutex_unlock(philo->table->mutex_dead);
-		printf("Dead flag para el Philo [%d]: %d\n", philo->id, philo->table->dead_flag);
 		pthread_mutex_unlock(&philo->meal_mutex);
 		return (1);
 	}
