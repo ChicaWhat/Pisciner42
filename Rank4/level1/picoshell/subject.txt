@@ -37,3 +37,40 @@ array of strings. You have to create a pipeline using the cmds you receive from
 the main, and execute them. If there is any error the function should return 1.
 Close all FFS before returning. If the cmds executed successfully wait all
 child processes and return 0.
+
+-------------------------------------------------------------------------------
+Ejercicio 2: picoshell
+
+Nombre de la tarea: picoshell 
+Archivos esperados: picoshell.c 
+Funciones permitidas: close, fork, wait, exit, execvp, dup2, pipe
+
+Escribe la siguiente función:
+
+int picoshell(char *cmds[]);
+
+El objetivo de esta función es ejecutar una tubería (pipeline).
+Debe ejecutar cada comando en cmds y conectar la salida
+de uno a la entrada del siguiente comando
+(tal como lo hace una shell).
+
+cmds contiene una lista de comandos válidos terminada en NULL.
+Cada fila de cmds es un arreglo argv directamente
+utilizable para una llamada a execvp.
+El primer argumento de cada comando es el nombre del
+comando o la ruta y puede pasarse directamente
+como el primer argumento de execvp.
+
+Si ocurre algún error, la función debe devolver 1
+(por supuesto, debes cerrar todos los descriptores de archivo abiertos
+antes de hacerlo). De lo contrario, la función debe esperar a todos
+los procesos hijos y devolver 0.
+Encontrarás en este directorio un archivo main.c que contiene
+algo para ayudarte a probar tu función.
+
+Ejemplos:
+
+./picoshell /bin/ls "|" /usr/bin/grep picoshell
+picoshell
+./picoshell echo 'squalala' "|" cat "|" sed 's/a/b/g'
+squblblb/

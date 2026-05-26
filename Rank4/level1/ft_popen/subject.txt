@@ -39,3 +39,32 @@ int	main() {
 Hints:
 Do not leak file descriptors!
 This exercise is inspired by the libc's popen().
+
+-------------------------------------------------------------------------------
+
+Ejercicio 1: ft_popen
+
+Funciones permitidas: pipe, fork, dup2, execvp, close, exit
+
+Escribe la siguiente función:
+
+int ft_popen(const char *file, const char *argv[], char type);
+
+La función debe ejecutar el archivo ejecutable (file) con los argumentos argv (usando execvp).
+
+   - Si el type es 'r', la función debe devolver un descriptor de archivo conectado a la salida del comando.
+
+   - Si el type es 'w', la función debe devolver un descriptor de archivo conectado a la entrada del comando.
+
+   - En caso de error o parámetro inválido, la función debe devolver -1.
+
+Ejemplo:
+
+int main() {
+    int fd = ft_popen("ls", (char const *[]){"ls", NULL}, 'r');
+    char *line;
+    while(line = get_next_line(fd))
+        ft_putstr(line);
+}
+
+Pista: ¡No dejes fugas de descriptores de archivo (file descriptors)!

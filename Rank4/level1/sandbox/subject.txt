@@ -24,3 +24,47 @@ If verbose is true, you must write the appropriate message among the following:
 You must not leak processes (even in zombie state, this will be checked using wait).
 
 We will test your code with very bad functions.
+
+------------------------------------------------------------------------------------------
+
+Ejercicio 3: sandbox
+
+Nombre de la tarea: sandbox
+Archivos esperados: sandbox.c
+Funciones permitidas:
+fork, waitpid, exit, alarm,
+sigaction, kill, printf, strsignal, errno
+
+Escribe la siguiente función:
+
+#include <stdbool.h>
+int sandbox(void (*f)(void), unsigned int timeout, bool verbose);
+
+Esta función debe probar si la función f es una función "buena" (nice)
+o una función "mala" (bad).
+Debes devolver 1 si f es buena, 0 si f es mala,
+o -1 en caso de un error en tu propia función.
+
+Una función se considera mala si:
+
+   - Es terminada o detenida por una señal (segfault, abort, etc...).
+
+   - Sale (exit) con cualquier código de salida que no sea 0.
+
+   - Se agota el tiempo de espera (timeout).
+
+Si verbose es true (verdadero), debes escribir
+el mensaje apropiado entre los siguientes:
+
+   - "Nice function!\n"
+   (¡Buena función!)
+   - "Bad function: exited with code <exit_code>\n"
+   (Mala función: salió con código...)
+   - "Bad function: <signal description>\n"
+   (Mala función: descripción de la señal...)
+   - "Bad function: timed out after <timeout> seconds\n"
+   (Mala función: se agotó el tiempo después de X segundos...)
+
+No debes dejar fugas de procesos
+(incluso en estado zombie; esto se verificará usando wait).
+Probaremos tu código con funciones muy malas.
