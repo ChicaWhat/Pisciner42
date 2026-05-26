@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/26 18:07:02 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 18:57:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 #  define RST "\033[0m"
 # endif
 
-typedef struct	s_philo t_philo;
+typedef struct s_philo	t_philo;
 
 /**
 * @struct s_data
