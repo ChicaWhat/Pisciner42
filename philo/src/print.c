@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:17:01 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/26 15:30:19 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 20:47:11 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ int	check_dead_before_print(t_philo *philo)
 	if (philo->table->dead_flag == 1)
 	{
 		pthread_mutex_unlock(philo->table->mutex_dead);
-		pthread_mutex_unlock(&philo->table->print_mutex);
 		return (1);
 	}
 	pthread_mutex_unlock(philo->table->mutex_dead);
