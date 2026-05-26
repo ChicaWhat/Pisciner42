@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:31:46 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/26 17:46:33 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 18:09:52 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	ft_odd_philo(t_philo *philo)
 	pthread_mutex_lock(philo->left_fork);
 	pthread_mutex_lock(philo->right_fork);
 	ft_print_mutex(philo, 1);
-	ft_print_mutex(philo, 2);//poner los dos tenedores
+	ft_print_mutex(philo, 1);
+	ft_print_mutex(philo, 2);
 	smart_usleep(philo, philo->table->time_to_eat);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = ft_now(philo->table);
@@ -31,6 +32,7 @@ void	ft_pair_philo(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_fork);
 	pthread_mutex_lock(philo->left_fork);
+	ft_print_mutex(philo, 1);
 	ft_print_mutex(philo, 1);
 	ft_print_mutex(philo, 2);
 	smart_usleep(philo, philo->table->time_to_eat);
@@ -75,6 +77,5 @@ int	philo_thinking(t_philo *philo, int status)
 	}
 	pthread_mutex_unlock(philo->table->mutex_dead);
 	ft_print_mutex(philo, status);
-	//	usleep(5);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:21:48 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/26 18:00:01 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 18:08:44 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	*routine_monitor(void *argv)
 		if (all_philos_eaten(table->philos) == 0)
 			break ;
 		i = (i + 1) % table->n_philos;
-//		usleep(30);
 	}
 	return (NULL);
 }
@@ -67,7 +66,6 @@ void	*routine_with_av(void *argv)
 			return (NULL);
 		if (philo_thinking(philo, 4) == 1)
 			return (NULL);
-//		usleep(5);
 	}
 	return (NULL);
 }
@@ -92,7 +90,6 @@ void	*routine(void *argv)
 			break ;
 		if (philo_thinking(philo, 4) == 1)
 			break ;
-//		usleep(5);
 	}
 	return (NULL);
 }
