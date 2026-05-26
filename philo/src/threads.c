@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:18:17 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 12:19:09 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 16:03:06 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	monitor_thread(t_data *table)
 {
-	if (pthread_create(&table->monitor, NULL, routine_monitor, 
-		table) == 0)
+	if (pthread_create(&table->monitor, NULL, routine_monitor,
+			table) == 0)
 	{
 		table->monitor_created = 1;
 		return (0);
@@ -37,8 +37,8 @@ void	ft_philo_thread(t_philo *philo)
 	i = 0;
 	while (i < philo->table->n_philos)
 	{
-		if (pthread_create(&philo[i].thread, NULL, 
-			routine, &philo[i]) != 0)
+		if (pthread_create(&philo[i].thread, NULL,
+				routine, &philo[i]) != 0)
 		{
 			join_the_threads(philo->table, i);
 			return ;

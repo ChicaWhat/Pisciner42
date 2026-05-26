@@ -6,13 +6,13 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 18:18:05 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 11:20:42 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 16:05:24 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	if (check_av(ac, av))
 		return (1);
@@ -26,7 +26,7 @@ int	start_program(int ac, char **av)
 	t_data	*table;
 	int		meals_inited;
 
-	table = init_data_struct(ac,av);
+	table = init_data_struct(ac, av);
 	if (!table)
 		return (1);
 	meals_inited = -1;

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:17:01 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/26 15:03:44 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 15:30:19 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,9 @@
 
 void	ft_print_mutex(t_philo *philo, int status)
 {
-	//! Esto esta añadido nuevo
+	if (check_dead_before_print(philo))
+		return ;
 	pthread_mutex_lock(&philo->table->print_mutex);
-	pthread_mutex_lock(philo->table->mutex_dead);
-    if (philo->table->dead_flag == 1)
-    {
-        pthread_mutex_unlock(philo->table->mutex_dead);
-        pthread_mutex_unlock(&philo->table->print_mutex);
-        return ;
-    }
-    pthread_mutex_unlock(philo->table->mutex_dead);
 	if (status == 1)
 	{
 		ft_putstr_fd(CYAN, 1);
@@ -46,6 +39,19 @@ void	ft_print_mutex(t_philo *philo, int status)
 	}
 	ft_putstr_fd(RST, 1);
 	pthread_mutex_unlock(&philo->table->print_mutex);
+}
+
+int	check_dead_before_print(t_philo *philo)
+{
+	pthread_mutex_lock(philo->table->mutex_dead);
+	if (philo->table->dead_flag == 1)
+	{
+		pthread_mutex_unlock(philo->table->mutex_dead);
+		pthread_mutex_unlock(&philo->table->print_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(philo->table->mutex_dead);
+	return (0);
 }
 
 void	print_dead(t_philo *philo)

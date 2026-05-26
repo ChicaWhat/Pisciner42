@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:33:23 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 13:53:27 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 18:00:18 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	all_philos_eaten(t_philo *philo)
 {
 	int	j;
-	int all_done;
+	int	all_done;
 
 	j = 0;
 	all_done = 1;

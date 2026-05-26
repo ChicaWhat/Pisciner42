@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:27:45 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 13:54:44 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 18:00:21 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 long	ft_gettimeofday(void)
 {
 	struct timeval	tv;
-	
+
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + (tv.tv_usec / 1000));
 }

@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 11:19:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 13:15:50 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 16:01:54 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_data	*init_data_struct(int ac, char **av)
 	table->time_to_die = ft_atoi(av[2]);
 	table->time_to_eat = ft_atoi(av[3]);
 	table->time_to_sleep = ft_atoi(av[4]);
-	table->forks_inited  = -1;
+	table->forks_inited = -1;
 	table->monitor_created = 0;
 	if (ac == 6)
 		table->target_meals = ft_atoi(av[5]);
@@ -82,7 +82,7 @@ int	init_mutex(t_data *table, int *dead_inited, int i)
 int	init_mutex2(t_data *table, int *meals_inited)
 {
 	int	i;
-	
+
 	i = 0;
 	*meals_inited = -1;
 	while (i < table->n_philos)

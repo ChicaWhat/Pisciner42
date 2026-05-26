@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 22:35:20 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 17:13:02 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 16:05:38 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	is_av_valid(char **av)
 {
 	int	i;
 	int	j;
+
 	if (!av || !*av)
 		return (1);
 	i = 1;

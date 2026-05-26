@@ -6,7 +6,7 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/20 16:21:48 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 18:33:05 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 18:00:01 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	*routine_monitor(void *argv)
 		if (all_philos_eaten(table->philos) == 0)
 			break ;
 		i = (i + 1) % table->n_philos;
-		usleep(50);
+//		usleep(30);
 	}
 	return (NULL);
 }
@@ -50,10 +50,9 @@ void	*routine_with_av(void *argv)
 	t_philo	*philo;
 
 	philo = (t_philo *)argv;
-// !Estas dos lineas son nuevas
 	if (philo->id % 2 == 0)
 		smart_usleep(philo, 5);
-	while(1)
+	while (1)
 	{
 		pthread_mutex_lock(&philo->meal_mutex);
 		if (philo->meals_eaten == philo->table->target_meals)
@@ -63,12 +62,12 @@ void	*routine_with_av(void *argv)
 		}
 		pthread_mutex_unlock(&philo->meal_mutex);
 		if (philo_eating(philo) == 1)
-			return (NULL) ;
+			return (NULL);
 		if (philo_sleeping(philo, 3) == 1)
-			return (NULL) ;
+			return (NULL);
 		if (philo_thinking(philo, 4) == 1)
-			return (NULL) ;
-		usleep(5);
+			return (NULL);
+//		usleep(5);
 	}
 	return (NULL);
 }
@@ -76,14 +75,13 @@ void	*routine_with_av(void *argv)
 void	*routine(void *argv)
 {
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)argv;
 	if (philo->table->target_meals != -1)
 	{
 		routine_with_av(philo);
 		return (NULL);
 	}
-	// !Estas dos lineas son nuevas
 	if (philo->id % 2 == 0)
 		smart_usleep(philo, 5);
 	while (1)
@@ -94,7 +92,7 @@ void	*routine(void *argv)
 			break ;
 		if (philo_thinking(philo, 4) == 1)
 			break ;
-		usleep(5);
+//		usleep(5);
 	}
 	return (NULL);
 }
