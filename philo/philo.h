@@ -6,11 +6,11 @@
 /*   By: carmegon <carmegon@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 21:47:44 by carmegon          #+#    #+#             */
-/*   Updated: 2026/05/25 11:43:16 by carmegon         ###   ########.fr       */
+/*   Updated: 2026/05/26 15:11:17 by carmegon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PHILO_H
+#ifndef PHILO_H
 # define PHILO_H
 
 # include <stdio.h>
@@ -22,26 +22,26 @@
 # include <sys/time.h>
 # include "./error.h"
 
-#ifndef RED
-# define RED	"\033[0;31m"
-#endif
-#ifndef BLUE
-# define BLUE	"\033[0;34m"
-#endif
-#ifndef PURPLE
-# define PURPLE	"\033[0;35m"
-#endif
-#ifndef CYAN
-# define CYAN	"\033[0;36m"
-#endif
-#ifndef GREEN
-# define GREEN	"\033[0;32m"
-#endif
-#ifndef RST
-# define RST	"\033[0m"
-#endif
+# ifndef RED
+#  define RED "\033[0;31m"
+# endif
+# ifndef BLUE
+#  define BLUE "\033[0;34m"
+# endif
+# ifndef PURPLE
+#  define PURPLE "\033[0;35m"
+# endif
+# ifndef CYAN
+#  define CYAN "\033[0;36m"
+# endif
+# ifndef GREEN
+#  define GREEN "\033[0;32m"
+# endif
+# ifndef RST
+#  define RST "\033[0m"
+# endif
 
-typedef struct s_philo t_philo;
+typedef	struct s_philo t_philo;
 
 typedef struct s_data
 {
