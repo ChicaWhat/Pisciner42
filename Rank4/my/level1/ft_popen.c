@@ -11,8 +11,10 @@ int ft_popen(const char *file, char *const argv[], char type)
 
 	//! Comprobar que los punteros contienen info y la variable type sea distinta
 	//! a 'r' o 'w'
-	if (!file || !argv || type != 'r' && type != 'w')
+	if (!file || !argv || (type != 'r' && type != 'w'))
 		return (-1);
+	//! Creamos el pipe ANTES de hacer fork(), porque si llamamos antes a fork()
+	//! se crearan procesos de Padre e Hijo sin estar conectados entre si
 	if (pipe(fd) < 0)
 		return (-1);
 	//* Le damos valores a la variable res y creamos el proceso Hijo
@@ -30,6 +32,7 @@ int ft_popen(const char *file, char *const argv[], char type)
 		if (type == 'r')
 		{
 			close(fd[0]);
+			//* dup2(oldfd, newfd);
 			dup2(fd[1], STDOUT_FILENO);
 			close(fd[1]);
 		}
@@ -39,7 +42,7 @@ int ft_popen(const char *file, char *const argv[], char type)
 			dup2(fd[0], STDIN_FILENO);
 			close(fd[0]);
 		}
-		if (execvp(file, argv) < 0);
+		if (execvp(file, argv) < 0)
 			exit (1);
 		exit (0);
 	}
