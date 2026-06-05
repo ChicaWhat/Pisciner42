@@ -47,7 +47,7 @@ Funciones permitidas: close, fork, wait, exit, execvp, dup2, pipe
 
 Escribe la siguiente función:
 
-int picoshell(char *cmds[]);
+int picoshell(char **cmds[]);
 
 El objetivo de esta función es ejecutar una tubería (pipeline).
 Debe ejecutar cada comando en cmds y conectar la salida
