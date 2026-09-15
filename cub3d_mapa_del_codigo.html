@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cub3D · mapa del código actual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16202B;
+  --paper:#EDEFF2;
+  --card:#F7F8FA;
+  --rule:#C3CBD4;
+  --wall:#3F4A54;
+  --floor:#DC6E00;
+  --ceiling:#E11E00;
+  --muted:#5D6B78;
+  --free:#DDE3E9;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;
+  line-height:1.62;
+}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px 120px}
+.col{max-width:70ch}
+
+header.hero{
+  border-bottom:2px solid var(--ink);
+  margin-bottom:56px;
+  padding:64px 0 40px;
+  background-image:
+    linear-gradient(to right, rgba(63,74,84,.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(63,74,84,.10) 1px, transparent 1px);
+  background-size:28px 28px;
+}
+.hero-inner{max-width:1040px;margin:0 auto;padding:0 28px}
+h1{
+  font-size:clamp(2.2rem,6vw,3.6rem);
+  line-height:1.04;
+  margin:0 0 14px;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+.sub{font-size:1.12rem;color:var(--muted);max-width:60ch;margin:0}
+.hero-meta{
+  margin-top:28px;font-family:"IBM Plex Mono",monospace;font-size:.82rem;
+  color:var(--muted);
+}
+.hero-meta span{display:inline-block;margin-right:22px}
+
+h2{
+  font-size:1.62rem;margin:72px 0 6px;letter-spacing:-.01em;font-weight:700;
+  padding-bottom:8px;border-bottom:1px solid var(--rule);
+}
+h2 .n{font-family:"IBM Plex Mono",monospace;font-size:.95rem;color:var(--floor);margin-right:12px;vertical-align:.18em}
+h3{font-size:1.12rem;margin:38px 0 4px;font-weight:600}
+h4{font-size:.98rem;margin:26px 0 2px;font-weight:600;color:var(--wall)}
+p{margin:12px 0}
+code{
+  font-family:"IBM Plex Mono",monospace;font-size:.88em;
+  background:#E2E7EC;padding:1px 5px;border-radius:3px;
+}
+ul,ol{padding-left:22px;margin:12px 0}
+li{margin:7px 0}
+strong{font-weight:600}
+
+nav.toc{
+  border:1px solid var(--rule);background:var(--card);
+  padding:20px 24px;margin:0 0 20px;max-width:70ch;
+}
+nav.toc p{margin:0 0 10px;font-weight:600;font-size:.95rem}
+nav.toc ol{margin:0;padding-left:20px;font-size:.95rem}
+nav.toc a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule)}
+nav.toc a:hover,nav.toc a:focus{border-bottom-color:var(--floor);color:var(--floor)}
+
+figure{
+  margin:34px 0;padding:24px 20px 18px;
+  background:var(--card);
+  border:1px solid var(--rule);
+  background-image:
+    linear-gradient(to right, rgba(63,74,84,.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(63,74,84,.055) 1px, transparent 1px);
+  background-size:22px 22px;
+}
+figure svg{display:block;width:100%;height:auto}
+figcaption{
+  margin-top:14px;font-size:.88rem;color:var(--muted);
+  border-top:1px solid var(--rule);padding-top:10px;
+}
+
+.callout{
+  border-left:4px solid var(--floor);
+  background:var(--card);
+  padding:14px 18px;margin:24px 0;max-width:70ch;
+}
+.callout.warn{border-left-color:var(--ceiling)}
+.callout p:first-child{margin-top:0}
+.callout p:last-child{margin-bottom:0}
+.callout .tag{
+  font-family:"IBM Plex Mono",monospace;font-size:.76rem;
+  color:var(--muted);display:block;margin-bottom:4px;
+}
+
+table{border-collapse:collapse;width:100%;margin:22px 0;font-size:.92rem}
+th,td{border-bottom:1px solid var(--rule);padding:9px 12px 9px 0;text-align:left;vertical-align:top}
+th{font-weight:600;border-bottom:1.5px solid var(--ink)}
+td code{background:transparent;padding:0}
+
+.files{display:grid;gap:0;margin:26px 0;max-width:78ch}
+.file{
+  border-top:1px solid var(--rule);
+  padding:18px 0;
+  display:grid;grid-template-columns:200px 1fr;gap:20px;
+}
+.file:last-child{border-bottom:1px solid var(--rule)}
+.file .name{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:.95rem}
+.file .name em{display:block;font-style:normal;font-family:"IBM Plex Sans",sans-serif;font-weight:400;font-size:.82rem;color:var(--muted);margin-top:3px}
+.file .body p:first-child{margin-top:0}
+.file .body p:last-child{margin-bottom:0}
+@media (max-width:720px){
+  .file{grid-template-columns:1fr;gap:6px}
+}
+
+.trace{
+  font-family:"IBM Plex Mono",monospace;font-size:.86rem;
+  background:var(--card);border:1px solid var(--rule);
+  padding:16px 18px;margin:20px 0;overflow-x:auto;white-space:pre;
+  line-height:1.75;
+}
+
+.status{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+  padding:2px 7px;border:1px solid var(--rule);color:var(--muted);margin-left:8px;vertical-align:.12em}
+.status.off{border-color:var(--ceiling);color:var(--ceiling)}
+.status.mine{border-color:var(--floor);color:var(--floor)}
+
+footer{
+  margin-top:90px;padding-top:22px;border-top:2px solid var(--ink);
+  font-size:.9rem;color:var(--muted);max-width:70ch;
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Qué hace hoy el cub3D<br>de tu compi</h1>
+    <p class="sub">Un recorrido del código tal y como está ahora mismo: qué guarda cada estructura, en qué orden se llama todo, qué partes están apagadas a propósito y dónde encaja tu parser cuando esté listo.</p>
+    <p class="hero-meta">
+      <span>10 archivos</span>
+      <span>MLX42</span>
+      <span>mapa aún hardcodeado</span>
+      <span>render de paredes comentado</span>
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="col">
+
+<nav class="toc">
+  <p>En esta página</p>
+  <ol>
+    <li><a href="#resumen">El resumen en tres frases</a></li>
+    <li><a href="#estructuras">Las estructuras: qué guarda cada caja</a></li>
+    <li><a href="#unidades">La idea clave: píxeles frente a celdas</a></li>
+    <li><a href="#arranque">Diagrama 1 — el arranque</a></li>
+    <li><a href="#bucle">Diagrama 2 — el ciclo de cada fotograma</a></li>
+    <li><a href="#archivos">Archivo por archivo</a></li>
+    <li><a href="#traza">Una traza concreta con el mapa actual</a></li>
+    <li><a href="#apagado">Lo que está apagado y por qué</a></li>
+    <li><a href="#frontera">Dónde entra tu parser</a></li>
+    <li><a href="#riesgos">Cosas que conviene mirar con lupa</a></li>
+  </ol>
+</nav>
+
+<h2 id="resumen"><span class="n">1</span>El resumen en tres frases</h2>
+
+<p>El programa reserva una estructura gigante (<code>t_scene</code>) que lo contiene todo, la rellena con un mapa escrito a mano dentro del propio código, coloca al jugador en la casilla donde hay una <code>N</code>, y arranca el bucle de MLX42.</p>
+
+<p>En cada vuelta de ese bucle lee el teclado, mueve o gira al jugador, lanza un rayo por cada columna de píxeles de la ventana para saber a qué distancia está la pared, y pinta el minimapa en la esquina.</p>
+
+<p>La parte que convierte esas distancias en paredes dibujadas está comentada ahora mismo, así que en pantalla solo se ve el minimapa. No está roto: está apagado a propósito para poder trabajar en el parseo sin pelearse con las texturas.</p>
+
+<h2 id="estructuras"><span class="n">2</span>Las estructuras: qué guarda cada caja</h2>
+
+<p>Todo el estado del programa vive en un único <code>t_scene *scene</code> que se reserva en <code>main</code> y se pasa por puntero a absolutamente todas las funciones. Es la mochila del programa: si algo necesita saberse en dos sitios distintos, está ahí dentro.</p>
+
+<table>
+  <thead><tr><th>Campo de <code>t_scene</code></th><th>Tipo</th><th>Para qué sirve</th></tr></thead>
+  <tbody>
+    <tr><td><code>mlx_connection</code></td><td><code>void *</code></td><td>El handle de MLX42, lo que devuelve <code>mlx_init</code>. Hace falta para crear imágenes, leer teclas y cerrar.</td></tr>
+    <tr><td><code>img</code></td><td><code>mlx_image_t *</code></td><td>El lienzo de 900×600 donde se pinta píxel a píxel. Se manda a la ventana al final de cada fotograma.</td></tr>
+    <tr><td><code>player</code></td><td><code>t_player</code></td><td>Posición, dirección y velocidad del jugador.</td></tr>
+    <tr><td><code>ray</code></td><td><code>t_ray</code></td><td>El bloc de notas del DDA: lo que el algoritmo va calculando mientras persigue un rayo.</td></tr>
+    <tr><td><code>map</code></td><td><code>int **</code></td><td>Matriz 5×7 en memoria dinámica. <code>1</code> = pared, <code>0</code> = suelo, y la letra del jugador guardada como su valor ASCII.</td></tr>
+    <tr><td><code>texture</code></td><td><code>t_texture</code></td><td>Cuatro punteros a PNG cargados, uno por orientación de pared.</td></tr>
+    <tr><td><code>floor</code>, <code>ceiling</code></td><td><code>t_floor</code>, <code>t_ceiling</code></td><td>Colores de suelo y techo. Tienen campos <code>r</code>, <code>g</code>, <code>b</code> sin usar y un <code>color</code> ya empaquetado.</td></tr>
+  </tbody>
+</table>
+
+<h3>t_player</h3>
+<p><code>pos_x</code> y <code>pos_y</code> son <strong>píxeles</strong>, no casillas. <code>dir_x</code> y <code>dir_y</code> forman un vector unitario que apunta a donde mira el jugador: hacia el norte es <code>(0, -1)</code> porque en pantalla la Y crece hacia abajo. <code>speed</code> es un entero, 10 píxeles por fotograma.</p>
+
+<h3>t_ray</h3>
+<p>Es la estructura de trabajo del DDA (el algoritmo que recorre la cuadrícula casilla a casilla hasta chocar). <code>map_x</code> y <code>map_y</code> son la casilla actual del rayo; <code>step_x</code> y <code>step_y</code> valen +1 o −1 según hacia dónde avanza; <code>side</code> guarda si el impacto fue en una pared vertical (0) u horizontal (1); <code>wall_x</code> es la fracción exacta del ancho de la pared donde pegó, y es lo que luego decide qué columna de la textura se dibuja.</p>
+
+<div class="callout">
+  <span class="tag">ojo</span>
+  <p><code>t_img</code> en el header (con <code>bpp</code>, <code>line_len</code>, <code>endian</code>) es de la miniLibX vieja, la de X11. Con MLX42 no se usa para nada y no aparece en ningún <code>.c</code>. Igual que los <code>#include</code> de <code>X11/X.h</code> y <code>X11/keysym.h</code>: son herencia de otro proyecto y se pueden quitar.</p>
+</div>
+
+<h2 id="unidades"><span class="n">3</span>La idea clave: píxeles frente a celdas</h2>
+
+<p>Si solo te llevas una cosa de todo este documento, que sea esta. En el código conviven dos sistemas de coordenadas y casi todos los cálculos raros que verás son traducciones de uno a otro.</p>
+
+<ul>
+  <li><strong>Celdas</strong>: índices del mapa, <code>map[i][j]</code>, con <code>i</code> de 0 a 4 e <code>j</code> de 0 a 6.</li>
+  <li><strong>Píxeles</strong>: coordenadas del mundo, de 0 a 899 en horizontal y de 0 a 599 en vertical.</li>
+</ul>
+
+<p>La conversión sale de dos constantes calculadas en varios sitios: <code>cell_width = WIDTH / MAP_WIDTH</code> = 900/7 = <strong>128</strong> y <code>cell_height = HEIGHT / MAP_HEIGHT</code> = 600/5 = <strong>120</strong>. Son divisiones enteras, así que 7×128 = 896 y sobran 4 píxeles por la derecha. Con el mapa actual da igual, pero es el tipo de detalle que revienta cuando el mapa venga de un archivo con dimensiones cualesquiera.</p>
+
+<figure>
+<svg viewBox="0 0 700 420" role="img" aria-label="Cuadrícula del mapa 7 por 5 con la posición del jugador en píxeles">
+  <g font-family="IBM Plex Mono, monospace" font-size="12">
+    <!-- grid cells -->
+    <g id="cells"></g>
+    <!-- drawn statically below -->
+    <!-- row 0 -->
+    <rect x="40" y="40" width="80" height="64" fill="#3F4A54"/>
+    <rect x="120" y="40" width="80" height="64" fill="#3F4A54"/>
+    <rect x="200" y="40" width="80" height="64" fill="#3F4A54"/>
+    <rect x="280" y="40" width="80" height="64" fill="#3F4A54"/>
+    <rect x="360" y="40" width="80" height="64" fill="#3F4A54"/>
+    <rect x="440" y="40" width="80" height="64" fill="#3F4A54"/>
+    <rect x="520" y="40" width="80" height="64" fill="#3F4A54"/>
+    <!-- row 1 -->
+    <rect x="40" y="104" width="80" height="64" fill="#3F4A54"/>
+    <rect x="120" y="104" width="400" height="64" fill="#DDE3E9"/>
+    <rect x="520" y="104" width="80" height="64" fill="#3F4A54"/>
+    <!-- row 2 -->
+    <rect x="40" y="168" width="80" height="64" fill="#3F4A54"/>
+    <rect x="120" y="168" width="160" height="64" fill="#DDE3E9"/>
+    <rect x="280" y="168" width="80" height="64" fill="#3F4A54"/>
+    <rect x="360" y="168" width="160" height="64" fill="#DDE3E9"/>
+    <rect x="520" y="168" width="80" height="64" fill="#3F4A54"/>
+    <!-- row 3 -->
+    <rect x="40" y="232" width="80" height="64" fill="#3F4A54"/>
+    <rect x="120" y="232" width="400" height="64" fill="#DDE3E9"/>
+    <rect x="520" y="232" width="80" height="64" fill="#3F4A54"/>
+    <!-- row 4 -->
+    <rect x="40" y="296" width="560" height="64" fill="#3F4A54"/>
+
+    <!-- grid lines -->
+    <g stroke="#F7F8FA" stroke-width="1" opacity=".55">
+      <line x1="120" y1="40" x2="120" y2="360"/>
+      <line x1="200" y1="40" x2="200" y2="360"/>
+      <line x1="280" y1="40" x2="280" y2="360"/>
+      <line x1="360" y1="40" x2="360" y2="360"/>
+      <line x1="440" y1="40" x2="440" y2="360"/>
+      <line x1="520" y1="40" x2="520" y2="360"/>
+      <line x1="40" y1="104" x2="600" y2="104"/>
+      <line x1="40" y1="168" x2="600" y2="168"/>
+      <line x1="40" y1="232" x2="600" y2="232"/>
+      <line x1="40" y1="296" x2="600" y2="296"/>
+    </g>
+    <rect x="40" y="40" width="560" height="320" fill="none" stroke="#16202B" stroke-width="2"/>
+
+    <!-- row / col labels -->
+    <g fill="#5D6B78" font-size="11" text-anchor="middle">
+      <text x="80" y="30">j=0</text><text x="160" y="30">1</text><text x="240" y="30">2</text>
+      <text x="320" y="30">3</text><text x="400" y="30">4</text><text x="480" y="30">5</text><text x="560" y="30">6</text>
+    </g>
+    <g fill="#5D6B78" font-size="11" text-anchor="end">
+      <text x="32" y="76">i=0</text><text x="32" y="140">1</text><text x="32" y="204">2</text>
+      <text x="32" y="268">3</text><text x="32" y="332">4</text>
+    </g>
+
+    <!-- player -->
+    <circle cx="160" cy="264" r="9" fill="#DC6E00" stroke="#16202B" stroke-width="1.5"/>
+    <line x1="160" y1="264" x2="160" y2="224" stroke="#16202B" stroke-width="2.5"/>
+    <polygon points="160,214 155,226 165,226" fill="#16202B"/>
+
+    <!-- callouts -->
+    <g stroke="#DC6E00" stroke-width="1.5" stroke-dasharray="4 3" fill="none">
+      <path d="M 172 264 L 250 264"/>
+    </g>
+    <g fill="#16202B" font-size="12">
+      <text x="258" y="258">map[3][1] contiene 'N' (78)</text>
+      <text x="258" y="276" fill="#DC6E00">pos = (192, 420) en píxeles</text>
+    </g>
+
+    <!-- cell size annotation -->
+    <g stroke="#16202B" stroke-width="1">
+      <line x1="440" y1="372" x2="520" y2="372"/>
+      <line x1="440" y1="368" x2="440" y2="376"/>
+      <line x1="520" y1="368" x2="520" y2="376"/>
+    </g>
+    <text x="480" y="392" text-anchor="middle" font-size="11" fill="#5D6B78">128 px de ancho</text>
+
+    <g stroke="#16202B" stroke-width="1">
+      <line x1="620" y1="232" x2="620" y2="296"/>
+      <line x1="616" y1="232" x2="624" y2="232"/>
+      <line x1="616" y1="296" x2="624" y2="296"/>
+    </g>
+    <text x="634" y="268" font-size="11" fill="#5D6B78">120 px</text>
+  </g>
+</svg>
+<figcaption>El mapa que hay hoy dentro de <code>init_scene.c</code>. Gris oscuro = <code>1</code>. El jugador nace en el centro de su casilla, no en la esquina: por eso el cálculo resta media celda.</figcaption>
+</figure>
+
+<p>La fórmula de <code>init_player</code> es <code>(cell_width * (j + 1)) - (cell_width / 2)</code>, que es una forma algo retorcida de decir «el centro de la casilla j». Con j=1: 128×2 − 64 = 192. Con i=3: 120×4 − 60 = 420.</p>
+
+<h2 id="arranque"><span class="n">4</span>Diagrama 1 — el arranque</h2>
+
+<p>Esto es lo que ocurre una sola vez, de arriba abajo, antes de que la ventana empiece a responder.</p>
+
+<figure>
+<svg viewBox="0 0 880 570" role="img" aria-label="Diagrama de flujo del arranque del programa">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#16202B"/>
+    </marker>
+  </defs>
+  <g font-family="IBM Plex Mono, monospace">
+    <!-- boxes -->
+    <g>
+      <rect x="30" y="20" width="300" height="56" fill="#16202B"/>
+      <text x="50" y="45" fill="#F7F8FA" font-size="14" font-weight="600">main()</text>
+      <text x="50" y="64" fill="#C3CBD4" font-size="11">malloc(sizeof(t_scene))</text>
+    </g>
+
+    <g>
+      <rect x="30" y="100" width="300" height="56" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+      <text x="50" y="125" font-size="14" font-weight="600">init_scene(scene)</text>
+      <text x="50" y="144" fill="#5D6B78" font-size="11">loading_struct() + populate_map()</text>
+    </g>
+
+    <g>
+      <rect x="30" y="180" width="300" height="56" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+      <text x="50" y="205" font-size="14" font-weight="600">init_player(scene)</text>
+      <text x="50" y="224" fill="#5D6B78" font-size="11">busca N/S/E/W en el mapa</text>
+    </g>
+
+    <g>
+      <rect x="30" y="260" width="300" height="56" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+      <text x="50" y="285" font-size="14" font-weight="600">init_events(scene)</text>
+      <text x="50" y="304" fill="#5D6B78" font-size="11">registra los dos hooks</text>
+    </g>
+
+    <g>
+      <rect x="30" y="340" width="300" height="56" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+      <text x="50" y="365" font-size="14" font-weight="600">primer fotograma</text>
+      <text x="50" y="384" fill="#5D6B78" font-size="11">analize_fov + paint_mapcell</text>
+    </g>
+
+    <g>
+      <rect x="30" y="420" width="300" height="56" fill="#DC6E00"/>
+      <text x="50" y="445" fill="#16202B" font-size="14" font-weight="600">mlx_loop(...)</text>
+      <text x="50" y="464" fill="#16202B" font-size="11">no vuelve hasta que se cierra</text>
+    </g>
+
+    <g>
+      <rect x="30" y="500" width="300" height="46" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="50" y="529" font-size="13" font-weight="600">close_handler(scene)</text>
+    </g>
+
+    <!-- arrows -->
+    <g stroke="#16202B" stroke-width="1.8" marker-end="url(#ar)" fill="none">
+      <line x1="180" y1="76" x2="180" y2="96"/>
+      <line x1="180" y1="156" x2="180" y2="176"/>
+      <line x1="180" y1="236" x2="180" y2="256"/>
+      <line x1="180" y1="316" x2="180" y2="336"/>
+      <line x1="180" y1="396" x2="180" y2="416"/>
+      <line x1="180" y1="476" x2="180" y2="496"/>
+    </g>
+
+    <!-- annotations -->
+    <g font-size="12" fill="#16202B">
+      <text x="368" y="38">mlx_init, mlx_new_image, cuatro mlx_load_png,</text>
+      <text x="368" y="56" fill="#5D6B78">colores de suelo y techo, y copia del mapa a int**</text>
+
+      <text x="368" y="198">recorre la matriz, guarda pos_x/pos_y en píxeles,</text>
+      <text x="368" y="216" fill="#5D6B78">fija dir_x/dir_y y speed = 10, y sale al primer acierto</text>
+
+      <text x="368" y="278">mlx_close_hook  →  close_handler</text>
+      <text x="368" y="296">mlx_loop_hook   →  game_loop</text>
+
+      <text x="368" y="358" fill="#5D6B78">redundante: el bucle lo repetiría igual</text>
+
+      <text x="368" y="438">a partir de aquí MLX42 llama a game_loop</text>
+      <text x="368" y="456" fill="#5D6B78">una y otra vez, por su cuenta</text>
+
+      <text x="368" y="524" fill="#E11E00">se llama también desde la cruz y desde ESC</text>
+    </g>
+  </g>
+</svg>
+<figcaption>La línea discontinua del final marca la parte problemática: <code>close_handler</code> puede ejecutarse más de una vez. Lo detallo en la sección 10.</figcaption>
+</figure>
+
+<h2 id="bucle"><span class="n">5</span>Diagrama 2 — el ciclo de cada fotograma</h2>
+
+<p>Una vez dentro de <code>mlx_loop</code>, MLX42 llama a <code>game_loop</code> continuamente. Cada vuelta hace exactamente cuatro cosas, siempre en el mismo orden.</p>
+
+<figure>
+<svg viewBox="0 0 880 440" role="img" aria-label="Ciclo de las cuatro fases de cada fotograma">
+  <defs>
+    <marker id="ar2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#16202B"/>
+    </marker>
+  </defs>
+  <g font-family="IBM Plex Mono, monospace">
+    <rect x="60" y="40" width="300" height="110" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+    <text x="80" y="68" font-size="14" font-weight="600">1 · handle_move()</text>
+    <text x="80" y="90" font-size="11.5" fill="#5D6B78">lee W A S D con mlx_is_key_down</text>
+    <text x="80" y="108" font-size="11.5" fill="#5D6B78">llama a moving_north/south/east/west</text>
+    <text x="80" y="126" font-size="11.5" fill="#5D6B78">luego handle_camera (flechas) y ESC</text>
+
+    <rect x="500" y="40" width="300" height="110" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+    <text x="520" y="68" font-size="14" font-weight="600">2 · analize_fov()</text>
+    <text x="520" y="90" font-size="11.5" fill="#5D6B78">900 columnas, un rayo por columna</text>
+    <text x="520" y="108" font-size="11.5" fill="#5D6B78">dda() devuelve la distancia</text>
+    <text x="520" y="126" font-size="11.5" fill="#E11E00">draw_vertical_line está comentada</text>
+
+    <rect x="500" y="270" width="300" height="110" fill="#F7F8FA" stroke="#16202B" stroke-width="1.5"/>
+    <text x="520" y="298" font-size="14" font-weight="600">3 · paint_mapcell()</text>
+    <text x="520" y="320" font-size="11.5" fill="#5D6B78">minimapa de 225×150 con margen 20</text>
+    <text x="520" y="338" font-size="11.5" fill="#5D6B78">un color por casilla, píxel a píxel</text>
+    <text x="520" y="356" font-size="11.5" fill="#5D6B78">draw_player pinta un círculo r=4</text>
+
+    <rect x="60" y="270" width="300" height="110" fill="#16202B"/>
+    <text x="80" y="298" font-size="14" font-weight="600" fill="#F7F8FA">4 · mlx_image_to_window()</text>
+    <text x="80" y="320" font-size="11.5" fill="#C3CBD4">manda el lienzo a la ventana</text>
+    <text x="80" y="346" font-size="11.5" fill="#DC6E00">se llama en cada vuelta, y no debería</text>
+
+    <g stroke="#16202B" stroke-width="1.8" marker-end="url(#ar2)" fill="none">
+      <line x1="360" y1="95" x2="494" y2="95"/>
+      <line x1="650" y1="150" x2="650" y2="264"/>
+      <line x1="500" y1="325" x2="366" y2="325"/>
+      <path d="M 60 325 L 30 325 L 30 95 L 54 95"/>
+    </g>
+
+    <text x="30" y="212" font-size="11.5" fill="#5D6B78" transform="rotate(-90 30 212)" text-anchor="middle">~60 veces por segundo</text>
+
+    <!-- collision note -->
+    <g>
+      <line x1="210" y1="150" x2="210" y2="200" stroke="#DC6E00" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="222" y="185" font-size="11.5" fill="#DC6E00">cada moving_* pregunta antes a check_walls_around()</text>
+      <text x="222" y="203" font-size="11.5" fill="#5D6B78">si devuelve 1, el movimiento simplemente no ocurre</text>
+    </g>
+  </g>
+</svg>
+<figcaption>El orden importa: primero se decide dónde está el jugador, después se dibuja lo que ve desde ahí. Si se invirtiera, cada fotograma iría uno por detrás del teclado.</figcaption>
+</figure>
+
+<h3>Cómo se mueve exactamente</h3>
+
+<p><code>handle_move</code> calcula dos vectores antes de mirar ninguna tecla. El de avance es la dirección por la velocidad: <code>(dir_x·speed, dir_y·speed)</code>. El lateral es el mismo vector girado 90°: <code>(-dir_y·speed, dir_x·speed)</code>. Girar un vector 90 grados es exactamente eso, intercambiar componentes y cambiarle el signo a una. Por eso A y D andan «de lado» sin cambiar hacia dónde miras.</p>
+
+<p>Los nombres <code>moving_north</code> y compañía despistan un poco: no son el norte del mapa, son avanzar, retroceder y los dos laterales relativos a la vista. W suma el vector de avance, S lo resta, D suma el lateral y A lo resta.</p>
+
+<p><code>handle_camera</code> aplica la matriz de rotación clásica con ±3 grados. Guarda <code>dir_x</code> en <code>old_dir_x</code> antes de tocar nada porque la segunda línea necesita el valor original: si no lo guardara, calcularía <code>dir_y</code> con un <code>dir_x</code> ya rotado y el vector se iría deformando vuelta a vuelta.</p>
+
+<h3>Cómo se dibuja la pared (cuando esté descomentado)</h3>
+
+<p>En <code>analize_fov</code>, para cada columna <code>x</code> de 0 a 899 se calcula un ángulo relativo: <code>offset = 30 - (x/900)·60</code>, o sea de +30° en el borde izquierdo a −30° en el derecho. Ese ángulo se le pasa a <code>dda</code>, que devuelve la distancia hasta la pared.</p>
+
+<p>Después viene <code>distance * cos(offset)</code>. Eso corrige el efecto ojo de pez: los rayos de los bordes recorren más camino que el central aunque la pared sea plana, y sin corregir una pared recta se vería abombada. Multiplicar por el coseno del ángulo relativo proyecta la distancia sobre la línea central de la vista.</p>
+
+<p>Y la altura sale de <code>HEIGHT / distance * (WIDTH / MAP_WIDTH)</code>: cuanto más lejos, más pequeño, escalado por el tamaño de celda en píxeles para que una pared de una casilla de alto ocupe una proporción razonable de la pantalla.</p>
+
+<h2 id="archivos"><span class="n">6</span>Archivo por archivo</h2>
+
+<div class="files">
+
+  <div class="file">
+    <div class="name">main.c<em>render y punto de entrada</em></div>
+    <div class="body">
+      <p>Contiene <code>main</code>, <code>analize_fov</code>, <code>draw_vertical_line</code> <span class="status off">apagada</span>, <code>draw_player</code> y <code>paint_mapcell</code>.</p>
+      <p><code>draw_player</code> pinta un disco recorriendo un cuadrado de lado 9 y quedándose solo con los puntos que cumplen <code>dx²+dy² ≤ r²</code>, que es la ecuación del círculo. Comprueba límites contra <code>img->width</code> y <code>img->height</code> antes de pintar, cosa que el resto del archivo no siempre hace.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">cub3d.h<em>estructuras y prototipos</em></div>
+    <div class="body">
+      <p>Define las constantes de tamaño y las siete estructuras. Le falta el <code>#ifndef CUB3D_H</code> de protección, así que si dos <code>.c</code> lo incluyen indirectamente dará error de redefinición.</p>
+      <p>El <code>#ifndef M_PI</code> no llega a activarse nunca porque <code>math.h</code> ya lo define, pero si lo hiciera, 3.1415 es bastante menos preciso de lo que quieres en trigonometría.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">init_scene.c<em>arranque del motor</em></div>
+    <div class="body">
+      <p><code>loading_struct</code> abre MLX42, crea la imagen, carga los cuatro PNG desde rutas fijas y calcula los colores con <code>createRGB</code>, que empaqueta R, G y B en un entero desplazando bits: R sube 16 posiciones, G sube 8, B se queda. <span class="status mine">esto será tuyo</span></p>
+      <p><code>populate_map</code> copia el array local a <code>int **</code> con un <code>malloc</code> por fila. Ojo: <code>createRGB</code> está en camelCase y la Norm de 42 lo va a rechazar.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">init_player.c<em>colocar al jugador</em></div>
+    <div class="body">
+      <p>Recorre la matriz hasta encontrar la primera N, S, E o W, calcula el centro de esa casilla en píxeles, pide a <code>dir_vector</code> la dirección correspondiente y sale.</p>
+      <p>Ahora mismo no hace nada si no encuentra ninguna letra: el jugador se queda con la basura que hubiera en el <code>malloc</code> de <code>t_scene</code>. Con el parser esto deja de importar, porque tú ya habrás validado que hay exactamente un jugador.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">init_events.c<em>teclado, bucle y cierre</em></div>
+    <div class="body">
+      <p>Las cuatro funciones del ciclo de vida: <code>handle_camera</code>, <code>handle_move</code>, <code>game_loop</code> y <code>close_handler</code>.</p>
+      <p><code>close_handler</code> libera imagen, texturas, las cinco filas del mapa, el mapa, cierra MLX42 y hace <code>free(scene)</code>. El número de filas que libera es <code>MAP_HEIGHT</code>, una constante: cuando el mapa venga de archivo tendrá que leerse de la estructura.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">moves.c<em>las cuatro traslaciones</em></div>
+    <div class="body">
+      <p>Cuatro funciones casi idénticas. Todas preguntan primero a <code>check_walls_around</code> con la posición <em>de destino</em>, y si hay pared salen sin tocar nada.</p>
+      <p>Al ser una sola comprobación para el movimiento completo, si te mueves en diagonal pegada a una pared te quedas clavada en vez de deslizarte por ella. Es una decisión, no un fallo, pero se nota al jugar.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">collision.c<em>el jugador tiene cuerpo</em></div>
+    <div class="body">
+      <p><code>is_wall</code> traduce píxeles a casilla con dos divisiones y mira si vale 1. <code>check_walls_around</code> comprueba las cuatro esquinas de un cuadrado de 15 píxeles de radio alrededor del destino.</p>
+      <p>Solo mira las diagonales, no los puntos centrales de los lados. Con celdas de 128×120 y radio 15 no se cuela nada, pero con pasillos estrechos sí podría.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">textures.c<em>elegir y leer píxel</em></div>
+    <div class="body">
+      <p><code>select_texture</code> decide qué pared toca según <code>ray.side</code> y el signo de <code>step_x</code> o <code>step_y</code>. <code>get_pixel</code> <span class="status off">apagada</span> leería los cuatro bytes RGBA del píxel y los empaquetaría en un <code>uint32_t</code>.</p>
+      <p>Tu compi menciona en un comentario que ha añadido campos <code>x</code> e <code>y</code> a <code>mlx_texture_t</code>, es decir, ha tocado el header de MLX42. Eso hay que saberlo antes de la defensa, porque es exactamente el tipo de cosa que preguntan.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">error.c<em>salida de emergencia</em></div>
+    <div class="body">
+      <p>Una sola función que imprime, limpia y sale. <span class="status mine">la vas a reescribir</span></p>
+      <p>Tal y como está: el mensaje no cumple el formato que pide el subject, sale por <code>stdout</code> en vez de <code>stderr</code>, la comprobación del rango del <code>int</code> siempre es cierta, y si le llegas con <code>scene</code> a NULL (como hace <code>main</code>) se va a <code>close_handler(NULL)</code> y peta. La parte de errores es tuya, así que esto entra en tu lista.</p>
+    </div>
+  </div>
+
+  <div class="file">
+    <div class="name">dda.c<em>no está en lo que me pasaste</em></div>
+    <div class="body">
+      <p>El header declara <code>float dda(t_scene *scene, float fov_offset)</code> pero el archivo no está entre los que subiste. Es el corazón del raycasting y es lo que rellena <code>t_ray</code>. Pídeselo, porque sin verlo no se puede entender del todo el <code>side</code>, el <code>step</code> ni el <code>wall_x</code>.</p>
+    </div>
+  </div>
+
+</div>
+
+<h2 id="traza"><span class="n">7</span>Una traza concreta con el mapa actual</h2>
+
+<p>Arrancas el programa y pulsas W una vez. Esto es lo que pasa, con números reales:</p>
+
+<div class="trace">init_player    → encuentra 'N' en map[3][1]
+               → pos_x = 128*2 - 64 = 192
+               → pos_y = 120*4 - 60 = 420
+               → dir = (0, -1)   speed = 10
+
+pulsas W       → move_x = 0 * 10  =   0
+               → move_y = -1 * 10 = -10
+               → moving_north(scene, 0, -10)
+
+comprobación   → destino = (192, 410)
+               → esquinas: (207,425) (177,395) (207,395) (177,425)
+               → casilla de (207,395): [395/120][207/128] = [3][1] → 'N' (78), no es 1
+               → casilla de (177,395): [3][1] otra vez → no es 1
+               → las de abajo caen en [3][1] también → devuelve 0
+
+resultado      → pos = (192, 410), diez píxeles más al norte</div>
+
+<p>Fíjate en un detalle: la casilla donde nace el jugador sigue conteniendo el 78 de la <code>'N'</code> durante toda la partida. Funciona porque <code>is_wall</code> compara con <code>== 1</code> y 78 no es 1, pero es frágil. Cuando hagas el parser, plantéate si conviene que la letra del jugador desaparezca del mapa una vez leída, dejando ahí un 0. Es una conversación que tenéis que tener los dos, porque cambia lo que él puede dar por supuesto.</p>
+
+<h2 id="apagado"><span class="n">8</span>Lo que está apagado y por qué</h2>
+
+<p>Hay dos bloques comentados con la nota «COMENTO FUNCION PARA PODER PARSEAR TRANQUILAMENTE»:</p>
+
+<ul>
+  <li><strong><code>draw_vertical_line</code></strong> en <code>main.c</code>: la que pinta techo, franja de pared texturizada y suelo en cada columna.</li>
+  <li><strong><code>get_pixel</code></strong> en <code>textures.c</code>: la que lee un píxel del PNG.</li>
+</ul>
+
+<p>Con eso apagado, <code>analize_fov</code> sigue haciendo todo el trabajo de cálculo (lanza las 900 llamadas a <code>dda</code>) pero tira el resultado. El único dibujo que llega a pantalla es el minimapa. Así que si abres el proyecto y ves una ventana casi vacía con un cuadradito en la esquina, está funcionando como se espera.</p>
+
+<div class="callout warn">
+  <span class="tag">para hablar con tu compi</span>
+  <p>En la versión comentada, <code>select_texture</code> recibe un <code>mlx_texture_t *</code> recién reservado con <code>malloc</code> y le copia <em>la estructura entera</em> de la textura original con <code>*texture = *scene->texture.wall_W</code>. Eso duplica el puntero <code>pixels</code>, no los píxeles. Funciona porque solo se lee, pero reservar y liberar una estructura 900 veces por fotograma para no usarla de verdad es caro y confuso. Se lo puedes plantear cuando volváis a encender esa parte.</p>
+</div>
+
+<h2 id="frontera"><span class="n">9</span>Dónde entra tu parser</h2>
+
+<p>Tu trabajo va a sustituir tres cosas que hoy están escritas a mano. Lo importante no es el código, es el <strong>contrato</strong>: qué le prometes a tu compi que va a encontrar en <code>t_scene</code> cuando tú termines.</p>
+
+<table>
+  <thead><tr><th>Hoy</th><th>Después de tu parser</th></tr></thead>
+  <tbody>
+    <tr><td>Mapa fijo 5×7 dentro de <code>init_scene</code></td><td><code>scene->map</code> leído del <code>.cub</code>, con alto y ancho variables guardados en la estructura</td></tr>
+    <tr><td><code>MAP_WIDTH</code> y <code>MAP_HEIGHT</code> como <code>#define</code></td><td>Campos de <code>t_scene</code>, porque ya no se conocen en tiempo de compilación</td></tr>
+    <tr><td>Cuatro rutas de PNG fijas en <code>loading_struct</code></td><td>Las rutas que vengan en <code>NO</code>, <code>SO</code>, <code>WE</code>, <code>EA</code></td></tr>
+    <tr><td><code>createRGB(220,110,0)</code> y <code>(225,30,0)</code></td><td>Los valores de <code>F</code> y <code>C</code>, validados en rango 0–255</td></tr>
+    <tr><td><code>main(void)</code></td><td><code>main(int argc, char **argv)</code></td></tr>
+  </tbody>
+</table>
+
+<p>Ese paso de <code>#define</code> a campo de estructura es el que más código de él va a tocar, porque <code>MAP_WIDTH</code> y <code>MAP_HEIGHT</code> aparecen en <code>collision.c</code>, <code>init_player.c</code>, <code>init_events.c</code> y <code>main.c</code>. Cuanto antes lo habléis, menos conflictos de merge vais a tener.</p>
+
+<p>También hay una decisión de diseño que os conviene cerrar pronto: <strong>¿el mapa sigue siendo <code>int **</code> o pasa a <code>char **</code>?</strong> Un <code>char **</code> es lo natural cuando lees líneas de un archivo (te ahorras convertir), ocupa menos y permite guardar el espacio <code>' '</code> como carácter válido, que el subject pide tratar. Pero cambia todas las comparaciones de él, que ahora miran <code>== 1</code> y pasarían a mirar <code>== '1'</code>. No hay respuesta correcta; hay que elegir una y que la elijáis los dos.</p>
+
+<h2 id="riesgos"><span class="n">10</span>Cosas que conviene mirar con lupa</h2>
+
+<p>Ninguna de estas es urgente hoy, pero todas son puntos donde la evaluación se puede torcer. Las ordeno de más a menos grave.</p>
+
+<h4>ESC no termina el programa</h4>
+<p>Al pulsar ESC se llama a <code>close_handler</code>, que hace <code>free(scene)</code>, pero después la función vuelve y el bucle de MLX42 sigue vivo. El siguiente fotograma va a usar memoria ya liberada. Falta un <code>exit</code> o, mejor, decirle a MLX42 que pare el bucle antes de limpiar.</p>
+
+<h4>Doble liberación al cerrar con la cruz</h4>
+<p><code>main</code> llama a <code>close_handler</code> después de <code>mlx_loop</code>, pero si has cerrado con la cruz el hook ya lo ha llamado. Dos <code>free</code> del mismo puntero es un <em>double free</em>, y el subject dice explícitamente que eso es un 0.</p>
+
+<h4>Coordenadas negativas en las colisiones</h4>
+<p><code>is_wall</code> hace <code>x / cell_width</code> sin comprobar que <code>x</code> sea positivo. Si el jugador llega a <code>x = 10</code> y se resta el radio, entra un −5 y se accede a <code>map[...][-1]</code>. Hoy no pasa porque el mapa está cerrado por paredes, pero depende de que el mapa siempre lo esté: es decir, depende de que tu parser haga bien su trabajo.</p>
+
+<h4>Fugas si falla una textura</h4>
+<p>En <code>loading_struct</code>, si carga tres PNG y el cuarto falla, se llama a <code>error_call</code> → <code>close_handler</code>, que intenta liberar el mapa. Pero el mapa aún no existe: <code>populate_map</code> se ejecuta después. <code>close_handler</code> da por hecho un estado completamente inicializado y no siempre lo está.</p>
+
+<h4>Detalles de Norm</h4>
+<p><code>createRGB</code> en camelCase, <code>paint_mapcell</code> pasa de 25 líneas y tiene más de 5 variables locales, faltan espacios tras <code>while</code> e <code>if</code> en <code>paint_mapcell</code>, y hay declaraciones sin alinear en <code>draw_player</code>. Todo eso es de él, pero la Norm se corrige sobre el proyecto entero.</p>
+
+<footer>
+  <p>Hecho a partir de los archivos que subiste: <code>main.c</code>, <code>cub3d.h</code>, <code>init_scene.c</code>, <code>init_player.c</code>, <code>init_events.c</code>, <code>moves.c</code>, <code>collision.c</code>, <code>textures.c</code> y <code>error.c</code>. Falta <code>dda.c</code>, que es el que de verdad hace el raycasting.</p>
+</footer>
+
+</div>
+</div>
+</body>
+</html>
