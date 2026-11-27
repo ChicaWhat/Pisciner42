@@ -81,6 +81,19 @@ int	ft_picoshell(char **cmds[])
 	while (wait(NULL) > 0)
 	{
 	}
+	/*
+	! SI VEO QUE EN EL EXAMEN NO ME PASA EL PICOSHELL BIEN DEBO DE AÑADIR ESTAS LINEAS DE CODIGO
+	*int		status;
+	*int		ret;
+	*pid_t	wpid;
+	*ret = 0;
+	*while ((wpid = wait(&status)) > 0)
+	*{
+	*	if (status != 0)
+	*		ret = 1;
+	*}
+	*return (ret);
+	**/
 	return (0);
 }
 
